@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-import { Order } from './Order'
+import { Order } from "./Order"
 import { v4 } from "uuid"
 
 @Entity()
@@ -25,6 +25,9 @@ export class User {
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
+
+    @Column({ type: "timestamp with time zone", default: new Date()})
+    public updatedAt: Date
 
     @OneToMany((type) => Order, (order) => order.user)
     public orders: Order[]

@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne, OneToMany } from "typeorm"
 import { Address } from "./Address"
+import { Product } from "./Product"
 import { User } from "./User"
 import { v4 } from "uuid"
 
@@ -12,14 +13,20 @@ export class Order {
     @Column({ type: "uuid", nullable: true })
     public id: string
 
-    @Column({ nullable: true })
+    @Column()
     public totalPrice: number
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
 
+    @Column({ type: "timestamp with time zone", default: new Date()})
+    public updatedAt: Date
+
     @ManyToOne((type) => User, (user) => user.orders)
     public user: User
+
+    @OneToMany((type) => Product, (product) => product.category, { nullable: true })
+    public products: Product[]
 
     @OneToOne((type) => Address)
     @JoinColumn()

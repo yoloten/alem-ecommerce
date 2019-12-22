@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { Category } from "./Category"
+import { Order } from "./Order"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
-import { User } from "./User"
 import { v4 } from "uuid"
 
 @Entity()
@@ -45,6 +45,9 @@ export class Product {
 
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand
+
+    @ManyToOne((type) => Order, (order) => order.products, { nullable: true })
+    public order: Order
     
     @OneToMany((type) => Photo, (photo) => photo.product, { nullable: true })
     public photos: Photo[]
