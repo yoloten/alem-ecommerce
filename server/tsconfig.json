@@ -1,0 +1,23 @@
+{
+   "version": "2.4.2",
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6",
+         "esnext"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "strictPropertyInitialization": false,
+      "baseUrl": "src",
+      "sourceMap": true,
+      "outDir": "./build",
+      "strict": true
+   },
+   "exclude": [
+      "node_modules"
+   ]
+}
