@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
-import { SubCategory } from "./SubCategory"
+import { Product } from "./Product"
 
 @Entity()
 export class Category {
@@ -9,7 +9,6 @@ export class Category {
     @Column()
     public name: string
 
-    @OneToMany((type) => SubCategory, (subCategory) => subCategory.category)
-    public subCategories: SubCategory[]
-
+    @OneToMany((type) => Product, (product) => product.category, { nullable: true })
+    public products: Product[]
 }

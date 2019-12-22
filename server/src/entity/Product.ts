@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
-import { SubCategory } from "./SubCategory"
-import { Comment } from "./Comment"
+import { Category } from "./Category"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
 import { User } from "./User"
@@ -41,20 +40,14 @@ export class Product {
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
     
-    @ManyToOne((type) => SubCategory, (subCategory) => subCategory.products)
-    public subCategory: SubCategory
+    @ManyToOne((type) => Category, (category) => category.products)
+    public category: Category
 
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand
-
-    @ManyToOne((type) => User, (user) => user.cart, { nullable: true })
-    public customer: User
-
+    
     @OneToMany((type) => Photo, (photo) => photo.product, { nullable: true })
     public photos: Photo[]
-
-    @OneToMany((type) => Comment, (comment) => comment.product, { nullable: true })
-    public comments: Comment[]
 
     constructor() {
         this.id = v4()
