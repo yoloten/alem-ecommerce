@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne, OneToMany } from "typeorm"
 import { Address } from "./Address"
-import { Product } from "./Product"
 import { User } from "./User"
 import { v4 } from "uuid"
 
@@ -24,9 +23,6 @@ export class Order {
 
     @ManyToOne((type) => User, (user) => user.orders)
     public user: User
-
-    @OneToMany((type) => Product, (product) => product.category, { nullable: true })
-    public products: Product[]
 
     @OneToOne((type) => Address)
     @JoinColumn()
