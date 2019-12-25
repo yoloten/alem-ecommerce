@@ -1,11 +1,12 @@
+import {createConnection, getConnectionOptions} from "typeorm"
 import { Server } from "@overnightjs/core"
 import * as bodyParser from "body-parser"
-import {createConnection, getConnectionOptions} from "typeorm"
-import "reflect-metadata"
 import * as cors from "cors"
+import "reflect-metadata"
 
-import { UserController } from "./controller/UserController"
 import { CategoryController } from "./controller/CategoryController"
+import { BrandController } from "./controller/BrandController"
+import { UserController } from "./controller/UserController"
 
 export class App extends Server {
 
@@ -24,8 +25,9 @@ export class App extends Server {
     private setupControllers(): void {
         const userController = new UserController()
         const categoryController = new CategoryController()
+        const brandController = new BrandController()
 
-        super.addControllers([userController, categoryController])
+        super.addControllers([userController, categoryController, brandController])
     }
 
     public async start(port: number) {
