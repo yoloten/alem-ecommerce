@@ -5,6 +5,7 @@ import "reflect-metadata"
 import * as cors from "cors"
 
 import { UserController } from "./controller/UserController"
+import { CategoryController } from "./controller/CategoryController"
 
 export class App extends Server {
 
@@ -22,7 +23,9 @@ export class App extends Server {
 
     private setupControllers(): void {
         const userController = new UserController()
-        super.addControllers([userController])
+        const categoryController = new CategoryController()
+
+        super.addControllers([userController, categoryController])
     }
 
     public async start(port: number) {

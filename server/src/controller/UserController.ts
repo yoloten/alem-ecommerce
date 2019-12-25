@@ -6,7 +6,6 @@ import { secret } from "../keys/secret"
 import * as jwt from "jsonwebtoken"
 import * as bcrypt from "bcrypt"
 
-
 import { User } from "../entity/User"
 
 const saltRounds = 10
