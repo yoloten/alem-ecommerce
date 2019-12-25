@@ -40,32 +40,34 @@ export class CategoryController {
         const manager = getManager()
 
         try {
-            const category = await manager
-                .createQueryBuilder(Category, "category")
-                .where("category.name = :name", { name: req.body.name })
-                .getOne()
+            if (req.body.name) {
+                const category = await manager
+                    .createQueryBuilder(Category, "category")
+                    .where("category.name = :name", { name: req.body.name })
+                    .getOne()
 
-            if (category) {
-                res.status(400).json({ msg: "This category is already exists" })
-            } else {
-
-                if (req.body.parent) {
-                    const parent: any = await manager.getRepository(Category).findOne(parseInt(req.body.parent, 10))
-                    const child = new Category()
-                    child.name = req.body.name
-                    child.parent = parent
-
-                    await manager.save(child)
+                if (category) {
+                    res.status(400).json({ msg: "This category is already exists" })
                 } else {
-                    const parentNode = new Category()
-                    parentNode.name = req.body.name
+                    if (req.body.parent) {
+                        const parent: any = await manager.getRepository(Category).findOne(parseInt(req.body.parent, 10))
+                        const child = new Category()
+                        child.name = req.body.name
+                        child.parent = parent
 
-                    await manager.save(parentNode)
+                        await manager.save(child)
+                    } else {
+                        const parentNode = new Category()
+                        parentNode.name = req.body.name
+
+                        await manager.save(parentNode)
+                    }
+
+                    res.status(200).json({ success: true })
                 }
-
-                res.status(200).json({ success: true })
+            } else {
+                res.status(400).json({ msg: "Please add name parameter" })
             }
-
         } catch (error) {
             res.status(400).json(error)
         }
@@ -74,26 +76,16 @@ export class CategoryController {
     @Post("update/")
     public async update(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-       
+
         try {
-            const category = await connection
-                .getRepository(Category)
-                .createQueryBuilder("category")
-                .where("category.name = :name", { name: req.body.name })
-                .getOne()
-            
-            if (category) {
-                res.status(400).json({ msg: "This category has the same name" })
-            } else {
-                await getConnection()
+            await getConnection()
                 .createQueryBuilder()
                 .update(Category)
                 .set({ name: req.body.name })
                 .where("id = :id", { id: parseInt(req.body.id, 10) })
                 .execute()
 
-                res.status(200).json({ success: true })
-            }
+            res.status(200).json({ success: true })
         } catch (error) {
             res.status(400).json(error)
         }
