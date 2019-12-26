@@ -10,7 +10,7 @@ export class Product {
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", nullable: true, default: v4() })
     public id: string
 
     @Column()
@@ -19,8 +19,11 @@ export class Product {
     @Column({ type: "varchar", length: 200 })
     public description: string
 
-    @Column("simple-json")
-    public materialAndCare: { material: string[], care: string[] }
+    @Column("simple-array")
+    public material: string[]
+    
+    @Column("simple-array")
+    public care: string[] 
 
     @Column("float")
     public price: number
@@ -36,6 +39,9 @@ export class Product {
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
+
+    @Column({ type: "timestamp with time zone", default: new Date()})
+    public updateddAt: Date
     
     @ManyToOne((type) => Category, (category) => category.products)
     public category: Category
@@ -48,8 +54,4 @@ export class Product {
     
     @OneToMany((type) => Photo, (photo) => photo.product, { nullable: true })
     public photos: Photo[]
-
-    constructor() {
-        this.id = v4()
-    }
 }

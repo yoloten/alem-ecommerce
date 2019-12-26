@@ -1,10 +1,12 @@
-import {createConnection, getConnectionOptions} from "typeorm"
+import { createConnection, getConnectionOptions } from "typeorm"
 import { Server } from "@overnightjs/core"
 import * as bodyParser from "body-parser"
 import * as cors from "cors"
 import "reflect-metadata"
 
 import { CategoryController } from "./controller/CategoryController"
+import { DiscountController } from "./controller/DiscountController"
+import { ProductController } from "./controller/ProductController"
 import { BrandController } from "./controller/BrandController"
 import { UserController } from "./controller/UserController"
 
@@ -23,11 +25,20 @@ export class App extends Server {
     }
 
     private setupControllers(): void {
-        const userController = new UserController()
         const categoryController = new CategoryController()
+        const discountController = new DiscountController()
+        const productController = new ProductController()
         const brandController = new BrandController()
+        const userController = new UserController()
 
-        super.addControllers([userController, categoryController, brandController])
+        super.addControllers(
+            [
+                userController,
+                categoryController,
+                brandController,
+                productController,
+                discountController,
+            ])
     }
 
     public async start(port: number) {
@@ -35,7 +46,7 @@ export class App extends Server {
             const connection = await createConnection()
 
             this.app.set("dbConnection", connection)
-        
+
             this.app.listen(port, () => console.log("Server listening on port: " + port))
         } catch (error) {
             console.error(error)

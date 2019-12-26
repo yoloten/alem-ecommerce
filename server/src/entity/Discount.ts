@@ -8,7 +8,7 @@ export class Discount {
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", nullable: true, default: v4() })
     public id: string
 
     @Column("float")
@@ -17,16 +17,12 @@ export class Discount {
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
 
-    @Column({ type: "timestamp with time zone"})
+    @Column({ type: "timestamp with time zone", default: new Date()})
     public updatedAt: Date
 
-    @Column({ type: "timestamp with time zone", default: new Date()})
+    @Column({ type: "timestamp with time zone", nullable: true })
     public expiredAt: Date
 
     @OneToMany((type) => Product, (product) => product.discount)
     public products: Product[]
-
-    constructor() {
-        this.id = v4()
-    }
 }

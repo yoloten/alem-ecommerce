@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Middleware } from "@overnightjs/core"
+import { Controller, Post, Get, Middleware, Put } from "@overnightjs/core"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
 import { getConnection, getManager } from "typeorm"
@@ -73,7 +73,7 @@ export class CategoryController {
         }
     }
 
-    @Post("update/")
+    @Put("update/")
     public async update(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 

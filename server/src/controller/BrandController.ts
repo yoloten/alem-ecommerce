@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Middleware } from "@overnightjs/core"
+import { Controller, Post, Get, Middleware, Put } from "@overnightjs/core"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
 import { getConnection } from "typeorm"
@@ -37,11 +37,11 @@ export class BrandController {
                     res.status(400).json({ msg: "This brand is already exists" })
                 } else {
                     await connection
-                    .createQueryBuilder()
-                    .insert()
-                    .into(Brand)
-                    .values([{ name: req.body.name }])
-                    .execute()
+                        .createQueryBuilder()
+                        .insert()
+                        .into(Brand)
+                        .values([{ name: req.body.name }])
+                        .execute()
 
                     res.status(200).json({ success: true })
                 }
@@ -53,7 +53,7 @@ export class BrandController {
         }
     }
 
-    @Post("update/")
+    @Put("update/")
     public async update(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
