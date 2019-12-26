@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, OneToOne } from "typeorm"
 import { Category } from "./Category"
-import { Discount } from "./Discount"
+import { Price } from "./Price"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
 import { v4 } from "uuid"
@@ -25,9 +25,6 @@ export class Product {
     @Column("simple-array")
     public care: string[] 
 
-    @Column("float")
-    public price: number
-
     @Column("simple-array")
     public colors: [string]
 
@@ -49,8 +46,9 @@ export class Product {
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand
 
-    @ManyToOne((type) => Discount, (discount) => discount.products)
-    public discount: Discount
+    @OneToOne((type) => Price, { nullable: false })
+    @JoinColumn()
+    public price: Price
     
     @OneToMany((type) => Photo, (photo) => photo.product, { nullable: true })
     public photos: Photo[]

@@ -5,7 +5,6 @@ import * as cors from "cors"
 import "reflect-metadata"
 
 import { CategoryController } from "./controller/CategoryController"
-import { DiscountController } from "./controller/DiscountController"
 import { ProductController } from "./controller/ProductController"
 import { BrandController } from "./controller/BrandController"
 import { UserController } from "./controller/UserController"
@@ -26,7 +25,6 @@ export class App extends Server {
 
     private setupControllers(): void {
         const categoryController = new CategoryController()
-        const discountController = new DiscountController()
         const productController = new ProductController()
         const brandController = new BrandController()
         const userController = new UserController()
@@ -37,7 +35,6 @@ export class App extends Server {
                 categoryController,
                 brandController,
                 productController,
-                discountController,
             ])
     }
 

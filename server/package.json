@@ -23,7 +23,7 @@
       "jwt-decode": "^2.2.0",
       "pg": "^7.3.0",
       "reflect-metadata": "^0.1.10",
-      "typeorm": "0.2.21",
+      "typeorm": "0.2.22",
       "uuid": "^3.3.3"
    },
    "scripts": {
