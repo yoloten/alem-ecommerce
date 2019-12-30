@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
+import { Product } from "../entity/Product"
 import { v4 } from "uuid"
 
 export enum Currency {
@@ -27,5 +28,4 @@ export class Price {
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
-
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, OneToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm"
 import { Category } from "./Category"
 import { Price } from "./Price"
 import { Photo } from "./Photo"
@@ -46,10 +46,10 @@ export class Product {
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand
 
-    @OneToOne((type) => Price, { nullable: false })
-    @JoinColumn()
-    public price: Price
-    
     @OneToMany((type) => Photo, (photo) => photo.product, { nullable: true })
     public photos: Photo[]
+
+    @OneToOne((type) => Price)
+    @JoinColumn()
+    public price: Price
 }
