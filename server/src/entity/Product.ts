@@ -1,8 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable, OneToMany, OneToOne, JoinColumn, ManyToMany } from "typeorm"
+import { Material } from "./Material"
 import { Category } from "./Category"
 import { Price } from "./Price"
+import { Color } from "./Color"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
+import { Care } from "./Care"
+import { Size } from "./Size"
 import { v4 } from "uuid"
 
 @Entity()
@@ -19,27 +23,31 @@ export class Product {
     @Column({ type: "varchar", length: 200 })
     public description: string
 
-    @Column("simple-array")
-    public material: string[]
-    
-    @Column("simple-array")
-    public care: string[] 
+    @ManyToMany(type => Material)
+    @JoinTable()
+    materials: Material[]
 
-    @Column("simple-array")
-    public colors: [string]
+    @ManyToMany(type => Care)
+    @JoinTable()
+    care: Care[]
 
-    @Column("simple-array")
-    public size: [string]
+    @ManyToMany(type => Color)
+    @JoinTable()
+    colors: Color[]
+
+    @ManyToMany(type => Size)
+    @JoinTable()
+    sizes: Size[]
 
     @Column("int")
     public quantity: number
 
-    @Column({ type: "timestamp with time zone", default: new Date()})
+    @Column({ type: "timestamp with time zone", default: new Date() })
     public createdAt: Date
 
-    @Column({ type: "timestamp with time zone", default: new Date()})
+    @Column({ type: "timestamp with time zone", default: new Date() })
     public updateddAt: Date
-    
+
     @ManyToOne((type) => Category, (category) => category.products)
     public category: Category
 

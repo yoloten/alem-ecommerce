@@ -2,9 +2,9 @@
    "type": "postgres",
    "host": "localhost",
    "port": 5432,
-   "username": "alemadmin",
-   "password": "alemadmin",
-   "database": "alemdb",
+   "username": "alem",
+   "password": "alem",
+   "database": "alem",
    "synchronize": true,
    "logging": false,
    "entities": [

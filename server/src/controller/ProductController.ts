@@ -1,12 +1,18 @@
 import { Controller, Post, Get, Delete, Middleware } from "@overnightjs/core"
+import { findDuplicates } from "../utils/findDuplicates"
+import { getConnection, Between, In } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
+import { filterMany } from "../utils/filterMany"
 import { Request, Response } from "express"
-import { getConnection, Between } from "typeorm"
 
-import { Price } from "../entity/Price"
+import { Material } from "../entity/Material"
 import { Category } from "../entity/Category"
 import { Product } from "../entity/Product"
 import { Brand } from "../entity/Brand"
+import { Color } from "../entity/Color"
+import { Price } from "../entity/Price"
+import { Size } from "../entity/Size"
+import { Care } from "../entity/Care"
 
 @Controller("api/product")
 export class ProductController {
@@ -47,31 +53,53 @@ export class ProductController {
         }
     }
 
-    @Get("filters/")
+    @Post("filters/")
     public async filterByPrice(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
-        // .getRepository(Product)
-        // .query(`
-        //     select *
-        //     from product
-        //     left join price on "pricePrimaryKey" = price."primaryKey"
-        //     where "categoryId" = $1 and price between $2 and $3    
-        // `, params)
-
         try {
-            const { category, colors, min, max } = req.body
-            // const params = [parseInt(category, 10), min, max, colors]
+            const { category, colors, min, max, sizes, materials } = req.body
+            const resultFromColor = await filterMany(colors, Color, connection, Product, "color")
+            const resultFromSize = await filterMany(sizes, Size, connection, Product, "size")
+            const resultFromMaterial = await filterMany(materials, Material, connection, Product, "material")
+            let results = []
+
+            if (resultFromColor.length === 0 || resultFromSize.length === 0 || resultFromMaterial.length === 0) {
+                results = []
+            } else {
+                results = resultFromColor.concat(resultFromSize).concat(resultFromMaterial)
+            }
+
+            results = findDuplicates(results)
+
+            const price = await connection.getRepository(Price).find({ price: Between(min, max)})
+            const priceList = price.map((item) => item.primaryKey)
+
             const products = await connection
-                .createQueryBuilder(Product, "product")
-                .select("product")
-                .leftJoinAndSelect("product.price", "price")
-                .where("product.category = :category", { category: parseInt(category, 10) })
-                .andWhere("price.price BETWEEN :min AND :max ", {
-                    min: req.body.min,
-                    max: req.body.max,
+                .getRepository(Product)
+                .find({
+                    join: {
+                        alias: "product",
+                        leftJoinAndSelect: {
+                            price: "product.price",
+                            colors: "product.colors",
+                            category: "product.category",
+                            sizes: "product.sizes",
+                            materials: "product.materials"
+                        }
+                    },
+                    where: results.length > 0 ? results.map((id) => {
+                        return { 
+                            primaryKey: parseInt(id, 10), 
+                            category: parseInt(category, 10),
+                            price: In(priceList)
+                        }
+                    }) 
+                    : { 
+                        category: parseInt(category, 10),
+                        price: In(priceList)
+                    }
                 })
-                .getMany()
 
             res.status(200).json(products)
         } catch (error) {
@@ -84,13 +112,47 @@ export class ProductController {
         const connection = getConnection()
 
         try {
-            const brand = await connection
+            const { colors, materials, sizes, cares, brand, category } = req.body
+
+            const productBrand = await connection
                 .getRepository(Brand)
-                .findOne({ name: req.body.brand })
-                
-            const category = await connection
+                .findOne({ name: brand })
+
+            const productCategory = await connection
                 .getRepository(Category)
-                .findOne({ name: req.body.category })
+                .findOne({ name: category })
+
+            const colorList = await connection
+                .getRepository(Color)
+                .find({
+                    where: colors.map((color: string) => {
+                        return { name: color }
+                    })
+                })
+
+            const materialList = await connection
+                .getRepository(Material)
+                .find({
+                    where: materials.map((material: string) => {
+                        return { name: material }
+                    })
+                })
+
+            const sizeList = await connection
+                .getRepository(Size)
+                .find({
+                    where: sizes.map((size: string) => {
+                        return { name: size }
+                    })
+                })
+
+            const careList = await connection
+                .getRepository(Care)
+                .find({
+                    where: cares.map((care: string) => {
+                        return { name: care }
+                    })
+                })
 
             if (brand && category) {
                 const priceProps = {
@@ -105,15 +167,15 @@ export class ProductController {
                 await connection.manager.save(price)
 
                 const productProps = {
-                    name: req.body.name,
                     description: req.body.description,
-                    colors: req.body.colors,
                     quantity: req.body.quantity,
-                    material: req.body.material,
-                    care: req.body.care,
-                    size: req.body.size,
-                    brand,
-                    category,
+                    name: req.body.name,
+                    category: productCategory,
+                    materials: materialList,
+                    brand: productBrand,
+                    colors: colorList,
+                    care: careList,
+                    sizes: sizeList,
                     price,
                 }
 
@@ -124,7 +186,7 @@ export class ProductController {
 
                 res.status(200).json({ success: true })
             } else {
-                res.status(400).json({ msg: "You forgot to add brand or category. Or both of them" })
+                res.status(400).json({ msg: "You forgot to add some of the properties" })
             }
         } catch (error) {
             res.status(400).json(error)

@@ -5,9 +5,13 @@ import * as cors from "cors"
 import "reflect-metadata"
 
 import { CategoryController } from "./controller/CategoryController"
+import { MaterialController } from "./controller/MaterialController"
 import { ProductController } from "./controller/ProductController"
+import { ColorController } from "./controller/ColorController"
 import { BrandController } from "./controller/BrandController"
 import { UserController } from "./controller/UserController"
+import { SizeController } from "./controller/SizeController"
+import { CareController } from "./controller/CareController"
 
 export class App extends Server {
 
@@ -25,16 +29,24 @@ export class App extends Server {
 
     private setupControllers(): void {
         const categoryController = new CategoryController()
+        const materialController = new MaterialController()
         const productController = new ProductController()
+        const colorController = new ColorController()
         const brandController = new BrandController()
         const userController = new UserController()
+        const sizeController = new SizeController()
+        const careController = new CareController()
 
         super.addControllers(
             [
-                userController,
+                materialController,
                 categoryController,
-                brandController,
                 productController,
+                brandController,
+                colorController,
+                sizeController,
+                userController,
+                careController
             ])
     }
 
