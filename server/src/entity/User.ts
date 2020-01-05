@@ -2,13 +2,19 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { Order } from "./Order"
 import { v4 } from "uuid"
 
+export enum Role {
+    Superadmin = "superadmin",
+    admin = "admin",
+    customer = "customer",
+}
+
 @Entity()
 export class User {
 
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", nullable: true, default: v4() })
     public id: string
 
     @Column()
@@ -16,6 +22,9 @@ export class User {
 
     @Column()
     public email: string
+
+    @Column({ type: "enum", enum: Role, default: Role.customer })
+    public role: Role
 
     @Column({ nullable: true })
     public password: string
@@ -31,8 +40,4 @@ export class User {
 
     @OneToMany((type) => Order, (order) => order.user)
     public orders: Order[]
-
-    constructor() {
-        this.id = v4()
-    }
 }

@@ -38,6 +38,7 @@ export class UserController {
                         name: req.body.name,
                         email: req.body.email,
                         password: req.body.password,
+                        role: req.body.role
                     }])
                     .execute()
 

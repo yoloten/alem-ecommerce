@@ -54,11 +54,11 @@ export class ProductController {
     }
 
     @Post("filters/")
-    public async filterByPrice(req: Request, res: Response): Promise<void> {
+    public async filters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
         try {
-            const { category, colors, min, max, sizes, materials } = req.body
+            const { category, colors, min, max, sizes, materials, skip, take, order } = req.body
             const resultFromColor = await filterMany(colors, Color, connection, Product, "color")
             const resultFromSize = await filterMany(sizes, Size, connection, Product, "size")
             const resultFromMaterial = await filterMany(materials, Material, connection, Product, "material")
@@ -72,34 +72,33 @@ export class ProductController {
 
             results = findDuplicates(results)
 
-            const price = await connection.getRepository(Price).find({ price: Between(min, max)})
+            const price = await connection.getRepository(Price).find({ price: Between(min, max) })
             const priceList = price.map((item) => item.primaryKey)
 
             const products = await connection
-                .getRepository(Product)
-                .find({
-                    join: {
-                        alias: "product",
-                        leftJoinAndSelect: {
-                            price: "product.price",
-                            colors: "product.colors",
-                            category: "product.category",
-                            sizes: "product.sizes",
-                            materials: "product.materials"
-                        }
-                    },
-                    where: results.length > 0 ? results.map((id) => {
-                        return { 
-                            primaryKey: parseInt(id, 10), 
-                            category: parseInt(category, 10),
-                            price: In(priceList)
-                        }
-                    }) 
-                    : { 
+                .createQueryBuilder(Product, "product")
+                .select("product")
+                .leftJoinAndSelect("product.price", "price")
+                .leftJoinAndSelect("product.colors", "colors")
+                .leftJoinAndSelect("product.category", "category")
+                .leftJoinAndSelect("product.sizes", "sizes")
+                .leftJoinAndSelect("product.materials", "materials")
+                .leftJoinAndSelect("product.care", "care")
+                .where(results.length > 0 ? results.map((id) => {
+                    return {
+                        primaryKey: parseInt(id, 10),
                         category: parseInt(category, 10),
                         price: In(priceList)
                     }
                 })
+                    : {
+                        category: parseInt(category, 10),
+                        price: In(priceList)
+                    })
+                .orderBy({ "price.price": order })
+                .skip(skip)
+                .take(take)
+                .getMany()
 
             res.status(200).json(products)
         } catch (error) {

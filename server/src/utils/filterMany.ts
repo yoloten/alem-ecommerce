@@ -11,7 +11,6 @@ export async function filterMany(arrFromReq: string[], Model: any, connection: C
 
     let i = 0
     let temp = []
-    let flat = []
     let results = []
 
     if (items.length > 0) {
@@ -36,7 +35,7 @@ export async function filterMany(arrFromReq: string[], Model: any, connection: C
                 break
         }
 
-        flat = temp.flat().map((item) => item.productPrimaryKey).sort((a, b) => a - b)
+        const flat = temp.flat().map((item) => item.productPrimaryKey).sort((a, b) => a - b)
 
         for (let i = 0; i < flat.length - 1; i++) {
             if (flat[i] === flat[i + 1]) {
