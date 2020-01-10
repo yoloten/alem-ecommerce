@@ -4,19 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/styled-components": "^4.4.2",
     "next": "^9.1.7",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
+    "@svgr/cli": "^5.0.1",
     "@types/node": "^13.1.4",
     "@types/react": "^16.9.17",
+    "tslint": "^5.20.1",
     "typescript": "^3.7.4"
   }
 }
