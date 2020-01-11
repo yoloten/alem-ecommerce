@@ -14,6 +14,7 @@
   "dependencies": {
     "@types/styled-components": "^4.4.2",
     "next": "^9.1.7",
+    "nuka-carousel": "^4.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "styled-components": "^4.4.1"

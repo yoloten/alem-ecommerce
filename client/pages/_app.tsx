@@ -8,6 +8,11 @@ function MyApp({ Component, pageProps }: any) {
                     src: url('fonts/SegoeUI.ttf');
                 }
 
+                @font-face {
+                    font-family: 'SegoeUIBold';
+                    src: url('fonts/SegoeUI-Bold.ttf');
+                }
+
                 body{
                     font-family: 'SegoeUI', serif;
                     margin: 0;

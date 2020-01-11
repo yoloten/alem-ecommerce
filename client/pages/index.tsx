@@ -1,9 +1,27 @@
-import Link from 'next/link'
+import LandingStyle from "../public/styles/LandingStyle"
 import * as Icons from "../public/icons/_compiled"
-import Card from "../components/UI/Card"
 import Button from "../components/UI/Button"
+import Card from "../components/UI/Card"
+import Carousel from "nuka-carousel"
+import Link from "next/link"
 
 export default function index() {
+
+    const btnClick = (): void => {
+        console.log("cliks")
+    }
+    const previousButton = ({ previousSlide }: any) => (
+        <div className="parent" style={{ marginTop: "-80px" }}>
+            <Icons.ArrowRight style={{ cursor: "pointer" }} onClick={previousSlide} />
+        </div>
+    )
+
+    const nextButtom = ({ nextSlide }: any) => (
+        <div className="parent" style={{ marginTop: "-80px" }}>
+            <Icons.ArrowLeft style={{ cursor: "pointer" }} onClick={nextSlide} />
+        </div>
+    )
+
     return (
         <>
             <div>
@@ -28,83 +46,185 @@ export default function index() {
                     </div>
                     <div className="header-main">
                         <div className="title">Brand new January Collection</div>
-                        <Button 
-                            customStyleObject={{marginTop: "40px"}}
+                        <Button
+                            customStyleObject={{ marginTop: "40px" }}
                             backgroundColor="#ff7070"
-                            className="btn-check"
+                            onClick={btnClick}
                             content="Check More"
                             borderRadius="30px"
                             height="50px"
                             width="150px"
-                            base={false}
+                            border={false}
                             color="#fff"
                         />
                     </div>
-                    {/* carousel */}
                 </div>
                 <div className="main">
                     <div className="promocards">
-                        <Card>
-                            <div className="new-arrivals">New arrivals are on now!</div>
-                            {/* <Button className="btn-check" content="Show Collection"/> */}
-                        </Card>
-                        <Card>
-                            <div className="card-title">Jackets</div>
-                            <div className="card-price">$ 39.99</div>
-                            {/* <Button className="btn-check">Show Collection</Button> */}
-                        </Card>
-                        <Card>
-                            <div className="sale">Sale this winter</div>
-                            <div className="percent">-50%</div>
-                        </Card>
+                        <Card
+                            height="375px"
+                            width="650px"
+                            backgroundColor="black"
+                            title="New arrivals are now in!"
+                            color="#fff"
+                            fontSize="30px"
+                            customStyleObject={{ justifyContent: "center" }}
+                            actionButton={<Button
+                                content="Show Collection"
+                                color="#fff"
+                                backgroundColor="#ff7070"
+                                borderRadius="30px"
+                                height="50px"
+                                width="150px"
+                            />
+                            }
+                        />
+                        <Card
+                            height="375px"
+                            width="350px"
+                            title="Jackets"
+                            subTitle="$ 39.99"
+                            backgroundColor="purple"
+                            color="#fff"
+                            fontSize="30px"
+                            customStyleObject={{ justifyContent: "center" }}
+                            actionButton={<Button
+                                content="Show All"
+                                color="#fff"
+                                backgroundColor="#ff7070"
+                                borderRadius="30px"
+                                height="50px"
+                                width="150px"
+                            />
+                            }
+                        />
+                        <Card
+                            height="375px"
+                            width="350px"
+                            title="Sale This Winter -50%"
+                            backgroundColor="purple"
+                            color="#fff"
+                            fontSize="30px"
+                            customStyleObject={{ justifyContent: "center" }}
+                        />
                     </div>
                     <div className="popular">
                         <div className="popular-header">
                             <div className="popular-title">Popular</div>
-                            {/* <Button>Show More</Button> */}
+                            <Button
+                                content="Show More"
+                                color="#fff"
+                                backgroundColor="#ff7070"
+                                borderRadius="30px"
+                                height="50px"
+                                width="120px"
+                            />
                         </div>
-                        <div className="popular-cards">
-                            <Card />
-                            <Card />
-                            <Card />
+                        <Carousel
+                            className="carousel"
+                            height="500px"
+                            slideWidth="340px"
+                            cellSpacing={45}
+                            wrapAround={false}
+                            renderCenterLeftControls={previousButton}
+                            renderCenterRightControls={nextButtom}
+                            renderBottomCenterControls={(): any => { }}
+                        >
+                            {[0, 1, 2, 3, 4].map((i) => (
+                                <div className="card" key={i}>
+                                    <Card
+                                        height="375px"
+                                        width="350px"
+                                        backgroundColor="purple"
+                                        color="#fff"
+                                        fontSize="30px"
+                                    />
+                                    <div className="product-info">
+                                        <div className="product-name">Jacket</div>
+                                        <div className="product-price">
+                                            <div className="new-price">$21.99</div>
+                                            <div className="old-price" style={{
+                                                textDecoration: "line-through",
+                                            }}>$39.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </Carousel>
+                    </div>
+                    <div className="pros-cards">
+                        <div className="pros-header">Why you should choose us?</div>
+                        <div className="pros-list">
+                            {prosCards.map((element) => (
+                                <Card
+                                    header={<div className="pros-card-icon">{element.iconSmall}</div>}
+                                    height="200px"
+                                    width="450px"
+                                    title={element.title}
+                                    subTitle={element.subTitle}
+                                    color="#000"
+                                    textPosition="left"
+                                    border={true}
+                                />
+                            ))}
                         </div>
                     </div>
+                    <div className="popular">
+                        <div className="pros-header">Products in today</div>
+                        <Carousel
+                            className="carousel"
+                            height="500px"
+                            slideWidth="340px"
+                            cellSpacing={45}
+                            wrapAround={false}
+                            renderCenterLeftControls={previousButton}
+                            renderCenterRightControls={nextButtom}
+                            renderBottomCenterControls={(): any => { }}
+                        >
+                            {[0, 1, 2, 3, 4].map((i) => (
+                                <div className="card" key={i}>
+                                    <Card
+                                        height="375px"
+                                        width="350px"
+                                        backgroundColor="purple"
+                                        color="#fff"
+                                        fontSize="30px"
+                                    />
+                                    <div className="product-info">
+                                        <div className="product-name">Jacket</div>
+                                        <div className="product-price">
+                                            <div className="new-price">$21.99</div>
+                                            <div className="old-price" style={{
+                                                textDecoration: "line-through",
+                                            }}>$39.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </Carousel>
+                    </div>
+                    <div className="footer">Powered by Rustam Sahatov. All rights reserved.</div>
                 </div>
             </div>
-            <style jsx>{`
-                .header{
-                    background: grey;
-                    height: 750px
-                }
-                .navbar{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-left: 170px;
-                    margin-right: 170px;
-                    padding-top: 40px
-                }
-                .categories{
-                    display: flex;
-                    width: 100px;
-                    justify-content: space-between;
-                }
-                .actions{
-                    display: flex;
-                    width: 120px;
-                    justify-content: space-between;
-                }
-                .search{
-                    cursor: pointer
-                }
-                .header-main{
-                    margin-left: 210px;
-                    margin-top: 80px
-                }
-                .title{
-                    font-size: 50px;
-                    width: 300px
-                }
-            `}</style>
+            <LandingStyle/>
         </>
     )
 }
+
+const prosCards = [
+    {
+        iconSmall: <Icons.FreeShippingSmall />,
+        title: "Free Shipping",
+        subTitle: "All purchases over $199 are eligible for free shipping"
+    },
+    {
+        iconSmall: <Icons.Wallet/>,
+        title: "Easy Payment",
+        subTitle: "All payments are processed instantly over a secure payment protocol",
+    },
+    {
+        iconSmall:  <Icons.Guarantee/>,
+        title: "Money-back Guarantee",
+        subTitle: "If an item arrived damaged or you've changed your mind, you can send it back for a full refund",
+    }
+]

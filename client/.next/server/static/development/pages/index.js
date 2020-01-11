@@ -133,40 +133,6 @@ function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_cor
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(Object(source)).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
 
 
-let Styles;
-
-(function (_Styles) {
-  const Background = _Styles.Background = ({
-    base,
-    backgroundColor
-  }) => backgroundColor ? `${base ? "transaprent" : backgroundColor}` : `${base ? "transaprent" : "grey"}`;
-
-  const Border = _Styles.Border = ({
-    base,
-    backgroundColor
-  }) => base ? `1px solid ${backgroundColor ? backgroundColor : "grey"}` : "none";
-
-  const BorderRadius = _Styles.BorderRadius = ({
-    borderRadius
-  }) => borderRadius ? borderRadius : "4px";
-
-  const FontSize = _Styles.FontSize = ({
-    fontSize
-  }) => fontSize ? fontSize : "14px";
-
-  const Height = _Styles.Height = ({
-    height
-  }) => height ? height : "40px";
-
-  const Width = _Styles.Width = ({
-    width
-  }) => width ? width : "150px";
-
-  const Color = _Styles.Color = ({
-    color
-  }) => color ? color : "black";
-})(Styles || (Styles = {}));
-
 let Btn;
 
 (function (_Btn) {})(Btn || (Btn = {}));
@@ -174,11 +140,11 @@ let Btn;
 function Button(props) {
   const btnStyle = {
     backgroundColor: props.backgroundColor ? `${props.base ? "transaprent" : props.backgroundColor}` : `${props.base ? "transaprent" : "grey"}`,
-    border: props.base ? `1px solid ${props.backgroundColor ? props.backgroundColor : "grey"}` : "none",
+    border: props.border ? `1px solid ${props.borderColor ? props.borderColor : "grey"}` : "none",
     borderRadius: props.borderRadius ? props.borderRadius : "4px",
     fontSize: props.fontSize ? props.fontSize : "14px",
-    height: props.height ? props.height : "40px",
-    width: props.width ? props.width : "150px",
+    height: props.height ? props.height : "35px",
+    width: props.width ? props.width : "120px",
     color: props.color ? props.color : "black",
     justifyContent: "center",
     alignItems: "center",
@@ -194,7 +160,7 @@ function Button(props) {
     style: style,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 54
+      lineNumber: 44
     },
     __self: this
   }, props.content);
@@ -212,19 +178,165 @@ function Button(props) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Card; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
 var _jsxFileName = "/home/rustam/alem-ecommerce/client/components/UI/Card.tsx";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+var __jsx = react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement;
+
+function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default()(object); if (_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default.a) { var symbols = _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default()(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(Object(source)).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
+
+
+let CardNamespace;
+
+(function (_CardNamespace) {})(CardNamespace || (CardNamespace = {}));
 
 function Card(props) {
+  const cardRef = Object(react__WEBPACK_IMPORTED_MODULE_7__["useRef"])();
+  const {
+    0: cardHeight,
+    1: setHeight
+  } = Object(react__WEBPACK_IMPORTED_MODULE_7__["useState"])();
+  Object(react__WEBPACK_IMPORTED_MODULE_7__["useEffect"])(() => {
+    setHeight(cardRef.current.getBoundingClientRect().height);
+  }, []);
+
+  const btnPosition = textPosition => {
+    switch (textPosition) {
+      case "center":
+        return "center";
+
+      case "left":
+        return "flex-start";
+
+      case "right":
+        return "flex-end";
+
+      default:
+        break;
+    }
+  };
+
+  const commonTextStyle = {
+    textAlign: props.textPosition ? props.textPosition : "center",
+    marginRight: props.textPosition === "right" ? "30px" : "",
+    marginLeft: props.textPosition === "left" ? "30px" : "",
+    color: props.color ? props.color : "#000"
+  };
+
+  const headerStyle = _objectSpread({}, commonTextStyle, {
+    marginTop: "30px",
+    alignSelf: props.textPosition ? btnPosition(props.textPosition) : "center"
+  });
+
+  const titleStyle = _objectSpread({}, commonTextStyle, {
+    marginTop: "30px",
+    fontSize: props.fontSize ? props.fontSize : "16px",
+    width: "200px",
+    alignSelf: props.textPosition ? btnPosition(props.textPosition) : "center"
+  });
+
+  const subTitleStyle = _objectSpread({}, commonTextStyle, {
+    marginTop: "10px",
+    fontSize: "14px",
+    color: "#bababa"
+  });
+
+  const btnStyle = _objectSpread({
+    marginTop: "40px",
+    display: "flex",
+    justifyContent: props.textPosition ? btnPosition(props.textPosition) : "center",
+    marginRight: props.textPosition === "right" ? "10px" : "",
+    marginLeft: props.textPosition === "left" ? "10px" : ""
+  }, commonTextStyle);
+
+  const footerStyle = _objectSpread({
+    borderTop: "1px solid #d9d9d9",
+    marginTop: "10px"
+  }, commonTextStyle);
+
+  const cardStyle = {
+    height: props.height ? props.height : "",
+    width: props.width ? props.width : "200px",
+    border: props.border ? `1px solid ${props.borderColor ? props.borderColor : "#d9d9d9"}` : "none",
+    backgroundImage: props.bgImage ? "url(" + props.bgImage + ")" : "",
+    backgroundPosition: "center center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
+    borderRadius: props.borderRadius ? props.borderRadius : "3px",
+    paddingBottom: "10px",
+    display: "flex"
+  };
   return __jsx("div", {
+    ref: cardRef,
+    style: _objectSpread({}, cardStyle, {
+      flexDirection: "column"
+    }, props.customStyleObject),
+    onClick: props.onClick,
+    onMouseEnter: props.onMouseEnter,
+    onMouseLeave: props.onMouseLeave,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 5
+      lineNumber: 109
     },
     __self: this
-  });
+  }, props.header ? __jsx("div", {
+    style: headerStyle,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 116
+    },
+    __self: this
+  }, props.header) : "", props.title ? __jsx("div", {
+    style: titleStyle,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 117
+    },
+    __self: this
+  }, props.title) : "", props.subTitle ? __jsx("div", {
+    style: subTitleStyle,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 118
+    },
+    __self: this
+  }, props.subTitle) : "", __jsx("div", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 119
+    },
+    __self: this
+  }, props.body ? props.body : ""), props.actionButton ? __jsx("div", {
+    style: btnStyle,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 120
+    },
+    __self: this
+  }, props.actionButton) : "");
 }
 
 /***/ }),
@@ -379,265 +491,563 @@ function _extends() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return index; });
-/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
-/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _public_styles_LandingStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../public/styles/LandingStyle */ "./public/styles/LandingStyle.tsx");
 /* harmony import */ var _public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../public/icons/_compiled */ "./public/icons/_compiled/index.ts");
-/* harmony import */ var _components_UI_Card__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/UI/Card */ "./components/UI/Card.tsx");
-/* harmony import */ var _components_UI_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/UI/Button */ "./components/UI/Button.tsx");
+/* harmony import */ var _components_UI_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/UI/Button */ "./components/UI/Button.tsx");
+/* harmony import */ var _components_UI_Card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/UI/Card */ "./components/UI/Card.tsx");
+/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! nuka-carousel */ "nuka-carousel");
+/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(nuka_carousel__WEBPACK_IMPORTED_MODULE_5__);
 var _jsxFileName = "/home/rustam/alem-ecommerce/client/pages/index.tsx";
 
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
-var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
 
 
 
 function index() {
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, __jsx("div", {
-    className: "jsx-485249738",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 9
+  const btnClick = () => {
+    console.log("cliks");
+  };
+
+  const previousButton = ({
+    previousSlide
+  }) => __jsx("div", {
+    className: "parent",
+    style: {
+      marginTop: "-80px"
     },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "header",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 10
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "navbar",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "logo",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 12
-    },
-    __self: this
-  }, "\xE4lem"), __jsx("div", {
-    className: "jsx-485249738" + " " + "categories",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "men",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 14
     },
     __self: this
-  }, "Men"), __jsx("div", {
-    className: "jsx-485249738" + " " + "women",
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowRight"], {
+    style: {
+      cursor: "pointer"
+    },
+    onClick: previousSlide,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 15
     },
     __self: this
-  }, "Women")), __jsx("div", {
-    className: "jsx-485249738" + " " + "actions",
+  }));
+
+  const nextButtom = ({
+    nextSlide
+  }) => __jsx("div", {
+    className: "parent",
+    style: {
+      marginTop: "-80px"
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17
+      lineNumber: 20
     },
     __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "search",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 18
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowLeft"], {
+    style: {
+      cursor: "pointer"
     },
-    __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Search"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 19
-    },
-    __self: this
-  })), __jsx("div", {
-    className: "jsx-485249738" + " " + "search",
+    onClick: nextSlide,
     __source: {
       fileName: _jsxFileName,
       lineNumber: 21
     },
     __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Cart"], {
+  }));
+
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 22
+      lineNumber: 27
     },
     __self: this
-  })), __jsx("div", {
-    className: "jsx-485249738" + " " + "search",
+  }, __jsx("div", {
+    className: "header",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
+      lineNumber: 28
     },
     __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Avatar"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 25
-    },
-    __self: this
-  })))), __jsx("div", {
-    className: "jsx-485249738" + " " + "header-main",
+  }, __jsx("div", {
+    className: "navbar",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 29
     },
     __self: this
   }, __jsx("div", {
-    className: "jsx-485249738" + " " + "title",
+    className: "logo",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 30
     },
     __self: this
-  }, "Brand new January Collection"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    customStyleObject: {
-      marginTop: "40px"
-    },
-    backgroundColor: "#ff7070",
-    className: "btn-check",
-    content: "Check More",
-    borderRadius: "30px",
-    height: "50px",
-    width: "150px",
-    base: false,
-    color: "#fff",
+  }, "\xE4lem"), __jsx("div", {
+    className: "categories",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 31
     },
     __self: this
-  }))), __jsx("div", {
-    className: "jsx-485249738" + " " + "main",
+  }, __jsx("div", {
+    className: "men",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 32
+    },
+    __self: this
+  }, "Men"), __jsx("div", {
+    className: "women",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 33
+    },
+    __self: this
+  }, "Women")), __jsx("div", {
+    className: "actions",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 35
     },
     __self: this
   }, __jsx("div", {
-    className: "jsx-485249738" + " " + "promocards",
+    className: "search",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 46
+      lineNumber: 36
     },
     __self: this
-  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Search"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 37
+    },
+    __self: this
+  })), __jsx("div", {
+    className: "search",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 39
+    },
+    __self: this
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Cart"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 40
+    },
+    __self: this
+  })), __jsx("div", {
+    className: "search",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 42
+    },
+    __self: this
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Avatar"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 43
+    },
+    __self: this
+  })))), __jsx("div", {
+    className: "header-main",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 47
     },
     __self: this
   }, __jsx("div", {
-    className: "jsx-485249738" + " " + "new-arrivals",
+    className: "title",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 48
     },
     __self: this
-  }, "New arrivals are on now!")), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "Brand new January Collection"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    customStyleObject: {
+      marginTop: "40px"
+    },
+    backgroundColor: "#ff7070",
+    onClick: btnClick,
+    content: "Check More",
+    borderRadius: "30px",
+    height: "50px",
+    width: "150px",
+    border: false,
+    color: "#fff",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 51
+      lineNumber: 49
     },
     __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "card-title",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 52
-    },
-    __self: this
-  }, "Jackets"), __jsx("div", {
-    className: "jsx-485249738" + " " + "card-price",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 53
-    },
-    __self: this
-  }, "$ 39.99")), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 56
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "sale",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 57
-    },
-    __self: this
-  }, "Sale this winter"), __jsx("div", {
-    className: "jsx-485249738" + " " + "percent",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 58
-    },
-    __self: this
-  }, "-50%"))), __jsx("div", {
-    className: "jsx-485249738" + " " + "popular",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 61
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "jsx-485249738" + " " + "popular-header",
+  }))), __jsx("div", {
+    className: "main",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 62
     },
     __self: this
   }, __jsx("div", {
-    className: "jsx-485249738" + " " + "popular-title",
+    className: "promocards",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 63
     },
     __self: this
-  }, "Popular")), __jsx("div", {
-    className: "jsx-485249738" + " " + "popular-cards",
+  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    height: "375px",
+    width: "650px",
+    backgroundColor: "black",
+    title: "New arrivals are now in!",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
+    actionButton: __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      content: "Show Collection",
+      color: "#fff",
+      backgroundColor: "#ff7070",
+      borderRadius: "30px",
+      height: "50px",
+      width: "150px",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 72
+      },
+      __self: this
+    }),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 66
+      lineNumber: 64
     },
     __self: this
-  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    height: "375px",
+    width: "350px",
+    title: "Jackets",
+    subTitle: "$ 39.99",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
+    actionButton: __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      content: "Show All",
+      color: "#fff",
+      backgroundColor: "#ff7070",
+      borderRadius: "30px",
+      height: "50px",
+      width: "150px",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 91
+      },
+      __self: this
+    }),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 67
+      lineNumber: 82
     },
     __self: this
-  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    height: "375px",
+    width: "350px",
+    title: "Sale This Winter -50%",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 68
+      lineNumber: 101
     },
     __self: this
-  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  })), __jsx("div", {
+    className: "popular",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 69
+      lineNumber: 111
     },
     __self: this
-  }))))), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
-    id: "485249738",
+  }, __jsx("div", {
+    className: "popular-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 112
+    },
     __self: this
-  }, ".header.jsx-485249738{background:grey;height:750px;}.navbar.jsx-485249738{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;margin-left:170px;margin-right:170px;padding-top:40px;}.categories.jsx-485249738{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;width:100px;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;}.actions.jsx-485249738{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;width:120px;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;}.search.jsx-485249738{cursor:pointer;}.header-main.jsx-485249738{margin-left:210px;margin-top:80px;}.title.jsx-485249738{font-size:50px;width:300px;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvcGFnZXMvaW5kZXgudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQXlFd0IsQUFHcUMsQUFJSCxBQU9BLEFBS0EsQUFNbEIsQUFFdUIsQUFJSCxlQU5uQixBQVFELENBNUJBLEVBd0JBLFNBSUMsRUE1QkEsS0F3QkEsd0NBckJrQyxBQU9sQixBQUtBLFlBSmtCLEFBS0EsdUdBWlosWUFRdEIsQUFLQSxNQVp1QixtQkFFeEIsaUJBQUMiLCJmaWxlIjoiL2hvbWUvcnVzdGFtL2FsZW0tZWNvbW1lcmNlL2NsaWVudC9wYWdlcy9pbmRleC50c3giLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTGluayBmcm9tICduZXh0L2xpbmsnXG5pbXBvcnQgKiBhcyBJY29ucyBmcm9tIFwiLi4vcHVibGljL2ljb25zL19jb21waWxlZFwiXG5pbXBvcnQgQ2FyZCBmcm9tIFwiLi4vY29tcG9uZW50cy9VSS9DYXJkXCJcbmltcG9ydCBCdXR0b24gZnJvbSBcIi4uL2NvbXBvbmVudHMvVUkvQnV0dG9uXCJcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gaW5kZXgoKSB7XG4gICAgcmV0dXJuIChcbiAgICAgICAgPD5cbiAgICAgICAgICAgIDxkaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJoZWFkZXJcIj5cbiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJuYXZiYXJcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibG9nb1wiPsOkbGVtPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImNhdGVnb3JpZXNcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm1lblwiPk1lbjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwid29tZW5cIj5Xb21lbjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImFjdGlvbnNcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInNlYXJjaFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8SWNvbnMuU2VhcmNoIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzZWFyY2hcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb25zLkNhcnQgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInNlYXJjaFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8SWNvbnMuQXZhdGFyIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaGVhZGVyLW1haW5cIj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGl0bGVcIj5CcmFuZCBuZXcgSmFudWFyeSBDb2xsZWN0aW9uPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8QnV0dG9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1c3RvbVN0eWxlT2JqZWN0PXt7bWFyZ2luVG9wOiBcIjQwcHhcIn19XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZENvbG9yPVwiI2ZmNzA3MFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiYnRuLWNoZWNrXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250ZW50PVwiQ2hlY2sgTW9yZVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYm9yZGVyUmFkaXVzPVwiMzBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVpZ2h0PVwiNTBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCIxNTBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYmFzZT17ZmFsc2V9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9XCIjZmZmXCJcbiAgICAgICAgICAgICAgICAgICAgICAgIC8+XG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICB7LyogY2Fyb3VzZWwgKi99XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtYWluXCI+XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvbW9jYXJkc1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPENhcmQ+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJuZXctYXJyaXZhbHNcIj5OZXcgYXJyaXZhbHMgYXJlIG9uIG5vdyE8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB7LyogPEJ1dHRvbiBjbGFzc05hbWU9XCJidG4tY2hlY2tcIiBjb250ZW50PVwiU2hvdyBDb2xsZWN0aW9uXCIvPiAqL31cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvQ2FyZD5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxDYXJkPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiY2FyZC10aXRsZVwiPkphY2tldHM8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImNhcmQtcHJpY2VcIj4kIDM5Ljk5PC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgey8qIDxCdXR0b24gY2xhc3NOYW1lPVwiYnRuLWNoZWNrXCI+U2hvdyBDb2xsZWN0aW9uPC9CdXR0b24+ICovfVxuICAgICAgICAgICAgICAgICAgICAgICAgPC9DYXJkPlxuICAgICAgICAgICAgICAgICAgICAgICAgPENhcmQ+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzYWxlXCI+U2FsZSB0aGlzIHdpbnRlcjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicGVyY2VudFwiPi01MCU8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvQ2FyZD5cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhclwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwb3B1bGFyLWhlYWRlclwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhci10aXRsZVwiPlBvcHVsYXI8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB7LyogPEJ1dHRvbj5TaG93IE1vcmU8L0J1dHRvbj4gKi99XG4gICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhci1jYXJkc1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxDYXJkIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPENhcmQgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8Q2FyZCAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8c3R5bGUganN4PntgXG4gICAgICAgICAgICAgICAgLmhlYWRlcntcbiAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZDogZ3JleTtcbiAgICAgICAgICAgICAgICAgICAgaGVpZ2h0OiA3NTBweFxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAubmF2YmFye1xuICAgICAgICAgICAgICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICAgICAgICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi1sZWZ0OiAxNzBweDtcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLXJpZ2h0OiAxNzBweDtcbiAgICAgICAgICAgICAgICAgICAgcGFkZGluZy10b3A6IDQwcHhcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLmNhdGVnb3JpZXN7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIHdpZHRoOiAxMDBweDtcbiAgICAgICAgICAgICAgICAgICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAuYWN0aW9uc3tcbiAgICAgICAgICAgICAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgICAgICAgICAgICAgd2lkdGg6IDEyMHB4O1xuICAgICAgICAgICAgICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5zZWFyY2h7XG4gICAgICAgICAgICAgICAgICAgIGN1cnNvcjogcG9pbnRlclxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAuaGVhZGVyLW1haW57XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi1sZWZ0OiAyMTBweDtcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLXRvcDogODBweFxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAudGl0bGV7XG4gICAgICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogNTBweDtcbiAgICAgICAgICAgICAgICAgICAgd2lkdGg6IDMwMHB4XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgYH08L3N0eWxlPlxuICAgICAgICA8Lz5cbiAgICApXG59XG4iXX0= */\n/*@ sourceURL=/home/rustam/alem-ecommerce/client/pages/index.tsx */"));
+  }, __jsx("div", {
+    className: "popular-title",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 113
+    },
+    __self: this
+  }, "Popular"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    content: "Show More",
+    color: "#fff",
+    backgroundColor: "#ff7070",
+    borderRadius: "30px",
+    height: "50px",
+    width: "120px",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 114
+    },
+    __self: this
+  })), __jsx(nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    className: "carousel",
+    height: "500px",
+    slideWidth: "340px",
+    cellSpacing: 45,
+    wrapAround: false,
+    renderCenterLeftControls: previousButton,
+    renderCenterRightControls: nextButtom,
+    renderBottomCenterControls: () => {},
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 123
+    },
+    __self: this
+  }, [0, 1, 2, 3, 4].map(i => __jsx("div", {
+    className: "card",
+    key: i,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 134
+    },
+    __self: this
+  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    height: "375px",
+    width: "350px",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 135
+    },
+    __self: this
+  }), __jsx("div", {
+    className: "product-info",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 142
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "product-name",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 143
+    },
+    __self: this
+  }, "Jacket"), __jsx("div", {
+    className: "product-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 144
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "new-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 145
+    },
+    __self: this
+  }, "$21.99"), __jsx("div", {
+    className: "old-price",
+    style: {
+      textDecoration: "line-through"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 146
+    },
+    __self: this
+  }, "$39.99"))))))), __jsx("div", {
+    className: "pros-cards",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 155
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "pros-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 156
+    },
+    __self: this
+  }, "Why you should choose us?"), __jsx("div", {
+    className: "pros-list",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 157
+    },
+    __self: this
+  }, prosCards.map(element => __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    header: __jsx("div", {
+      className: "pros-card-icon",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 160
+      },
+      __self: this
+    }, element.iconSmall),
+    height: "200px",
+    width: "450px",
+    title: element.title,
+    subTitle: element.subTitle,
+    color: "#000",
+    textPosition: "left",
+    border: true,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 159
+    },
+    __self: this
+  })))), __jsx("div", {
+    className: "popular",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 172
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "pros-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 173
+    },
+    __self: this
+  }, "Products in today"), __jsx(nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    className: "carousel",
+    height: "500px",
+    slideWidth: "340px",
+    cellSpacing: 45,
+    wrapAround: false,
+    renderCenterLeftControls: previousButton,
+    renderCenterRightControls: nextButtom,
+    renderBottomCenterControls: () => {},
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 174
+    },
+    __self: this
+  }, [0, 1, 2, 3, 4].map(i => __jsx("div", {
+    className: "card",
+    key: i,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 185
+    },
+    __self: this
+  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    height: "375px",
+    width: "350px",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 186
+    },
+    __self: this
+  }), __jsx("div", {
+    className: "product-info",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 193
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "product-name",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 194
+    },
+    __self: this
+  }, "Jacket"), __jsx("div", {
+    className: "product-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 195
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "new-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 196
+    },
+    __self: this
+  }, "$21.99"), __jsx("div", {
+    className: "old-price",
+    style: {
+      textDecoration: "line-through"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 197
+    },
+    __self: this
+  }, "$39.99"))))))), __jsx("div", {
+    className: "footer",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 206
+    },
+    __self: this
+  }, "Powered by Rustam Sahatov. All rights reserved."))), __jsx(_public_styles_LandingStyle__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 209
+    },
+    __self: this
+  }));
 }
+const prosCards = [{
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["FreeShippingSmall"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 216
+    },
+    __self: undefined
+  }),
+  title: "Free Shipping",
+  subTitle: "All purchases over $199 are eligible for free shipping"
+}, {
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Wallet"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 221
+    },
+    __self: undefined
+  }),
+  title: "Easy Payment",
+  subTitle: "All payments are processed instantly over a secure payment protocol"
+}, {
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Guarantee"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 226
+    },
+    __self: undefined
+  }),
+  title: "Money-back Guarantee",
+  subTitle: "If an item arrived damaged or you've changed your mind, you can send it back for a full refund"
+}];
 
 /***/ }),
 
@@ -1271,6 +1681,139 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./public/styles/LandingStyle.tsx":
+/*!****************************************!*\
+  !*** ./public/styles/LandingStyle.tsx ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LandingStyle; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+var _jsxFileName = "/home/rustam/alem-ecommerce/client/public/styles/LandingStyle.tsx";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+function LandingStyle() {
+  return __jsx("style", {
+    jsx: true,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 5
+    },
+    __self: this
+  }, `          
+                .header{
+                    background: grey;
+                    height: 750px
+                }
+                .navbar{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-left: 170px;
+                    margin-right: 170px;
+                    padding-top: 40px
+                }
+                .categories{
+                    display: flex;
+                    width: 100px;
+                    justify-content: space-between;
+                }
+                .actions{
+                    display: flex;
+                    width: 120px;
+                    justify-content: space-between;
+                }
+                .search{
+                    cursor: pointer
+                }
+                .header-main{
+                    margin-left: 210px;
+                    margin-top: 80px
+                }
+                .title{
+                    font-size: 50px;
+                    width: 300px
+                }
+                .main{
+                    margin-left: 170px;
+                    margin-right: 170px;
+                }
+                .promocards{
+                    margin-top: 40px;
+                    display: flex;
+                    justify-content: space-between
+                }
+                .popular{
+                    margin-top: 120px;
+                }
+                .popular-header{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 60px;
+                }
+                .popular-title{
+                    font-size: 29px
+                }
+                .product-info{
+                    margin-top: 40px
+                }
+                .product-price {
+                    width: 200px;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 16px;
+                }
+                .new-price{
+                    font-size: 20px;
+                    color: red;
+                }
+                .old-price{
+                    font-size: 20px;
+                    color: grey;
+                }
+                .pros-cards{
+                    margin-top: 80px;
+                }
+                .pros-header{
+                    text-align: center;
+                    font-size: 29px;
+                    margin-bottom: 60px;
+                }
+                .pros-list{
+                    display: flex;
+                    justify-content: space-between;
+                    font-family: 'SegoeUIBold', serif;
+                }
+                .pros-card-icon{
+                    height: 70px;
+                    width: 70px;
+                    border-radius: 6px;
+                    background: #d9d9d9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center
+                }
+                .pros-card-subtitle{
+                    font-family: 'SegoeUI', serif;
+                }
+                .footer{
+                    margin-top: 120px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100px;
+                    border-top: 1px solid #d9d9d9;
+                    font-size: 18px;
+                    color:  gray
+                }
+            `);
+}
+
+/***/ }),
+
 /***/ 3:
 /*!*******************************!*\
   !*** multi ./pages/index.tsx ***!
@@ -1360,6 +1903,17 @@ module.exports = require("core-js/library/fn/object/keys");
 
 /***/ }),
 
+/***/ "nuka-carousel":
+/*!********************************!*\
+  !*** external "nuka-carousel" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("nuka-carousel");
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "react" ***!
@@ -1368,17 +1922,6 @@ module.exports = require("core-js/library/fn/object/keys");
 /***/ (function(module, exports) {
 
 module.exports = require("react");
-
-/***/ }),
-
-/***/ "styled-jsx/style":
-/*!***********************************!*\
-  !*** external "styled-jsx/style" ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("styled-jsx/style");
 
 /***/ })
 
