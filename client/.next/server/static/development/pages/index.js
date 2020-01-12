@@ -88,10 +88,473 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./actions/product.ts":
+/*!****************************!*\
+  !*** ./actions/product.ts ***!
+  \****************************/
+/*! exports provided: Action, Payload, getAllProductsAction, getAllProducts */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Action", function() { return Action; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Payload", function() { return Payload; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllProductsAction", function() { return getAllProductsAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllProducts", function() { return getAllProducts; });
+/* harmony import */ var redux_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux-actions */ "redux-actions");
+/* harmony import */ var redux_actions__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(redux_actions__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+let Action;
+
+(function (Action) {
+  Action["GET_ALLPRODUCTS"] = "GET_ALLPRODUCTS";
+})(Action || (Action = {}));
+
+let Payload;
+
+(function (_Payload) {})(Payload || (Payload = {}));
+
+const getAllProductsAction = Object(redux_actions__WEBPACK_IMPORTED_MODULE_0__["createAction"])(Action.GET_ALLPRODUCTS);
+const getAllProducts = () => {
+  return async dispatch => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("http://localhost:8000/api/product/all");
+      dispatch(getAllProductsAction(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+/***/ }),
+
+/***/ "./components/LandingComponents/PromoCards.tsx":
+/*!*****************************************************!*\
+  !*** ./components/LandingComponents/PromoCards.tsx ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PromoCards; });
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _UI_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/Button */ "./components/UI/Button.tsx");
+/* harmony import */ var _UI_Card__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../UI/Card */ "./components/UI/Card.tsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+var _jsxFileName = "/home/rustam/alem-ecommerce/client/components/LandingComponents/PromoCards.tsx";
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement;
+
+
+
+function PromoCards() {
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_3___default.a.Fragment, null, __jsx("div", {
+    className: "jsx-1174480102" + " " + "promocards",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11
+    },
+    __self: this
+  }, __jsx(_UI_Card__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    height: "375px",
+    width: "650px",
+    backgroundColor: "black",
+    title: "New arrivals are now in!",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
+    actionButton: __jsx(_UI_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      content: "Show Collection",
+      color: "#fff",
+      backgroundColor: "#ff7070",
+      borderRadius: "30px",
+      height: "50px",
+      width: "150px",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 20
+      },
+      __self: this
+    }),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12
+    },
+    __self: this
+  }), __jsx(_UI_Card__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    height: "375px",
+    width: "350px",
+    title: "Jackets",
+    subTitle: "$ 39.99",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
+    actionButton: __jsx(_UI_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      content: "Show All",
+      color: "#fff",
+      backgroundColor: "#ff7070",
+      borderRadius: "30px",
+      height: "50px",
+      width: "150px",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 39
+      },
+      __self: this
+    }),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 30
+    },
+    __self: this
+  }), __jsx(_UI_Card__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    height: "375px",
+    width: "350px",
+    title: "Sale This Winter -50%",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    customStyleObject: {
+      justifyContent: "center"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 49
+    },
+    __self: this
+  })), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    id: "1174480102",
+    __self: this
+  }, ".promocards.jsx-1174480102{margin-top:40px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvY29tcG9uZW50cy9MYW5kaW5nQ29tcG9uZW50cy9Qcm9tb0NhcmRzLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUEwRHdCLEFBR3FDLGdCQUNILDBFQUVsQixtSEFBQyIsImZpbGUiOiIvaG9tZS9ydXN0YW0vYWxlbS1lY29tbWVyY2UvY2xpZW50L2NvbXBvbmVudHMvTGFuZGluZ0NvbXBvbmVudHMvUHJvbW9DYXJkcy50c3giLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB1c2VEaXNwYXRjaCwgdXNlU2VsZWN0b3IgfSBmcm9tIFwicmVhY3QtcmVkdXhcIlxuaW1wb3J0IHsgZ2V0QWxsUHJvZHVjdHMgfSBmcm9tIFwiLi4vLi4vYWN0aW9ucy9wcm9kdWN0XCJcbmltcG9ydCB7IHVzZUVmZmVjdCB9IGZyb20gXCJyZWFjdFwiXG5pbXBvcnQgQnV0dG9uIGZyb20gXCIuLi9VSS9CdXR0b25cIlxuaW1wb3J0IENhcmQgZnJvbSBcIi4uL1VJL0NhcmRcIlxuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiXG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFByb21vQ2FyZHMoKSB7XG4gICAgcmV0dXJuIChcbiAgICAgICAgPD5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvbW9jYXJkc1wiPlxuICAgICAgICAgICAgICAgIDxDYXJkXG4gICAgICAgICAgICAgICAgICAgIGhlaWdodD1cIjM3NXB4XCJcbiAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCI2NTBweFwiXG4gICAgICAgICAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcj1cImJsYWNrXCJcbiAgICAgICAgICAgICAgICAgICAgdGl0bGU9XCJOZXcgYXJyaXZhbHMgYXJlIG5vdyBpbiFcIlxuICAgICAgICAgICAgICAgICAgICBjb2xvcj1cIiNmZmZcIlxuICAgICAgICAgICAgICAgICAgICBmb250U2l6ZT1cIjMwcHhcIlxuICAgICAgICAgICAgICAgICAgICBjdXN0b21TdHlsZU9iamVjdD17eyBqdXN0aWZ5Q29udGVudDogXCJjZW50ZXJcIiB9fVxuICAgICAgICAgICAgICAgICAgICBhY3Rpb25CdXR0b249ezxCdXR0b25cbiAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRlbnQ9XCJTaG93IENvbGxlY3Rpb25cIlxuICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9XCIjZmZmXCJcbiAgICAgICAgICAgICAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcj1cIiNmZjcwNzBcIlxuICAgICAgICAgICAgICAgICAgICAgICAgYm9yZGVyUmFkaXVzPVwiMzBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICBoZWlnaHQ9XCI1MHB4XCJcbiAgICAgICAgICAgICAgICAgICAgICAgIHdpZHRoPVwiMTUwcHhcIlxuICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICA8Q2FyZFxuICAgICAgICAgICAgICAgICAgICBoZWlnaHQ9XCIzNzVweFwiXG4gICAgICAgICAgICAgICAgICAgIHdpZHRoPVwiMzUwcHhcIlxuICAgICAgICAgICAgICAgICAgICB0aXRsZT1cIkphY2tldHNcIlxuICAgICAgICAgICAgICAgICAgICBzdWJUaXRsZT1cIiQgMzkuOTlcIlxuICAgICAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kQ29sb3I9XCJwdXJwbGVcIlxuICAgICAgICAgICAgICAgICAgICBjb2xvcj1cIiNmZmZcIlxuICAgICAgICAgICAgICAgICAgICBmb250U2l6ZT1cIjMwcHhcIlxuICAgICAgICAgICAgICAgICAgICBjdXN0b21TdHlsZU9iamVjdD17eyBqdXN0aWZ5Q29udGVudDogXCJjZW50ZXJcIiB9fVxuICAgICAgICAgICAgICAgICAgICBhY3Rpb25CdXR0b249ezxCdXR0b25cbiAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRlbnQ9XCJTaG93IEFsbFwiXG4gICAgICAgICAgICAgICAgICAgICAgICBjb2xvcj1cIiNmZmZcIlxuICAgICAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZENvbG9yPVwiI2ZmNzA3MFwiXG4gICAgICAgICAgICAgICAgICAgICAgICBib3JkZXJSYWRpdXM9XCIzMHB4XCJcbiAgICAgICAgICAgICAgICAgICAgICAgIGhlaWdodD1cIjUwcHhcIlxuICAgICAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCIxNTBweFwiXG4gICAgICAgICAgICAgICAgICAgIC8+XG4gICAgICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgIDxDYXJkXG4gICAgICAgICAgICAgICAgICAgIGhlaWdodD1cIjM3NXB4XCJcbiAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCIzNTBweFwiXG4gICAgICAgICAgICAgICAgICAgIHRpdGxlPVwiU2FsZSBUaGlzIFdpbnRlciAtNTAlXCJcbiAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZENvbG9yPVwicHVycGxlXCJcbiAgICAgICAgICAgICAgICAgICAgY29sb3I9XCIjZmZmXCJcbiAgICAgICAgICAgICAgICAgICAgZm9udFNpemU9XCIzMHB4XCJcbiAgICAgICAgICAgICAgICAgICAgY3VzdG9tU3R5bGVPYmplY3Q9e3sganVzdGlmeUNvbnRlbnQ6IFwiY2VudGVyXCIgfX1cbiAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8c3R5bGUganN4PntgXG4gICAgICAgICAgICAgICAgLnByb21vY2FyZHN7XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi10b3A6IDQwcHg7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlblxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGB9PC9zdHlsZT5cbiAgICAgICAgPC8+XG4gICAgKVxufVxuIl19 */\n/*@ sourceURL=/home/rustam/alem-ecommerce/client/components/LandingComponents/PromoCards.tsx */"));
+}
+
+/***/ }),
+
+/***/ "./components/LandingComponents/ProsCards.tsx":
+/*!****************************************************!*\
+  !*** ./components/LandingComponents/ProsCards.tsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ProsCards; });
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _actions_product__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../actions/product */ "./actions/product.ts");
+/* harmony import */ var _public_icons_compiled__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../public/icons/_compiled */ "./public/icons/_compiled/index.ts");
+/* harmony import */ var _UI_Card__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UI/Card */ "./components/UI/Card.tsx");
+var _jsxFileName = "/home/rustam/alem-ecommerce/client/components/LandingComponents/ProsCards.tsx";
+
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
+
+
+
+
+function ProsCards() {
+  const state = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(st => st.product);
+  const dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useDispatch"])();
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
+    dispatch(Object(_actions_product__WEBPACK_IMPORTED_MODULE_3__["getAllProducts"])());
+  }, []);
+  console.log(state, "test");
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, __jsx("div", {
+    className: "jsx-1394770085" + " " + "pros-cards",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 16
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-1394770085" + " " + "pros-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 17
+    },
+    __self: this
+  }, "Why you should choose us?"), __jsx("div", {
+    className: "jsx-1394770085" + " " + "pros-list",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, prosCards.map((element, i) => __jsx(_UI_Card__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    key: i,
+    header: __jsx("div", {
+      className: "jsx-1394770085" + " " + "pros-card-icon",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 22
+      },
+      __self: this
+    }, element.iconSmall),
+    height: "200px",
+    width: "450px",
+    title: element.title,
+    subTitle: element.subTitle,
+    color: "#000",
+    textPosition: "left",
+    border: true,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 20
+    },
+    __self: this
+  })))), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    id: "1394770085",
+    __self: this
+  }, ".pros-cards.jsx-1394770085{margin-top:80px;}.pros-header.jsx-1394770085{text-align:center;font-size:29px;margin-bottom:60px;}.pros-list.jsx-1394770085{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;font-family:'SegoeUIBold',serif;}.pros-card-icon.jsx-1394770085{height:70px;width:70px;border-radius:6px;background:#d9d9d9;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}.pros-card-subtitle.jsx-1394770085{font-family:'SegoeUI',serif;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvY29tcG9uZW50cy9MYW5kaW5nQ29tcG9uZW50cy9Qcm9zQ2FyZHMudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWlDd0IsQUFHcUMsQUFHRSxBQUtMLEFBS0QsQUFTaUIsWUFSbEIsSUFiZixFQUdtQixLQVdHLEtBUXRCLEtBbEJ1QixRQVdBLFdBVnZCLFFBV2lCLGNBUmlCLDREQVNQLHVEQVJVLGdDQUNyQyxZQVNELDZGQUFDIiwiZmlsZSI6Ii9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvY29tcG9uZW50cy9MYW5kaW5nQ29tcG9uZW50cy9Qcm9zQ2FyZHMudHN4Iiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlRGlzcGF0Y2gsIHVzZVNlbGVjdG9yIH0gZnJvbSBcInJlYWN0LXJlZHV4XCJcbmltcG9ydCB7IGdldEFsbFByb2R1Y3RzIH0gZnJvbSBcIi4uLy4uL2FjdGlvbnMvcHJvZHVjdFwiXG5pbXBvcnQgKiBhcyBJY29ucyBmcm9tIFwiLi4vLi4vcHVibGljL2ljb25zL19jb21waWxlZFwiXG5pbXBvcnQgeyB1c2VFZmZlY3QgfSBmcm9tIFwicmVhY3RcIlxuaW1wb3J0IENhcmQgZnJvbSBcIi4uL1VJL0NhcmRcIlxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9zQ2FyZHMoKSB7XG4gICAgY29uc3Qgc3RhdGUgPSB1c2VTZWxlY3Rvcigoc3Q6IGFueSkgPT4gc3QucHJvZHVjdClcbiAgICBjb25zdCBkaXNwYXRjaCA9IHVzZURpc3BhdGNoKClcbiAgICB1c2VFZmZlY3QoKCkgPT4ge1xuICAgICAgICBkaXNwYXRjaChnZXRBbGxQcm9kdWN0cygpKVxuICAgIH0sIFtdKVxuICAgIGNvbnNvbGUubG9nKHN0YXRlLCBcInRlc3RcIilcbiAgICByZXR1cm4gKFxuICAgICAgICA8PlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwcm9zLWNhcmRzXCI+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwcm9zLWhlYWRlclwiPldoeSB5b3Ugc2hvdWxkIGNob29zZSB1cz88L2Rpdj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInByb3MtbGlzdFwiPlxuICAgICAgICAgICAgICAgICAgICB7cHJvc0NhcmRzLm1hcCgoZWxlbWVudCwgaSkgPT4gKFxuICAgICAgICAgICAgICAgICAgICAgICAgPENhcmRcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBrZXk9e2l9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVhZGVyPXs8ZGl2IGNsYXNzTmFtZT1cInByb3MtY2FyZC1pY29uXCI+e2VsZW1lbnQuaWNvblNtYWxsfTwvZGl2Pn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZWlnaHQ9XCIyMDBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCI0NTBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgdGl0bGU9e2VsZW1lbnQudGl0bGV9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc3ViVGl0bGU9e2VsZW1lbnQuc3ViVGl0bGV9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9XCIjMDAwXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB0ZXh0UG9zaXRpb249XCJsZWZ0XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBib3JkZXI9e3RydWV9XG4gICAgICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICAgICApKX1cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPHN0eWxlIGpzeD57YFxuICAgICAgICAgICAgICAgIC5wcm9zLWNhcmRze1xuICAgICAgICAgICAgICAgICAgICBtYXJnaW4tdG9wOiA4MHB4O1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAucHJvcy1oZWFkZXJ7XG4gICAgICAgICAgICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplOiAyOXB4O1xuICAgICAgICAgICAgICAgICAgICBtYXJnaW4tYm90dG9tOiA2MHB4O1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAucHJvcy1saXN0e1xuICAgICAgICAgICAgICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICAgICAgICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gICAgICAgICAgICAgICAgICAgIGZvbnQtZmFtaWx5OiAnU2Vnb2VVSUJvbGQnLCBzZXJpZjtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLnByb3MtY2FyZC1pY29ue1xuICAgICAgICAgICAgICAgICAgICBoZWlnaHQ6IDcwcHg7XG4gICAgICAgICAgICAgICAgICAgIHdpZHRoOiA3MHB4O1xuICAgICAgICAgICAgICAgICAgICBib3JkZXItcmFkaXVzOiA2cHg7XG4gICAgICAgICAgICAgICAgICAgIGJhY2tncm91bmQ6ICNkOWQ5ZDk7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICAgICAgICAgICAgICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyXG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5wcm9zLWNhcmQtc3VidGl0bGV7XG4gICAgICAgICAgICAgICAgICAgIGZvbnQtZmFtaWx5OiAnU2Vnb2VVSScsIHNlcmlmO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGB9PC9zdHlsZT5cbiAgICAgICAgPC8+XG4gICAgKVxufVxuXG5jb25zdCBwcm9zQ2FyZHMgPSBbXG4gICAge1xuICAgICAgICBpY29uU21hbGw6IDxJY29ucy5GcmVlU2hpcHBpbmdTbWFsbCAvPixcbiAgICAgICAgdGl0bGU6IFwiRnJlZSBTaGlwcGluZ1wiLFxuICAgICAgICBzdWJUaXRsZTogXCJBbGwgcHVyY2hhc2VzIG92ZXIgJDE5OSBhcmUgZWxpZ2libGUgZm9yIGZyZWUgc2hpcHBpbmdcIlxuICAgIH0sXG4gICAge1xuICAgICAgICBpY29uU21hbGw6IDxJY29ucy5XYWxsZXQgLz4sXG4gICAgICAgIHRpdGxlOiBcIkVhc3kgUGF5bWVudFwiLFxuICAgICAgICBzdWJUaXRsZTogXCJBbGwgcGF5bWVudHMgYXJlIHByb2Nlc3NlZCBpbnN0YW50bHkgb3ZlciBhIHNlY3VyZSBwYXltZW50IHByb3RvY29sXCIsXG4gICAgfSxcbiAgICB7XG4gICAgICAgIGljb25TbWFsbDogPEljb25zLkd1YXJhbnRlZSAvPixcbiAgICAgICAgdGl0bGU6IFwiTW9uZXktYmFjayBHdWFyYW50ZWVcIixcbiAgICAgICAgc3ViVGl0bGU6IFwiSWYgYW4gaXRlbSBhcnJpdmVkIGRhbWFnZWQgb3IgeW91J3ZlIGNoYW5nZWQgeW91ciBtaW5kLCB5b3UgY2FuIHNlbmQgaXQgYmFjayBmb3IgYSBmdWxsIHJlZnVuZFwiLFxuICAgIH0sXG5dXG4iXX0= */\n/*@ sourceURL=/home/rustam/alem-ecommerce/client/components/LandingComponents/ProsCards.tsx */"));
+}
+const prosCards = [{
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_4__["FreeShippingSmall"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 67
+    },
+    __self: undefined
+  }),
+  title: "Free Shipping",
+  subTitle: "All purchases over $199 are eligible for free shipping"
+}, {
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_4__["Wallet"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 72
+    },
+    __self: undefined
+  }),
+  title: "Easy Payment",
+  subTitle: "All payments are processed instantly over a secure payment protocol"
+}, {
+  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_4__["Guarantee"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 77
+    },
+    __self: undefined
+  }),
+  title: "Money-back Guarantee",
+  subTitle: "If an item arrived damaged or you've changed your mind, you can send it back for a full refund"
+}];
+
+/***/ }),
+
+/***/ "./components/LandingComponents/WithCarousel.tsx":
+/*!*******************************************************!*\
+  !*** ./components/LandingComponents/WithCarousel.tsx ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WithCarousel; });
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../public/icons/_compiled */ "./public/icons/_compiled/index.ts");
+/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! nuka-carousel */ "nuka-carousel");
+/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(nuka_carousel__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _UI_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UI/Button */ "./components/UI/Button.tsx");
+/* harmony import */ var _UI_Card__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UI/Card */ "./components/UI/Card.tsx");
+var _jsxFileName = "/home/rustam/alem-ecommerce/client/components/LandingComponents/WithCarousel.tsx";
+
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
+
+
+
+function WithCarousel(props) {
+  const previousButton = ({
+    previousSlide
+  }) => __jsx("div", {
+    style: {
+      marginTop: "-80px"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12
+    },
+    __self: this
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowRight"], {
+    style: {
+      cursor: "pointer"
+    },
+    onClick: previousSlide,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13
+    },
+    __self: this
+  }));
+
+  const nextButtom = ({
+    nextSlide
+  }) => __jsx("div", {
+    style: {
+      marginTop: "-80px"
+    },
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowLeft"], {
+    style: {
+      cursor: "pointer"
+    },
+    onClick: nextSlide,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 19
+    },
+    __self: this
+  }));
+
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, __jsx("div", {
+    className: "jsx-2082021955" + " " + "popular",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 25
+    },
+    __self: this
+  }, props.header === "popular-header" ? __jsx("div", {
+    className: "jsx-2082021955" + " " + "popular-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2082021955" + " " + "popular-title",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 29
+    },
+    __self: this
+  }, "Popular"), __jsx(_UI_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    content: "Show More",
+    color: "#fff",
+    backgroundColor: "#ff7070",
+    borderRadius: "30px",
+    height: "50px",
+    width: "120px",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 30
+    },
+    __self: this
+  })) : __jsx("div", {
+    className: "jsx-2082021955" + " " + "pros-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 40
+    },
+    __self: this
+  }, "Products in today"), __jsx(nuka_carousel__WEBPACK_IMPORTED_MODULE_3___default.a, {
+    className: "carousel",
+    height: "500px",
+    slideWidth: "340px",
+    cellSpacing: 45,
+    wrapAround: false,
+    renderCenterLeftControls: previousButton,
+    renderCenterRightControls: nextButtom,
+    renderBottomCenterControls: () => {},
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 43
+    },
+    __self: this
+  }, [0, 1, 2, 3, 4].map(i => __jsx("div", {
+    key: i,
+    className: "jsx-2082021955" + " " + "card",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 54
+    },
+    __self: this
+  }, __jsx(_UI_Card__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    height: "375px",
+    width: "350px",
+    backgroundColor: "purple",
+    color: "#fff",
+    fontSize: "30px",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 55
+    },
+    __self: this
+  }), __jsx("div", {
+    className: "jsx-2082021955" + " " + "product-info",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 62
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2082021955" + " " + "product-name",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 63
+    },
+    __self: this
+  }, "Jacket"), __jsx("div", {
+    className: "jsx-2082021955" + " " + "product-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 64
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2082021955" + " " + "new-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 65
+    },
+    __self: this
+  }, "$21.99"), __jsx("div", {
+    style: {
+      textDecoration: "line-through"
+    },
+    className: "jsx-2082021955" + " " + "old-price",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 66
+    },
+    __self: this
+  }, "$39.99"))))))), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    id: "2082021955",
+    __self: this
+  }, ".popular.jsx-2082021955{margin-top:120px;}.popular-header.jsx-2082021955{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;margin-bottom:60px;}.popular-title.jsx-2082021955{font-size:29px;}.product-info.jsx-2082021955{margin-top:40px;}.product-price.jsx-2082021955{width:200px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;font-size:16px;}.new-price.jsx-2082021955{font-size:20px;color:red;}.old-price.jsx-2082021955{font-size:20px;color:grey;}.pros-header.jsx-2082021955{text-align:center;font-size:29px;margin-bottom:60px;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvY29tcG9uZW50cy9MYW5kaW5nQ29tcG9uZW50cy9XaXRoQ2Fyb3VzZWwudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQTJFd0IsQUFHc0MsQUFHSixBQU1sQixBQUdBLEFBRWlCLEFBTUcsQUFJQSxBQUlHLFlBYkwsR0FOakIsQUFZYyxBQUlDLENBYmYsQ0FYQSxDQTRCbUIsT0FQbkIsQ0FJQSxPQUl1QixtQkFDdkIsc0JBM0JrQyxZQVlBLHVHQVhYLFlBWUosT0FYbkIsUUFZQSIsImZpbGUiOiIvaG9tZS9ydXN0YW0vYWxlbS1lY29tbWVyY2UvY2xpZW50L2NvbXBvbmVudHMvTGFuZGluZ0NvbXBvbmVudHMvV2l0aENhcm91c2VsLnRzeCIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHVzZURpc3BhdGNoLCB1c2VTZWxlY3RvciB9IGZyb20gXCJyZWFjdC1yZWR1eFwiXG5pbXBvcnQgeyBnZXRBbGxQcm9kdWN0cyB9IGZyb20gXCIuLi8uLi9hY3Rpb25zL3Byb2R1Y3RcIlxuaW1wb3J0ICogYXMgSWNvbnMgZnJvbSBcIi4uLy4uL3B1YmxpYy9pY29ucy9fY29tcGlsZWRcIlxuaW1wb3J0IENhcm91c2VsIGZyb20gXCJudWthLWNhcm91c2VsXCJcbmltcG9ydCB7IHVzZUVmZmVjdCB9IGZyb20gXCJyZWFjdFwiXG5pbXBvcnQgQnV0dG9uIGZyb20gXCIuLi9VSS9CdXR0b25cIlxuaW1wb3J0IENhcmQgZnJvbSBcIi4uL1VJL0NhcmRcIlxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBXaXRoQ2Fyb3VzZWwocHJvcHM6IGFueSkge1xuXG4gICAgY29uc3QgcHJldmlvdXNCdXR0b24gPSAoeyBwcmV2aW91c1NsaWRlIH06IGFueSkgPT4gKFxuICAgICAgICA8ZGl2IHN0eWxlPXt7IG1hcmdpblRvcDogXCItODBweFwiIH19PlxuICAgICAgICAgICAgPEljb25zLkFycm93UmlnaHQgc3R5bGU9e3sgY3Vyc29yOiBcInBvaW50ZXJcIiB9fSBvbkNsaWNrPXtwcmV2aW91c1NsaWRlfSAvPlxuICAgICAgICA8L2Rpdj5cbiAgICApXG5cbiAgICBjb25zdCBuZXh0QnV0dG9tID0gKHsgbmV4dFNsaWRlIH06IGFueSkgPT4gKFxuICAgICAgICA8ZGl2IHN0eWxlPXt7IG1hcmdpblRvcDogXCItODBweFwiIH19PlxuICAgICAgICAgICAgPEljb25zLkFycm93TGVmdCBzdHlsZT17eyBjdXJzb3I6IFwicG9pbnRlclwiIH19IG9uQ2xpY2s9e25leHRTbGlkZX0gLz5cbiAgICAgICAgPC9kaXY+XG4gICAgKVxuXG4gICAgcmV0dXJuIChcbiAgICAgICAgPD5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhclwiPlxuICAgICAgICAgICAgICAgIHtwcm9wcy5oZWFkZXIgPT09IFwicG9wdWxhci1oZWFkZXJcIlxuICAgICAgICAgICAgICAgICAgICA/XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhci1oZWFkZXJcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9wdWxhci10aXRsZVwiPlBvcHVsYXI8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxCdXR0b25cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250ZW50PVwiU2hvdyBNb3JlXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb2xvcj1cIiNmZmZcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJhY2tncm91bmRDb2xvcj1cIiNmZjcwNzBcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJvcmRlclJhZGl1cz1cIjMwcHhcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGhlaWdodD1cIjUwcHhcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHdpZHRoPVwiMTIwcHhcIlxuICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+IFxuICAgICAgICAgICAgICAgICAgICA6XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvcy1oZWFkZXJcIj5Qcm9kdWN0cyBpbiB0b2RheTwvZGl2PlxuICAgICAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgICAgIDxDYXJvdXNlbFxuICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJjYXJvdXNlbFwiXG4gICAgICAgICAgICAgICAgICAgIGhlaWdodD1cIjUwMHB4XCJcbiAgICAgICAgICAgICAgICAgICAgc2xpZGVXaWR0aD1cIjM0MHB4XCJcbiAgICAgICAgICAgICAgICAgICAgY2VsbFNwYWNpbmc9ezQ1fVxuICAgICAgICAgICAgICAgICAgICB3cmFwQXJvdW5kPXtmYWxzZX1cbiAgICAgICAgICAgICAgICAgICAgcmVuZGVyQ2VudGVyTGVmdENvbnRyb2xzPXtwcmV2aW91c0J1dHRvbn1cbiAgICAgICAgICAgICAgICAgICAgcmVuZGVyQ2VudGVyUmlnaHRDb250cm9scz17bmV4dEJ1dHRvbX1cbiAgICAgICAgICAgICAgICAgICAgcmVuZGVyQm90dG9tQ2VudGVyQ29udHJvbHM9eygpOiBhbnkgPT4geyB9fVxuICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgICAge1swLCAxLCAyLCAzLCA0XS5tYXAoKGkpID0+IChcbiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiY2FyZFwiIGtleT17aX0+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPENhcmRcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVpZ2h0PVwiMzc1cHhcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB3aWR0aD1cIjM1MHB4XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYmFja2dyb3VuZENvbG9yPVwicHVycGxlXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3I9XCIjZmZmXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZm9udFNpemU9XCIzMHB4XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvZHVjdC1pbmZvXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvZHVjdC1uYW1lXCI+SmFja2V0PC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicHJvZHVjdC1wcmljZVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJuZXctcHJpY2VcIj4kMjEuOTk8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwib2xkLXByaWNlXCIgc3R5bGU9e3tcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0ZXh0RGVjb3JhdGlvbjogXCJsaW5lLXRocm91Z2hcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH19PiQzOS45OTwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICApKX1cbiAgICAgICAgICAgICAgICA8L0Nhcm91c2VsPlxuICAgICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICAgIDxzdHlsZSBqc3g+e2BcbiAgICAgICAgICAgICAgICAucG9wdWxhcntcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLXRvcDogMTIwcHg7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5wb3B1bGFyLWhlYWRlcntcbiAgICAgICAgICAgICAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgICAgICAgICAgICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgICAgICAgICAgICAgICAgICBtYXJnaW4tYm90dG9tOiA2MHB4O1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAucG9wdWxhci10aXRsZXtcbiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplOiAyOXB4XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5wcm9kdWN0LWluZm97XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi10b3A6IDQwcHhcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLnByb2R1Y3QtcHJpY2Uge1xuICAgICAgICAgICAgICAgICAgICB3aWR0aDogMjAwcHg7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAubmV3LXByaWNle1xuICAgICAgICAgICAgICAgICAgICBmb250LXNpemU6IDIwcHg7XG4gICAgICAgICAgICAgICAgICAgIGNvbG9yOiByZWQ7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5vbGQtcHJpY2V7XG4gICAgICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMjBweDtcbiAgICAgICAgICAgICAgICAgICAgY29sb3I6IGdyZXk7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5wcm9zLWhlYWRlcntcbiAgICAgICAgICAgICAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgICAgICAgICAgICAgICAgICBmb250LXNpemU6IDI5cHg7XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi1ib3R0b206IDYwcHg7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgYH08L3N0eWxlPlxuICAgICAgICA8Lz5cbiAgICApXG59XG4iXX0= */\n/*@ sourceURL=/home/rustam/alem-ecommerce/client/components/LandingComponents/WithCarousel.tsx */"));
+}
+
+/***/ }),
 
 /***/ "./components/UI/Button.tsx":
 /*!**********************************!*\
@@ -352,6 +815,17 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/assign */ "co
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/object/create.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/object/create.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/create */ "core-js/library/fn/object/create");
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js":
 /*!*********************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js ***!
@@ -418,6 +892,99 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/keys */ "core
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/promise.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/promise.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/promise */ "core-js/library/fn/promise");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/symbol.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/symbol.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/symbol */ "core-js/library/fn/symbol");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/symbol/iterator */ "core-js/library/fn/symbol/iterator");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/weak-map.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/weak-map.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/weak-map */ "core-js/library/fn/weak-map");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _Promise = __webpack_require__(/*! ../core-js/promise */ "./node_modules/@babel/runtime-corejs2/core-js/promise.js");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    _Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new _Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js ***!
@@ -481,6 +1048,1621 @@ function _extends() {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutProperties.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutProperties.js ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _objectWithoutProperties; });
+/* harmony import */ var _core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
+/* harmony import */ var _core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutPropertiesLoose.js");
+
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__["default"])(source, excluded);
+  var key, i;
+
+  if (_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_0___default.a) {
+    var sourceSymbolKeys = _core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_0___default()(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutPropertiesLoose.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutPropertiesLoose.js ***!
+  \*****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _objectWithoutPropertiesLoose; });
+/* harmony import */ var _core_js_object_keys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+/* harmony import */ var _core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0__);
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+
+  var sourceKeys = _core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default()(source);
+
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/extends.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/extends.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _Object$assign = __webpack_require__(/*! ../core-js/object/assign */ "./node_modules/@babel/runtime-corejs2/core-js/object/assign.js");
+
+function _extends() {
+  module.exports = _extends = _Object$assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    "default": obj
+  };
+}
+
+module.exports = _interopRequireDefault;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _Object$getOwnPropertyDescriptor = __webpack_require__(/*! ../core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
+
+var _Object$defineProperty = __webpack_require__(/*! ../core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var _typeof = __webpack_require__(/*! ../helpers/typeof */ "./node_modules/@babel/runtime-corejs2/helpers/typeof.js");
+
+var _WeakMap = __webpack_require__(/*! ../core-js/weak-map */ "./node_modules/@babel/runtime-corejs2/core-js/weak-map.js");
+
+function _getRequireWildcardCache() {
+  if (typeof _WeakMap !== "function") return null;
+  var cache = new _WeakMap();
+
+  _getRequireWildcardCache = function _getRequireWildcardCache() {
+    return cache;
+  };
+
+  return cache;
+}
+
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  }
+
+  if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") {
+    return {
+      "default": obj
+    };
+  }
+
+  var cache = _getRequireWildcardCache();
+
+  if (cache && cache.has(obj)) {
+    return cache.get(obj);
+  }
+
+  var newObj = {};
+  var hasPropertyDescriptor = _Object$defineProperty && _Object$getOwnPropertyDescriptor;
+
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      var desc = hasPropertyDescriptor ? _Object$getOwnPropertyDescriptor(obj, key) : null;
+
+      if (desc && (desc.get || desc.set)) {
+        _Object$defineProperty(newObj, key, desc);
+      } else {
+        newObj[key] = obj[key];
+      }
+    }
+  }
+
+  newObj["default"] = obj;
+
+  if (cache) {
+    cache.set(obj, newObj);
+  }
+
+  return newObj;
+}
+
+module.exports = _interopRequireWildcard;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/typeof.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/typeof.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _Symbol$iterator = __webpack_require__(/*! ../core-js/symbol/iterator */ "./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js");
+
+var _Symbol = __webpack_require__(/*! ../core-js/symbol */ "./node_modules/@babel/runtime-corejs2/core-js/symbol.js");
+
+function _typeof2(obj) { if (typeof _Symbol === "function" && typeof _Symbol$iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof _Symbol === "function" && obj.constructor === _Symbol && obj !== _Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
+function _typeof(obj) {
+  if (typeof _Symbol === "function" && _typeof2(_Symbol$iterator) === "symbol") {
+    module.exports = _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    module.exports = _typeof = function _typeof(obj) {
+      return obj && typeof _Symbol === "function" && obj.constructor === _Symbol && obj !== _Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+
+module.exports = _typeof;
+
+/***/ }),
+
+/***/ "./node_modules/next/app.js":
+/*!**********************************!*\
+  !*** ./node_modules/next/app.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./dist/pages/_app */ "./node_modules/next/dist/pages/_app.js")
+
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/client/router.js":
+/*!*************************************************!*\
+  !*** ./node_modules/next/dist/client/router.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.useRouter = useRouter;
+exports.makePublicRouterInstance = makePublicRouterInstance;
+exports.createRouter = exports.withRouter = exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/extends */ "./node_modules/@babel/runtime-corejs2/helpers/extends.js"));
+
+var _defineProperty = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+var _router2 = _interopRequireWildcard(__webpack_require__(/*! ../next-server/lib/router/router */ "./node_modules/next/dist/next-server/lib/router/router.js"));
+
+exports.Router = _router2.default;
+exports.NextRouter = _router2.NextRouter;
+
+var _routerContext = __webpack_require__(/*! ../next-server/lib/router-context */ "./node_modules/next/dist/next-server/lib/router-context.js");
+
+var _withRouter = _interopRequireDefault(__webpack_require__(/*! ./with-router */ "./node_modules/next/dist/client/with-router.js"));
+
+exports.withRouter = _withRouter.default;
+/* global window */
+
+var singletonRouter = {
+  router: null,
+  // holds the actual router instance
+  readyCallbacks: [],
+
+  ready(cb) {
+    if (this.router) return cb();
+
+    if (false) {}
+  }
+
+}; // Create public properties and methods of the router in the singletonRouter
+
+var urlPropertyFields = ['pathname', 'route', 'query', 'asPath', 'components'];
+var routerEvents = ['routeChangeStart', 'beforeHistoryChange', 'routeChangeComplete', 'routeChangeError', 'hashChangeStart', 'hashChangeComplete'];
+var coreMethodFields = ['push', 'replace', 'reload', 'back', 'prefetch', 'beforePopState']; // Events is a static property on the router, the router doesn't have to be initialized to use it
+
+(0, _defineProperty.default)(singletonRouter, 'events', {
+  get() {
+    return _router2.default.events;
+  }
+
+});
+urlPropertyFields.forEach(field => {
+  // Here we need to use Object.defineProperty because, we need to return
+  // the property assigned to the actual router
+  // The value might get changed as we change routes and this is the
+  // proper way to access it
+  (0, _defineProperty.default)(singletonRouter, field, {
+    get() {
+      var router = getRouter();
+      return router[field];
+    }
+
+  });
+});
+coreMethodFields.forEach(field => {
+  // We don't really know the types here, so we add them later instead
+  ;
+
+  singletonRouter[field] = function () {
+    var router = getRouter();
+    return router[field](...arguments);
+  };
+});
+routerEvents.forEach(event => {
+  singletonRouter.ready(() => {
+    _router2.default.events.on(event, function () {
+      var eventField = "on" + event.charAt(0).toUpperCase() + event.substring(1);
+      var _singletonRouter = singletonRouter;
+
+      if (_singletonRouter[eventField]) {
+        try {
+          _singletonRouter[eventField](...arguments);
+        } catch (err) {
+          // tslint:disable-next-line:no-console
+          console.error("Error when running the Router event: " + eventField); // tslint:disable-next-line:no-console
+
+          console.error(err.message + "\n" + err.stack);
+        }
+      }
+    });
+  });
+});
+
+function getRouter() {
+  if (!singletonRouter.router) {
+    var message = 'No router instance found.\n' + 'You should only use "next/router" inside the client side of your app.\n';
+    throw new Error(message);
+  }
+
+  return singletonRouter.router;
+} // Export the singletonRouter and this is the public API.
+
+
+var _default = singletonRouter; // Reexport the withRoute HOC
+
+exports.default = _default;
+
+function useRouter() {
+  return _react.default.useContext(_routerContext.RouterContext);
+} // INTERNAL APIS
+// -------------
+// (do not use following exports inside the app)
+// Create a router and assign it as the singleton instance.
+// This is used in client side when we are initilizing the app.
+// This should **not** use inside the server.
+
+
+var createRouter = function createRouter() {
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  singletonRouter.router = new _router2.default(...args);
+  singletonRouter.readyCallbacks.forEach(cb => cb());
+  singletonRouter.readyCallbacks = [];
+  return singletonRouter.router;
+}; // This function is used to create the `withRouter` router instance
+
+
+exports.createRouter = createRouter;
+
+function makePublicRouterInstance(router) {
+  var _router = router;
+  var instance = {};
+
+  for (var property of urlPropertyFields) {
+    if (typeof _router[property] === 'object') {
+      instance[property] = (0, _extends2.default)({}, _router[property]); // makes sure query is not stateful
+
+      continue;
+    }
+
+    instance[property] = _router[property];
+  } // Events is a static property on the router, the router doesn't have to be initialized to use it
+
+
+  instance.events = _router2.default.events;
+  coreMethodFields.forEach(field => {
+    instance[field] = function () {
+      return _router[field](...arguments);
+    };
+  });
+  return instance;
+}
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/client/with-router.js":
+/*!******************************************************!*\
+  !*** ./node_modules/next/dist/client/with-router.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = withRouter;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/extends */ "./node_modules/@babel/runtime-corejs2/helpers/extends.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+var _router = __webpack_require__(/*! ./router */ "./node_modules/next/dist/client/router.js");
+
+function withRouter(ComposedComponent) {
+  function WithRouterWrapper(props) {
+    return _react.default.createElement(ComposedComponent, (0, _extends2.default)({
+      router: (0, _router.useRouter)()
+    }, props));
+  }
+
+  WithRouterWrapper.getInitialProps = ComposedComponent.getInitialProps // This is needed to allow checking for custom getInitialProps in _app
+  ;
+  WithRouterWrapper.origGetInitialProps = ComposedComponent.origGetInitialProps;
+
+  if (true) {
+    var name = ComposedComponent.displayName || ComposedComponent.name || 'Unknown';
+    WithRouterWrapper.displayName = "withRouter(" + name + ")";
+  }
+
+  return WithRouterWrapper;
+}
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/mitt.js":
+/*!********************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/mitt.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+MIT License
+
+Copyright (c) Jason Miller (https://jasonformat.com/)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+var _Object$create = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/create */ "./node_modules/@babel/runtime-corejs2/core-js/object/create.js");
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function mitt() {
+  const all = _Object$create(null);
+
+  return {
+    on(type, handler) {
+      ;
+      (all[type] || (all[type] = [])).push(handler);
+    },
+
+    off(type, handler) {
+      if (all[type]) {
+        // tslint:disable-next-line:no-bitwise
+        all[type].splice(all[type].indexOf(handler) >>> 0, 1);
+      }
+    },
+
+    emit(type, ...evts) {
+      // eslint-disable-next-line array-callback-return
+      ;
+      (all[type] || []).slice().map(handler => {
+        handler(...evts);
+      });
+    }
+
+  };
+}
+
+exports.default = mitt;
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router-context.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router-context.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  result["default"] = mod;
+  return result;
+};
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const React = __importStar(__webpack_require__(/*! react */ "react"));
+
+exports.RouterContext = React.createContext(null);
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router/rewrite-url-for-export.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router/rewrite-url-for-export.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function rewriteUrlForNextExport(url) {
+  const [pathname, hash] = url.split('#'); // tslint:disable-next-line
+
+  let [path, qs] = pathname.split('?');
+  path = path.replace(/\/$/, ''); // Append a trailing slash if this path does not have an extension
+
+  if (!/\.[^/]+\/?$/.test(path)) path += `/`;
+  if (qs) path += '?' + qs;
+  if (hash) path += '#' + hash;
+  return path;
+}
+
+exports.rewriteUrlForNextExport = rewriteUrlForNextExport;
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router/router.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router/router.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$assign = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/assign */ "./node_modules/@babel/runtime-corejs2/core-js/object/assign.js");
+
+var _Promise = __webpack_require__(/*! @babel/runtime-corejs2/core-js/promise */ "./node_modules/@babel/runtime-corejs2/core-js/promise.js");
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const url_1 = __webpack_require__(/*! url */ "url");
+
+const mitt_1 = __importDefault(__webpack_require__(/*! ../mitt */ "./node_modules/next/dist/next-server/lib/mitt.js"));
+
+const utils_1 = __webpack_require__(/*! ../utils */ "./node_modules/next/dist/next-server/lib/utils.js");
+
+const rewrite_url_for_export_1 = __webpack_require__(/*! ./rewrite-url-for-export */ "./node_modules/next/dist/next-server/lib/router/rewrite-url-for-export.js");
+
+const is_dynamic_1 = __webpack_require__(/*! ./utils/is-dynamic */ "./node_modules/next/dist/next-server/lib/router/utils/is-dynamic.js");
+
+const route_matcher_1 = __webpack_require__(/*! ./utils/route-matcher */ "./node_modules/next/dist/next-server/lib/router/utils/route-matcher.js");
+
+const route_regex_1 = __webpack_require__(/*! ./utils/route-regex */ "./node_modules/next/dist/next-server/lib/router/utils/route-regex.js");
+
+function addBasePath(path) {
+  // @ts-ignore variable is always a string
+  const p = "";
+  return path.indexOf(p) !== 0 ? p + path : path;
+}
+
+function toRoute(path) {
+  return path.replace(/\/$/, '') || '/';
+}
+
+class Router {
+  constructor(pathname, query, as, {
+    initialProps,
+    pageLoader,
+    App,
+    wrapApp,
+    Component,
+    err,
+    subscription
+  }) {
+    // Static Data Cache
+    this.sdc = {};
+
+    this.onPopState = e => {
+      if (!e.state) {
+        // We get state as undefined for two reasons.
+        //  1. With older safari (< 8) and older chrome (< 34)
+        //  2. When the URL changed with #
+        //
+        // In the both cases, we don't need to proceed and change the route.
+        // (as it's already changed)
+        // But we can simply replace the state with the new changes.
+        // Actually, for (1) we don't need to nothing. But it's hard to detect that event.
+        // So, doing the following for (1) does no harm.
+        const {
+          pathname,
+          query
+        } = this;
+        this.changeState('replaceState', utils_1.formatWithValidation({
+          pathname,
+          query
+        }), utils_1.getURL());
+        return;
+      } // Make sure we don't re-render on initial load,
+      // can be caused by navigating back from an external site
+
+
+      if (e.state && this.isSsr && e.state.url === this.pathname && e.state.as === this.asPath) {
+        return;
+      } // If the downstream application returns falsy, return.
+      // They will then be responsible for handling the event.
+
+
+      if (this._bps && !this._bps(e.state)) {
+        return;
+      }
+
+      const {
+        url,
+        as,
+        options
+      } = e.state;
+
+      if (true) {
+        if (typeof url === 'undefined' || typeof as === 'undefined') {
+          console.warn('`popstate` event triggered but `event.state` did not have `url` or `as` https://err.sh/zeit/next.js/popstate-state-empty');
+        }
+      }
+
+      this.replace(url, as, options);
+    };
+
+    this._getStaticData = (asPath, _cachedData) => {
+      let pathname = url_1.parse(asPath).pathname;
+      pathname = !pathname || pathname === '/' ? '/index' : pathname;
+      return  false ? undefined : fetch( // @ts-ignore __NEXT_DATA__
+      `/_next/data/${__NEXT_DATA__.buildId}${pathname}.json`).then(res => {
+        if (!res.ok) {
+          throw new Error(`Failed to load static props`);
+        }
+
+        return res.json();
+      }).then(data => {
+        this.sdc[pathname] = data;
+        return data;
+      }).catch(err => {
+        ;
+        err.code = 'PAGE_LOAD_ERROR';
+        throw err;
+      });
+    }; // represents the current component key
+
+
+    this.route = toRoute(pathname); // set up the component cache (by route keys)
+
+    this.components = {}; // We should not keep the cache, if there's an error
+    // Otherwise, this cause issues when when going back and
+    // come again to the errored page.
+
+    if (pathname !== '/_error') {
+      this.components[this.route] = {
+        Component,
+        props: initialProps,
+        err
+      };
+    }
+
+    this.components['/_app'] = {
+      Component: App
+    }; // Backwards compat for Router.router.events
+    // TODO: Should be remove the following major version as it was never documented
+    // @ts-ignore backwards compatibility
+
+    this.events = Router.events;
+    this.pageLoader = pageLoader;
+    this.pathname = pathname;
+    this.query = query; // if auto prerendered and dynamic route wait to update asPath
+    // until after mount to prevent hydration mismatch
+
+    this.asPath = // @ts-ignore this is temporarily global (attached to window)
+    is_dynamic_1.isDynamicRoute(pathname) && __NEXT_DATA__.autoExport ? pathname : as;
+    this.sub = subscription;
+    this.clc = null;
+    this._wrapApp = wrapApp; // make sure to ignore extra popState in safari on navigating
+    // back from external site
+
+    this.isSsr = true;
+
+    if (false) {}
+  } // @deprecated backwards compatibility even though it's a private method.
+
+
+  static _rewriteUrlForNextExport(url) {
+    return rewrite_url_for_export_1.rewriteUrlForNextExport(url);
+  }
+
+  update(route, mod) {
+    const Component = mod.default || mod;
+    const data = this.components[route];
+
+    if (!data) {
+      throw new Error(`Cannot update unavailable route: ${route}`);
+    }
+
+    const newData = _Object$assign(_Object$assign({}, data), {
+      Component
+    });
+
+    this.components[route] = newData; // pages/_app.js updated
+
+    if (route === '/_app') {
+      this.notify(this.components[this.route]);
+      return;
+    }
+
+    if (route === this.route) {
+      this.notify(newData);
+    }
+  }
+
+  reload() {
+    window.location.reload();
+  }
+  /**
+   * Go back in history
+   */
+
+
+  back() {
+    window.history.back();
+  }
+  /**
+   * Performs a `pushState` with arguments
+   * @param url of the route
+   * @param as masks `url` for the browser
+   * @param options object you can define `shallow` and other options
+   */
+
+
+  push(url, as = url, options = {}) {
+    return this.change('pushState', url, as, options);
+  }
+  /**
+   * Performs a `replaceState` with arguments
+   * @param url of the route
+   * @param as masks `url` for the browser
+   * @param options object you can define `shallow` and other options
+   */
+
+
+  replace(url, as = url, options = {}) {
+    return this.change('replaceState', url, as, options);
+  }
+
+  change(method, _url, _as, options) {
+    return new _Promise((resolve, reject) => {
+      if (!options._h) {
+        this.isSsr = false;
+      } // marking route changes as a navigation start entry
+
+
+      if (utils_1.SUPPORTS_PERFORMANCE_USER_TIMING) {
+        performance.mark('routeChange');
+      } // If url and as provided as an object representation,
+      // we'll format them into the string version here.
+
+
+      const url = typeof _url === 'object' ? utils_1.formatWithValidation(_url) : _url;
+      let as = typeof _as === 'object' ? utils_1.formatWithValidation(_as) : _as; // Add the ending slash to the paths. So, we can serve the
+      // "<page>/index.html" directly for the SSR page.
+
+      if (false) {}
+
+      this.abortComponentLoad(as); // If the url change is only related to a hash change
+      // We should not proceed. We should only change the state.
+      // WARNING: `_h` is an internal option for handing Next.js client-side
+      // hydration. Your app should _never_ use this property. It may change at
+      // any time without notice.
+
+      if (!options._h && this.onlyAHashChange(as)) {
+        this.asPath = as;
+        Router.events.emit('hashChangeStart', as);
+        this.changeState(method, url, addBasePath(as));
+        this.scrollToHash(as);
+        Router.events.emit('hashChangeComplete', as);
+        return resolve(true);
+      }
+
+      const {
+        pathname,
+        query,
+        protocol
+      } = url_1.parse(url, true);
+
+      if (!pathname || protocol) {
+        if (true) {
+          throw new Error(`Invalid href passed to router: ${url} https://err.sh/zeit/next.js/invalid-href-passed`);
+        }
+
+        return resolve(false);
+      } // If asked to change the current URL we should reload the current page
+      // (not location.reload() but reload getInitialProps and other Next.js stuffs)
+      // We also need to set the method = replaceState always
+      // as this should not go into the history (That's how browsers work)
+      // We should compare the new asPath to the current asPath, not the url
+
+
+      if (!this.urlIsNew(as)) {
+        method = 'replaceState';
+      } // @ts-ignore pathname is always a string
+
+
+      const route = toRoute(pathname);
+      const {
+        shallow = false
+      } = options;
+
+      if (is_dynamic_1.isDynamicRoute(route)) {
+        const {
+          pathname: asPathname
+        } = url_1.parse(as);
+        const routeMatch = route_matcher_1.getRouteMatcher(route_regex_1.getRouteRegex(route))(asPathname);
+
+        if (!routeMatch) {
+          const error = `The provided \`as\` value (${asPathname}) is incompatible with the \`href\` value (${route}). ` + `Read more: https://err.sh/zeit/next.js/incompatible-href-as`;
+
+          if (true) {
+            throw new Error(error);
+          } else {}
+
+          return resolve(false);
+        } // Merge params into `query`, overwriting any specified in search
+
+
+        _Object$assign(query, routeMatch);
+      }
+
+      Router.events.emit('routeChangeStart', as); // If shallow is true and the route exists in the router cache we reuse the previous result
+      // @ts-ignore pathname is always a string
+
+      this.getRouteInfo(route, pathname, query, as, shallow).then(routeInfo => {
+        const {
+          error
+        } = routeInfo;
+
+        if (error && error.cancelled) {
+          return resolve(false);
+        }
+
+        Router.events.emit('beforeHistoryChange', as);
+        this.changeState(method, url, addBasePath(as), options);
+        const hash = window.location.hash.substring(1);
+
+        if (true) {
+          const appComp = this.components['/_app'].Component;
+          window.next.isPrerendered = appComp.getInitialProps === appComp.origGetInitialProps && !routeInfo.Component.getInitialProps;
+        } // @ts-ignore pathname is always defined
+
+
+        this.set(route, pathname, query, as, _Object$assign(_Object$assign({}, routeInfo), {
+          hash
+        }));
+
+        if (error) {
+          Router.events.emit('routeChangeError', error, as);
+          throw error;
+        }
+
+        Router.events.emit('routeChangeComplete', as);
+        return resolve(true);
+      }, reject);
+    });
+  }
+
+  changeState(method, url, as, options = {}) {
+    if (true) {
+      if (typeof window.history === 'undefined') {
+        console.error(`Warning: window.history is not available.`);
+        return;
+      } // @ts-ignore method should always exist on history
+
+
+      if (typeof window.history[method] === 'undefined') {
+        console.error(`Warning: window.history.${method} is not available`);
+        return;
+      }
+    }
+
+    if (method !== 'pushState' || utils_1.getURL() !== as) {
+      // @ts-ignore method should always exist on history
+      window.history[method]({
+        url,
+        as,
+        options
+      }, null, as);
+    }
+  }
+
+  getRouteInfo(route, pathname, query, as, shallow = false) {
+    const cachedRouteInfo = this.components[route]; // If there is a shallow route transition possible
+    // If the route is already rendered on the screen.
+
+    if (shallow && cachedRouteInfo && this.route === route) {
+      return _Promise.resolve(cachedRouteInfo);
+    }
+
+    return new _Promise((resolve, reject) => {
+      if (cachedRouteInfo) {
+        return resolve(cachedRouteInfo);
+      }
+
+      this.fetchComponent(route).then(Component => resolve({
+        Component
+      }), reject);
+    }).then(routeInfo => {
+      const {
+        Component
+      } = routeInfo;
+
+      if (true) {
+        const {
+          isValidElementType
+        } = __webpack_require__(/*! react-is */ "react-is");
+
+        if (!isValidElementType(Component)) {
+          throw new Error(`The default export is not a React Component in page: "${pathname}"`);
+        }
+      }
+
+      return this._getData(() => Component.__NEXT_SPR ? this._getStaticData(as) : this.getInitialProps(Component, // we provide AppTree later so this needs to be `any`
+      {
+        pathname,
+        query,
+        asPath: as
+      })).then(props => {
+        routeInfo.props = props;
+        this.components[route] = routeInfo;
+        return routeInfo;
+      });
+    }).catch(err => {
+      return new _Promise(resolve => {
+        if (err.code === 'PAGE_LOAD_ERROR') {
+          // If we can't load the page it could be one of following reasons
+          //  1. Page doesn't exists
+          //  2. Page does exist in a different zone
+          //  3. Internal error while loading the page
+          // So, doing a hard reload is the proper way to deal with this.
+          window.location.href = as; // Changing the URL doesn't block executing the current code path.
+          // So, we need to mark it as a cancelled error and stop the routing logic.
+
+          err.cancelled = true; // @ts-ignore TODO: fix the control flow here
+
+          return resolve({
+            error: err
+          });
+        }
+
+        if (err.cancelled) {
+          // @ts-ignore TODO: fix the control flow here
+          return resolve({
+            error: err
+          });
+        }
+
+        resolve(this.fetchComponent('/_error').then(Component => {
+          const routeInfo = {
+            Component,
+            err
+          };
+          return new _Promise(resolve => {
+            this.getInitialProps(Component, {
+              err,
+              pathname,
+              query
+            }).then(props => {
+              routeInfo.props = props;
+              routeInfo.error = err;
+              resolve(routeInfo);
+            }, gipErr => {
+              console.error('Error in error page `getInitialProps`: ', gipErr);
+              routeInfo.error = err;
+              routeInfo.props = {};
+              resolve(routeInfo);
+            });
+          });
+        }));
+      });
+    });
+  }
+
+  set(route, pathname, query, as, data) {
+    this.route = route;
+    this.pathname = pathname;
+    this.query = query;
+    this.asPath = as;
+    this.notify(data);
+  }
+  /**
+   * Callback to execute before replacing router state
+   * @param cb callback to be executed
+   */
+
+
+  beforePopState(cb) {
+    this._bps = cb;
+  }
+
+  onlyAHashChange(as) {
+    if (!this.asPath) return false;
+    const [oldUrlNoHash, oldHash] = this.asPath.split('#');
+    const [newUrlNoHash, newHash] = as.split('#'); // Makes sure we scroll to the provided hash if the url/hash are the same
+
+    if (newHash && oldUrlNoHash === newUrlNoHash && oldHash === newHash) {
+      return true;
+    } // If the urls are change, there's more than a hash change
+
+
+    if (oldUrlNoHash !== newUrlNoHash) {
+      return false;
+    } // If the hash has changed, then it's a hash only change.
+    // This check is necessary to handle both the enter and
+    // leave hash === '' cases. The identity case falls through
+    // and is treated as a next reload.
+
+
+    return oldHash !== newHash;
+  }
+
+  scrollToHash(as) {
+    const [, hash] = as.split('#'); // Scroll to top if the hash is just `#` with no value
+
+    if (hash === '') {
+      window.scrollTo(0, 0);
+      return;
+    } // First we check if the element by id is found
+
+
+    const idEl = document.getElementById(hash);
+
+    if (idEl) {
+      idEl.scrollIntoView();
+      return;
+    } // If there's no element with the id, we check the `name` property
+    // To mirror browsers
+
+
+    const nameEl = document.getElementsByName(hash)[0];
+
+    if (nameEl) {
+      nameEl.scrollIntoView();
+    }
+  }
+
+  urlIsNew(asPath) {
+    return this.asPath !== asPath;
+  }
+  /**
+   * Prefetch `page` code, you may wait for the data during `page` rendering.
+   * This feature only works in production!
+   * @param url of prefetched `page`
+   */
+
+
+  prefetch(url) {
+    return new _Promise((resolve, reject) => {
+      const {
+        pathname,
+        protocol
+      } = url_1.parse(url);
+
+      if (!pathname || protocol) {
+        if (true) {
+          throw new Error(`Invalid href passed to router: ${url} https://err.sh/zeit/next.js/invalid-href-passed`);
+        }
+
+        return;
+      } // @ts-ignore pathname is always defined
+
+
+      const route = toRoute(pathname); // Prefetch is not supported in development mode because it would trigger on-demand-entries
+
+      if (true) {
+        // mark it as prefetched for debugging in dev
+        this.pageLoader.prefetched[route] = true;
+        return;
+      }
+
+      this.pageLoader.prefetch(route).then(resolve, reject);
+    });
+  }
+
+  async fetchComponent(route) {
+    let cancelled = false;
+
+    const cancel = this.clc = () => {
+      cancelled = true;
+    };
+
+    const Component = await this.pageLoader.loadPage(route);
+
+    if (cancelled) {
+      const error = new Error(`Abort fetching component for route: "${route}"`);
+      error.cancelled = true;
+      throw error;
+    }
+
+    if (cancel === this.clc) {
+      this.clc = null;
+    }
+
+    return Component;
+  }
+
+  _getData(fn) {
+    let cancelled = false;
+
+    const cancel = () => {
+      cancelled = true;
+    };
+
+    this.clc = cancel;
+    return fn().then(data => {
+      if (cancel === this.clc) {
+        this.clc = null;
+      }
+
+      if (cancelled) {
+        const err = new Error('Loading initial props cancelled');
+        err.cancelled = true;
+        throw err;
+      }
+
+      return data;
+    });
+  }
+
+  getInitialProps(Component, ctx) {
+    const {
+      Component: App
+    } = this.components['/_app'];
+
+    const AppTree = this._wrapApp(App);
+
+    ctx.AppTree = AppTree;
+    return utils_1.loadGetInitialProps(App, {
+      AppTree,
+      Component,
+      router: this,
+      ctx
+    });
+  }
+
+  abortComponentLoad(as) {
+    if (this.clc) {
+      const e = new Error('Route Cancelled');
+      e.cancelled = true;
+      Router.events.emit('routeChangeError', e, as);
+      this.clc();
+      this.clc = null;
+    }
+  }
+
+  notify(data) {
+    this.sub(data, this.components['/_app'].Component);
+  }
+
+}
+
+exports.default = Router;
+Router.events = mitt_1.default();
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router/utils/is-dynamic.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router/utils/is-dynamic.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+}); // Identify /[param]/ in route string
+
+
+const TEST_ROUTE = /\/\[[^/]+?\](?=\/|$)/;
+
+function isDynamicRoute(route) {
+  return TEST_ROUTE.test(route);
+}
+
+exports.isDynamicRoute = isDynamicRoute;
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router/utils/route-matcher.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router/utils/route-matcher.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$keys = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function getRouteMatcher(routeRegex) {
+  const {
+    re,
+    groups
+  } = routeRegex;
+  return pathname => {
+    const routeMatch = re.exec(pathname);
+
+    if (!routeMatch) {
+      return false;
+    }
+
+    const decode = decodeURIComponent;
+    const params = {};
+
+    _Object$keys(groups).forEach(slugName => {
+      const g = groups[slugName];
+      const m = routeMatch[g.pos];
+
+      if (m !== undefined) {
+        params[slugName] = ~m.indexOf('/') ? m.split('/').map(entry => decode(entry)) : g.repeat ? [decode(m)] : decode(m);
+      }
+    });
+
+    return params;
+  };
+}
+
+exports.getRouteMatcher = getRouteMatcher;
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/router/utils/route-regex.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/router/utils/route-regex.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function getRouteRegex(normalizedRoute) {
+  // Escape all characters that could be considered RegEx
+  const escapedRoute = (normalizedRoute.replace(/\/$/, '') || '/').replace(/[|\\{}()[\]^$+*?.-]/g, '\\$&');
+  const groups = {};
+  let groupIndex = 1;
+  const parameterizedRoute = escapedRoute.replace(/\/\\\[([^/]+?)\\\](?=\/|$)/g, (_, $1) => {
+    const isCatchAll = /^(\\\.){3}/.test($1);
+    groups[$1 // Un-escape key
+    .replace(/\\([|\\{}()[\]^$+*?.-])/g, '$1').replace(/^\.{3}/, '') // eslint-disable-next-line no-sequences
+    ] = {
+      pos: groupIndex++,
+      repeat: isCatchAll
+    };
+    return isCatchAll ? '/(.+?)' : '/([^/]+?)';
+  });
+  return {
+    re: new RegExp('^' + parameterizedRoute + '(?:/)?$', 'i'),
+    groups
+  };
+}
+
+exports.getRouteRegex = getRouteRegex;
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/next-server/lib/utils.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/next/dist/next-server/lib/utils.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Object$keys = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const url_1 = __webpack_require__(/*! url */ "url");
+/**
+ * Utils
+ */
+
+
+function execOnce(fn) {
+  let used = false;
+  let result = null;
+  return (...args) => {
+    if (!used) {
+      used = true;
+      result = fn.apply(this, args);
+    }
+
+    return result;
+  };
+}
+
+exports.execOnce = execOnce;
+
+function getLocationOrigin() {
+  const {
+    protocol,
+    hostname,
+    port
+  } = window.location;
+  return `${protocol}//${hostname}${port ? ':' + port : ''}`;
+}
+
+exports.getLocationOrigin = getLocationOrigin;
+
+function getURL() {
+  const {
+    href
+  } = window.location;
+  const origin = getLocationOrigin();
+  return href.substring(origin.length);
+}
+
+exports.getURL = getURL;
+
+function getDisplayName(Component) {
+  return typeof Component === 'string' ? Component : Component.displayName || Component.name || 'Unknown';
+}
+
+exports.getDisplayName = getDisplayName;
+
+function isResSent(res) {
+  return res.finished || res.headersSent;
+}
+
+exports.isResSent = isResSent;
+
+async function loadGetInitialProps(App, ctx) {
+  if (true) {
+    if (App.prototype && App.prototype.getInitialProps) {
+      const message = `"${getDisplayName(App)}.getInitialProps()" is defined as an instance method - visit https://err.sh/zeit/next.js/get-initial-props-as-an-instance-method for more information.`;
+      throw new Error(message);
+    }
+  } // when called from _app `ctx` is nested in `ctx`
+
+
+  const res = ctx.res || ctx.ctx && ctx.ctx.res;
+
+  if (!App.getInitialProps) {
+    if (ctx.ctx && ctx.Component) {
+      // @ts-ignore pageProps default
+      return {
+        pageProps: await loadGetInitialProps(ctx.Component, ctx.ctx)
+      };
+    }
+
+    return {};
+  }
+
+  const props = await App.getInitialProps(ctx);
+
+  if (res && isResSent(res)) {
+    return props;
+  }
+
+  if (!props) {
+    const message = `"${getDisplayName(App)}.getInitialProps()" should resolve to an object. But found "${props}" instead.`;
+    throw new Error(message);
+  }
+
+  if (true) {
+    if (_Object$keys(props).length === 0 && !ctx.ctx) {
+      console.warn(`${getDisplayName(App)} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://err.sh/zeit/next.js/empty-object-getInitialProps`);
+    }
+  }
+
+  return props;
+}
+
+exports.loadGetInitialProps = loadGetInitialProps;
+exports.urlObjectKeys = ['auth', 'hash', 'host', 'hostname', 'href', 'path', 'pathname', 'port', 'protocol', 'query', 'search', 'slashes'];
+
+function formatWithValidation(url, options) {
+  if (true) {
+    if (url !== null && typeof url === 'object') {
+      _Object$keys(url).forEach(key => {
+        if (exports.urlObjectKeys.indexOf(key) === -1) {
+          console.warn(`Unknown key passed via urlObject into url.format: ${key}`);
+        }
+      });
+    }
+  }
+
+  return url_1.format(url, options);
+}
+
+exports.formatWithValidation = formatWithValidation;
+exports.SUPPORTS_PERFORMANCE = typeof performance !== 'undefined';
+exports.SUPPORTS_PERFORMANCE_USER_TIMING = exports.SUPPORTS_PERFORMANCE && typeof performance.mark === 'function' && typeof performance.measure === 'function';
+
+/***/ }),
+
+/***/ "./node_modules/next/dist/pages/_app.js":
+/*!**********************************************!*\
+  !*** ./node_modules/next/dist/pages/_app.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.Container = Container;
+exports.createUrl = createUrl;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/extends */ "./node_modules/@babel/runtime-corejs2/helpers/extends.js"));
+
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/asyncToGenerator */ "./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+var _utils = __webpack_require__(/*! ../next-server/lib/utils */ "./node_modules/next/dist/next-server/lib/utils.js");
+
+exports.AppInitialProps = _utils.AppInitialProps;
+
+__webpack_require__(/*! ../client/router */ "./node_modules/next/dist/client/router.js");
+/**
+* `App` component is used for initialize of pages. It allows for overwriting and full control of the `page` initialization.
+* This allows for keeping state between navigation, custom error handling, injecting additional data.
+*/
+
+
+function appGetInitialProps(_x) {
+  return _appGetInitialProps.apply(this, arguments);
+}
+
+function _appGetInitialProps() {
+  _appGetInitialProps = (0, _asyncToGenerator2.default)(function* (_ref) {
+    var {
+      Component,
+      ctx
+    } = _ref;
+    var pageProps = yield (0, _utils.loadGetInitialProps)(Component, ctx);
+    return {
+      pageProps
+    };
+  });
+  return _appGetInitialProps.apply(this, arguments);
+}
+
+class App extends _react.default.Component {
+  // Kept here for backwards compatibility.
+  // When someone ended App they could call `super.componentDidCatch`.
+  // @deprecated This method is no longer needed. Errors are caught at the top level
+  componentDidCatch(error, _errorInfo) {
+    throw error;
+  }
+
+  render() {
+    var {
+      router,
+      Component,
+      pageProps
+    } = this.props;
+    var url = createUrl(router);
+    return _react.default.createElement(Component, (0, _extends2.default)({}, pageProps, {
+      url: url
+    }));
+  }
+
+}
+
+exports.default = App;
+App.origGetInitialProps = appGetInitialProps;
+App.getInitialProps = appGetInitialProps;
+var warnContainer;
+var warnUrl;
+
+if (true) {
+  warnContainer = (0, _utils.execOnce)(() => {
+    console.warn("Warning: the `Container` in `_app` has been deprecated and should be removed. https://err.sh/zeit/next.js/app-container-deprecated");
+  });
+  warnUrl = (0, _utils.execOnce)(() => {
+    console.error("Warning: the 'url' property is deprecated. https://err.sh/zeit/next.js/url-deprecated");
+  });
+} // @deprecated noop for now until removal
+
+
+function Container(p) {
+  if (true) warnContainer();
+  return p.children;
+}
+
+function createUrl(router) {
+  // This is to make sure we don't references the router object at call time
+  var {
+    pathname,
+    asPath,
+    query
+  } = router;
+  return {
+    get query() {
+      if (true) warnUrl();
+      return query;
+    },
+
+    get pathname() {
+      if (true) warnUrl();
+      return pathname;
+    },
+
+    get asPath() {
+      if (true) warnUrl();
+      return asPath;
+    },
+
+    back: () => {
+      if (true) warnUrl();
+      router.back();
+    },
+    push: (url, as) => {
+      if (true) warnUrl();
+      return router.push(url, as);
+    },
+    pushTo: (href, as) => {
+      if (true) warnUrl();
+      var pushRoute = as ? href : '';
+      var pushUrl = as || href;
+      return router.push(pushRoute, pushUrl);
+    },
+    replace: (url, as) => {
+      if (true) warnUrl();
+      return router.replace(url, as);
+    },
+    replaceTo: (href, as) => {
+      if (true) warnUrl();
+      var replaceRoute = as ? href : '';
+      var replaceUrl = as || href;
+      return router.replace(replaceRoute, replaceUrl);
+    }
+  };
+}
+
+/***/ }),
+
 /***/ "./pages/index.tsx":
 /*!*************************!*\
   !*** ./pages/index.tsx ***!
@@ -490,185 +2672,150 @@ function _extends() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return index; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _public_styles_LandingStyle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../public/styles/LandingStyle */ "./public/styles/LandingStyle.tsx");
-/* harmony import */ var _public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../public/icons/_compiled */ "./public/icons/_compiled/index.ts");
-/* harmony import */ var _components_UI_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/UI/Button */ "./components/UI/Button.tsx");
-/* harmony import */ var _components_UI_Card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/UI/Card */ "./components/UI/Card.tsx");
-/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! nuka-carousel */ "nuka-carousel");
-/* harmony import */ var nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(nuka_carousel__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "styled-jsx/style");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _actions_product__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../actions/product */ "./actions/product.ts");
+/* harmony import */ var _withRedux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../withRedux */ "./withRedux/index.tsx");
+/* harmony import */ var _components_LandingComponents_WithCarousel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/LandingComponents/WithCarousel */ "./components/LandingComponents/WithCarousel.tsx");
+/* harmony import */ var _components_LandingComponents_PromoCards__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/LandingComponents/PromoCards */ "./components/LandingComponents/PromoCards.tsx");
+/* harmony import */ var _components_LandingComponents_ProsCards__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/LandingComponents/ProsCards */ "./components/LandingComponents/ProsCards.tsx");
+/* harmony import */ var _public_icons_compiled__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../public/icons/_compiled */ "./public/icons/_compiled/index.ts");
+/* harmony import */ var _components_UI_Button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/UI/Button */ "./components/UI/Button.tsx");
 var _jsxFileName = "/home/rustam/alem-ecommerce/client/pages/index.tsx";
 
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
+
+
+
 
 
 
 
 
 function index() {
+  const state = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(st => st.product);
+  console.log(state, "state");
+
   const btnClick = () => {
     console.log("cliks");
   };
 
-  const previousButton = ({
-    previousSlide
-  }) => __jsx("div", {
-    className: "parent",
-    style: {
-      marginTop: "-80px"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14
-    },
-    __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowRight"], {
-    style: {
-      cursor: "pointer"
-    },
-    onClick: previousSlide,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15
-    },
-    __self: this
-  }));
-
-  const nextButtom = ({
-    nextSlide
-  }) => __jsx("div", {
-    className: "parent",
-    style: {
-      marginTop: "-80px"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 20
-    },
-    __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["ArrowLeft"], {
-    style: {
-      cursor: "pointer"
-    },
-    onClick: nextSlide,
+  return __jsx(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, __jsx("div", {
+    className: "jsx-2223128121",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 21
     },
     __self: this
-  }));
-
-  return __jsx(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, __jsx("div", {
+  }, __jsx("div", {
+    className: "jsx-2223128121" + " " + "header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2223128121" + " " + "navbar",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 23
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2223128121" + " " + "logo",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 24
+    },
+    __self: this
+  }, "\xE4lem"), __jsx("div", {
+    className: "jsx-2223128121" + " " + "categories",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 25
+    },
+    __self: this
+  }, __jsx("div", {
+    className: "jsx-2223128121" + " " + "men",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 26
+    },
+    __self: this
+  }, "Men"), __jsx("div", {
+    className: "jsx-2223128121" + " " + "women",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 27
     },
     __self: this
-  }, __jsx("div", {
-    className: "header",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 28
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "navbar",
+  }, "Women")), __jsx("div", {
+    className: "jsx-2223128121" + " " + "actions",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 29
     },
     __self: this
   }, __jsx("div", {
-    className: "logo",
+    className: "jsx-2223128121" + " " + "search",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 30
     },
     __self: this
-  }, "\xE4lem"), __jsx("div", {
-    className: "categories",
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_8__["Search"], {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 31
     },
     __self: this
-  }, __jsx("div", {
-    className: "men",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 32
-    },
-    __self: this
-  }, "Men"), __jsx("div", {
-    className: "women",
+  })), __jsx("div", {
+    className: "jsx-2223128121" + " " + "search",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 33
     },
     __self: this
-  }, "Women")), __jsx("div", {
-    className: "actions",
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_8__["Cart"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 35
+      lineNumber: 34
     },
     __self: this
-  }, __jsx("div", {
-    className: "search",
+  })), __jsx("div", {
+    className: "jsx-2223128121" + " " + "search",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 36
     },
     __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Search"], {
+  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_8__["Avatar"], {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 37
     },
     __self: this
-  })), __jsx("div", {
-    className: "search",
+  })))), __jsx("div", {
+    className: "jsx-2223128121" + " " + "header-main",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 39
+      lineNumber: 41
     },
     __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Cart"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 40
-    },
-    __self: this
-  })), __jsx("div", {
-    className: "search",
+  }, __jsx("div", {
+    className: "jsx-2223128121" + " " + "title",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 42
     },
     __self: this
-  }, __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Avatar"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 43
-    },
-    __self: this
-  })))), __jsx("div", {
-    className: "header-main",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 47
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "title",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 48
-    },
-    __self: this
-  }, "Brand new January Collection"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "Brand new January Collection"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_9__["default"], {
     customStyleObject: {
       marginTop: "40px"
     },
@@ -682,372 +2829,66 @@ function index() {
     color: "#fff",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49
+      lineNumber: 43
     },
     __self: this
   }))), __jsx("div", {
-    className: "main",
+    className: "jsx-2223128121" + " " + "main",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 56
+    },
+    __self: this
+  }, __jsx(_components_LandingComponents_PromoCards__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 57
+    },
+    __self: this
+  }), __jsx(_components_LandingComponents_WithCarousel__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    header: "popular-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 58
+    },
+    __self: this
+  }), __jsx(_components_LandingComponents_ProsCards__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 59
+    },
+    __self: this
+  }), __jsx(_components_LandingComponents_WithCarousel__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    header: "prod-header",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 61
+    },
+    __self: this
+  }), __jsx("div", {
+    className: "jsx-2223128121" + " " + "footer",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 62
     },
     __self: this
-  }, __jsx("div", {
-    className: "promocards",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 63
-    },
+  }, "Powered by Rustam Sahatov. All rights reserved."))), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    id: "2223128121",
     __self: this
-  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    height: "375px",
-    width: "650px",
-    backgroundColor: "black",
-    title: "New arrivals are now in!",
-    color: "#fff",
-    fontSize: "30px",
-    customStyleObject: {
-      justifyContent: "center"
-    },
-    actionButton: __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      content: "Show Collection",
-      color: "#fff",
-      backgroundColor: "#ff7070",
-      borderRadius: "30px",
-      height: "50px",
-      width: "150px",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 72
-      },
-      __self: this
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 64
-    },
-    __self: this
-  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    height: "375px",
-    width: "350px",
-    title: "Jackets",
-    subTitle: "$ 39.99",
-    backgroundColor: "purple",
-    color: "#fff",
-    fontSize: "30px",
-    customStyleObject: {
-      justifyContent: "center"
-    },
-    actionButton: __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      content: "Show All",
-      color: "#fff",
-      backgroundColor: "#ff7070",
-      borderRadius: "30px",
-      height: "50px",
-      width: "150px",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 91
-      },
-      __self: this
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 82
-    },
-    __self: this
-  }), __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    height: "375px",
-    width: "350px",
-    title: "Sale This Winter -50%",
-    backgroundColor: "purple",
-    color: "#fff",
-    fontSize: "30px",
-    customStyleObject: {
-      justifyContent: "center"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 101
-    },
-    __self: this
-  })), __jsx("div", {
-    className: "popular",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 111
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "popular-header",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 112
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "popular-title",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 113
-    },
-    __self: this
-  }, "Popular"), __jsx(_components_UI_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    content: "Show More",
-    color: "#fff",
-    backgroundColor: "#ff7070",
-    borderRadius: "30px",
-    height: "50px",
-    width: "120px",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 114
-    },
-    __self: this
-  })), __jsx(nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    className: "carousel",
-    height: "500px",
-    slideWidth: "340px",
-    cellSpacing: 45,
-    wrapAround: false,
-    renderCenterLeftControls: previousButton,
-    renderCenterRightControls: nextButtom,
-    renderBottomCenterControls: () => {},
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 123
-    },
-    __self: this
-  }, [0, 1, 2, 3, 4].map(i => __jsx("div", {
-    className: "card",
-    key: i,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 134
-    },
-    __self: this
-  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    height: "375px",
-    width: "350px",
-    backgroundColor: "purple",
-    color: "#fff",
-    fontSize: "30px",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 135
-    },
-    __self: this
-  }), __jsx("div", {
-    className: "product-info",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 142
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "product-name",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 143
-    },
-    __self: this
-  }, "Jacket"), __jsx("div", {
-    className: "product-price",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 144
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "new-price",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 145
-    },
-    __self: this
-  }, "$21.99"), __jsx("div", {
-    className: "old-price",
-    style: {
-      textDecoration: "line-through"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 146
-    },
-    __self: this
-  }, "$39.99"))))))), __jsx("div", {
-    className: "pros-cards",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 155
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "pros-header",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 156
-    },
-    __self: this
-  }, "Why you should choose us?"), __jsx("div", {
-    className: "pros-list",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 157
-    },
-    __self: this
-  }, prosCards.map(element => __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    header: __jsx("div", {
-      className: "pros-card-icon",
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 160
-      },
-      __self: this
-    }, element.iconSmall),
-    height: "200px",
-    width: "450px",
-    title: element.title,
-    subTitle: element.subTitle,
-    color: "#000",
-    textPosition: "left",
-    border: true,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 159
-    },
-    __self: this
-  })))), __jsx("div", {
-    className: "popular",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 172
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "pros-header",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 173
-    },
-    __self: this
-  }, "Products in today"), __jsx(nuka_carousel__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    className: "carousel",
-    height: "500px",
-    slideWidth: "340px",
-    cellSpacing: 45,
-    wrapAround: false,
-    renderCenterLeftControls: previousButton,
-    renderCenterRightControls: nextButtom,
-    renderBottomCenterControls: () => {},
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 174
-    },
-    __self: this
-  }, [0, 1, 2, 3, 4].map(i => __jsx("div", {
-    className: "card",
-    key: i,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 185
-    },
-    __self: this
-  }, __jsx(_components_UI_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    height: "375px",
-    width: "350px",
-    backgroundColor: "purple",
-    color: "#fff",
-    fontSize: "30px",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 186
-    },
-    __self: this
-  }), __jsx("div", {
-    className: "product-info",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 193
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "product-name",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 194
-    },
-    __self: this
-  }, "Jacket"), __jsx("div", {
-    className: "product-price",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 195
-    },
-    __self: this
-  }, __jsx("div", {
-    className: "new-price",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 196
-    },
-    __self: this
-  }, "$21.99"), __jsx("div", {
-    className: "old-price",
-    style: {
-      textDecoration: "line-through"
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 197
-    },
-    __self: this
-  }, "$39.99"))))))), __jsx("div", {
-    className: "footer",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 206
-    },
-    __self: this
-  }, "Powered by Rustam Sahatov. All rights reserved."))), __jsx(_public_styles_LandingStyle__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 209
-    },
-    __self: this
-  }));
+  }, ".header.jsx-2223128121{background:grey;height:750px;}.navbar.jsx-2223128121{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;margin-left:170px;margin-right:170px;padding-top:40px;}.categories.jsx-2223128121{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;width:100px;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;}.actions.jsx-2223128121{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;width:120px;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;}.search.jsx-2223128121{cursor:pointer;}.header-main.jsx-2223128121{margin-left:210px;margin-top:80px;}.title.jsx-2223128121{font-size:50px;width:300px;}.main.jsx-2223128121{margin-left:170px;margin-right:170px;}.footer.jsx-2223128121{margin-top:120px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:100px;border-top:1px solid #d9d9d9;font-size:18px;color:gray;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL3J1c3RhbS9hbGVtLWVjb21tZXJjZS9jbGllbnQvcGFnZXMvaW5kZXgudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWdFd0IsQUFHcUMsQUFJSCxBQU9BLEFBS0EsQUFNbEIsQUFFdUIsQUFJSCxBQUlHLEFBSUQsZUFkckIsQUFRRCxDQTVCQSxDQW1Da0IsQ0FYbEIsQUFPd0IsU0FIdkIsRUE1QkEsS0F3QkEsR0FRQSxxQ0E3QmtDLEFBT2xCLEFBS0EsWUFKa0IsQUFLQSxLQW9CUCxrR0FoQ0wsQ0FpQ0MsV0F6QnZCLEFBS0EsTUFadUIsbUJBRXhCLGlCQUFDLHdDQStCaUIsYUFDZ0IsNkJBQ2QsZUFFcEIsV0FBQyIsImZpbGUiOiIvaG9tZS9ydXN0YW0vYWxlbS1lY29tbWVyY2UvY2xpZW50L3BhZ2VzL2luZGV4LnRzeCIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHVzZURpc3BhdGNoLCB1c2VTZWxlY3RvciB9IGZyb20gXCJyZWFjdC1yZWR1eFwiXG5pbXBvcnQgeyBnZXRBbGxQcm9kdWN0cyB9IGZyb20gXCIuLi9hY3Rpb25zL3Byb2R1Y3RcIlxuaW1wb3J0IHsgd2l0aFJlZHV4IH0gZnJvbSBcIi4uL3dpdGhSZWR1eFwiXG5pbXBvcnQgTGluayBmcm9tIFwibmV4dC9saW5rXCJcblxuaW1wb3J0IFdpdGhDYXJvdXNlbCBmcm9tIFwiLi4vY29tcG9uZW50cy9MYW5kaW5nQ29tcG9uZW50cy9XaXRoQ2Fyb3VzZWxcIlxuaW1wb3J0IFByb21vQ2FyZHMgZnJvbSBcIi4uL2NvbXBvbmVudHMvTGFuZGluZ0NvbXBvbmVudHMvUHJvbW9DYXJkc1wiXG5pbXBvcnQgUHJvc0NhcmRzIGZyb20gXCIuLi9jb21wb25lbnRzL0xhbmRpbmdDb21wb25lbnRzL1Byb3NDYXJkc1wiXG5pbXBvcnQgKiBhcyBJY29ucyBmcm9tIFwiLi4vcHVibGljL2ljb25zL19jb21waWxlZFwiXG5pbXBvcnQgQnV0dG9uIGZyb20gXCIuLi9jb21wb25lbnRzL1VJL0J1dHRvblwiXG5cbmZ1bmN0aW9uIGluZGV4KCkge1xuICAgIGNvbnN0IHN0YXRlID0gdXNlU2VsZWN0b3IoKHN0OiBhbnkpID0+IHN0LnByb2R1Y3QpXG4gICAgY29uc29sZS5sb2coc3RhdGUsIFwic3RhdGVcIilcbiAgICBjb25zdCBidG5DbGljayA9ICgpOiB2b2lkID0+IHtcbiAgICAgICAgY29uc29sZS5sb2coXCJjbGlrc1wiKVxuICAgIH1cblxuICAgIHJldHVybiAoXG4gICAgICAgIDw+XG4gICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaGVhZGVyXCI+XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibmF2YmFyXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImxvZ29cIj7DpGxlbTwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJjYXRlZ29yaWVzXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtZW5cIj5NZW48L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIndvbWVuXCI+V29tZW48L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJhY3Rpb25zXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzZWFyY2hcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb25zLlNlYXJjaCAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwic2VhcmNoXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxJY29ucy5DYXJ0IC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzZWFyY2hcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPEljb25zLkF2YXRhciAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImhlYWRlci1tYWluXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRpdGxlXCI+QnJhbmQgbmV3IEphbnVhcnkgQ29sbGVjdGlvbjwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPEJ1dHRvblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1c3RvbVN0eWxlT2JqZWN0PXt7IG1hcmdpblRvcDogXCI0MHB4XCIgfX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kQ29sb3I9XCIjZmY3MDcwXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXtidG5DbGlja31cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250ZW50PVwiQ2hlY2sgTW9yZVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYm9yZGVyUmFkaXVzPVwiMzBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVpZ2h0PVwiNTBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgd2lkdGg9XCIxNTBweFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYm9yZGVyPXtmYWxzZX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb2xvcj1cIiNmZmZcIlxuICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtYWluXCI+XG4gICAgICAgICAgICAgICAgICAgIDxQcm9tb0NhcmRzIC8+XG4gICAgICAgICAgICAgICAgICAgIDxXaXRoQ2Fyb3VzZWwgaGVhZGVyPVwicG9wdWxhci1oZWFkZXJcIi8+XG4gICAgICAgICAgICAgICAgICAgIDxQcm9zQ2FyZHMgLz5cbiAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgIDxXaXRoQ2Fyb3VzZWwgaGVhZGVyPVwicHJvZC1oZWFkZXJcIi8+XG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZm9vdGVyXCI+UG93ZXJlZCBieSBSdXN0YW0gU2FoYXRvdi4gQWxsIHJpZ2h0cyByZXNlcnZlZC48L2Rpdj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPHN0eWxlIGpzeD57YCAgICAgICAgICBcbiAgICAgICAgICAgICAgICAuaGVhZGVye1xuICAgICAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kOiBncmV5O1xuICAgICAgICAgICAgICAgICAgICBoZWlnaHQ6IDc1MHB4XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5uYXZiYXJ7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDE3MHB4O1xuICAgICAgICAgICAgICAgICAgICBtYXJnaW4tcmlnaHQ6IDE3MHB4O1xuICAgICAgICAgICAgICAgICAgICBwYWRkaW5nLXRvcDogNDBweFxuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAuY2F0ZWdvcmllc3tcbiAgICAgICAgICAgICAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgICAgICAgICAgICAgd2lkdGg6IDEwMHB4O1xuICAgICAgICAgICAgICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5hY3Rpb25ze1xuICAgICAgICAgICAgICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICAgICAgICAgICAgICB3aWR0aDogMTIwcHg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLnNlYXJjaHtcbiAgICAgICAgICAgICAgICAgICAgY3Vyc29yOiBwb2ludGVyXG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC5oZWFkZXItbWFpbntcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDIxMHB4O1xuICAgICAgICAgICAgICAgICAgICBtYXJnaW4tdG9wOiA4MHB4XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgICAgIC50aXRsZXtcbiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplOiA1MHB4O1xuICAgICAgICAgICAgICAgICAgICB3aWR0aDogMzAwcHhcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLm1haW57XG4gICAgICAgICAgICAgICAgICAgIG1hcmdpbi1sZWZ0OiAxNzBweDtcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLXJpZ2h0OiAxNzBweDtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgLmZvb3RlcntcbiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLXRvcDogMTIwcHg7XG4gICAgICAgICAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICAgICAgICAgICAgICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgICAgICAgICAgICAgICAgICBoZWlnaHQ6IDEwMHB4O1xuICAgICAgICAgICAgICAgICAgICBib3JkZXItdG9wOiAxcHggc29saWQgI2Q5ZDlkOTtcbiAgICAgICAgICAgICAgICAgICAgZm9udC1zaXplOiAxOHB4O1xuICAgICAgICAgICAgICAgICAgICBjb2xvcjogIGdyYXlcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICBgXG4gICAgICAgICAgICB9PC9zdHlsZT5cbiAgICAgICAgPC8+XG4gICAgKVxufVxuXG5pbmRleC5nZXRJbml0aWFsUHJvcHMgPSAoeyByZWR1eFN0b3JlIH06IGFueSkgPT4ge1xuICAgIGNvbnN0IHsgZGlzcGF0Y2ggfSA9IHJlZHV4U3RvcmVcbiAgICBkaXNwYXRjaChnZXRBbGxQcm9kdWN0cygpKVxuICAgIFxuICAgIHJldHVybiB7fVxufVxuXG5leHBvcnQgZGVmYXVsdCB3aXRoUmVkdXgoaW5kZXgpXG4iXX0= */\n/*@ sourceURL=/home/rustam/alem-ecommerce/client/pages/index.tsx */"));
 }
-const prosCards = [{
-  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["FreeShippingSmall"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 216
-    },
-    __self: undefined
-  }),
-  title: "Free Shipping",
-  subTitle: "All purchases over $199 are eligible for free shipping"
-}, {
-  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Wallet"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 221
-    },
-    __self: undefined
-  }),
-  title: "Easy Payment",
-  subTitle: "All payments are processed instantly over a secure payment protocol"
-}, {
-  iconSmall: __jsx(_public_icons_compiled__WEBPACK_IMPORTED_MODULE_2__["Guarantee"], {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 226
-    },
-    __self: undefined
-  }),
-  title: "Money-back Guarantee",
-  subTitle: "If an item arrived damaged or you've changed your mind, you can send it back for a full refund"
-}];
+
+index.getInitialProps = ({
+  reduxStore
+}) => {
+  const {
+    dispatch
+  } = reduxStore;
+  dispatch(Object(_actions_product__WEBPACK_IMPORTED_MODULE_3__["getAllProducts"])());
+  return {};
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(_withRedux__WEBPACK_IMPORTED_MODULE_4__["withRedux"])(index));
 
 /***/ }),
 
@@ -1681,140 +3522,239 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./public/styles/LandingStyle.tsx":
-/*!****************************************!*\
-  !*** ./public/styles/LandingStyle.tsx ***!
-  \****************************************/
-/*! exports provided: default */
+/***/ "./reducers/index.ts":
+/*!***************************!*\
+  !*** ./reducers/index.ts ***!
+  \***************************/
+/*! exports provided: rootReducer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LandingStyle; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/home/rustam/alem-ecommerce/client/public/styles/LandingStyle.tsx";
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rootReducer", function() { return rootReducer; });
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "redux");
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(redux__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _reducers_product__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reducers/product */ "./reducers/product.ts");
 
-function LandingStyle() {
-  return __jsx("style", {
-    jsx: true,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 5
-    },
-    __self: this
-  }, `          
-                .header{
-                    background: grey;
-                    height: 750px
-                }
-                .navbar{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-left: 170px;
-                    margin-right: 170px;
-                    padding-top: 40px
-                }
-                .categories{
-                    display: flex;
-                    width: 100px;
-                    justify-content: space-between;
-                }
-                .actions{
-                    display: flex;
-                    width: 120px;
-                    justify-content: space-between;
-                }
-                .search{
-                    cursor: pointer
-                }
-                .header-main{
-                    margin-left: 210px;
-                    margin-top: 80px
-                }
-                .title{
-                    font-size: 50px;
-                    width: 300px
-                }
-                .main{
-                    margin-left: 170px;
-                    margin-right: 170px;
-                }
-                .promocards{
-                    margin-top: 40px;
-                    display: flex;
-                    justify-content: space-between
-                }
-                .popular{
-                    margin-top: 120px;
-                }
-                .popular-header{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 60px;
-                }
-                .popular-title{
-                    font-size: 29px
-                }
-                .product-info{
-                    margin-top: 40px
-                }
-                .product-price {
-                    width: 200px;
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 16px;
-                }
-                .new-price{
-                    font-size: 20px;
-                    color: red;
-                }
-                .old-price{
-                    font-size: 20px;
-                    color: grey;
-                }
-                .pros-cards{
-                    margin-top: 80px;
-                }
-                .pros-header{
-                    text-align: center;
-                    font-size: 29px;
-                    margin-bottom: 60px;
-                }
-                .pros-list{
-                    display: flex;
-                    justify-content: space-between;
-                    font-family: 'SegoeUIBold', serif;
-                }
-                .pros-card-icon{
-                    height: 70px;
-                    width: 70px;
-                    border-radius: 6px;
-                    background: #d9d9d9;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center
-                }
-                .pros-card-subtitle{
-                    font-family: 'SegoeUI', serif;
-                }
-                .footer{
-                    margin-top: 120px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100px;
-                    border-top: 1px solid #d9d9d9;
-                    font-size: 18px;
-                    color:  gray
-                }
-            `);
-}
+
+const rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
+  product: _reducers_product__WEBPACK_IMPORTED_MODULE_1__["productReducer"]
+});
 
 /***/ }),
 
-/***/ 3:
+/***/ "./reducers/product.ts":
+/*!*****************************!*\
+  !*** ./reducers/product.ts ***!
+  \*****************************/
+/*! exports provided: productReducer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "productReducer", function() { return productReducer; });
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var redux_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! redux-actions */ "redux-actions");
+/* harmony import */ var redux_actions__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(redux_actions__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _actions_product__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../actions/product */ "./actions/product.ts");
+
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default()(object); if (_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default.a) { var symbols = _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default()(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(Object(source)).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
+
+
+
+const State = {
+  allProducts: []
+};
+const productReducer = Object(redux_actions__WEBPACK_IMPORTED_MODULE_7__["handleActions"])({
+  [_actions_product__WEBPACK_IMPORTED_MODULE_8__["Action"].GET_ALLPRODUCTS]: (state, {
+    payload
+  }) => {
+    return _objectSpread({}, state, {
+      allProducts: payload
+    });
+  }
+}, State);
+
+/***/ }),
+
+/***/ "./store/index.ts":
+/*!************************!*\
+  !*** ./store/index.ts ***!
+  \************************/
+/*! exports provided: initializeStore */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initializeStore", function() { return initializeStore; });
+/* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux-devtools-extension */ "redux-devtools-extension");
+/* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux */ "redux");
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers */ "./reducers/index.ts");
+/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-thunk */ "redux-thunk");
+/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(redux_thunk__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+const initializeStore = preloadedState => {
+  return Object(redux__WEBPACK_IMPORTED_MODULE_1__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_2__["rootReducer"], preloadedState, Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_1__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_3___default.a)));
+};
+
+/***/ }),
+
+/***/ "./withRedux/index.tsx":
+/*!*****************************!*\
+  !*** ./withRedux/index.tsx ***!
+  \*****************************/
+/*! exports provided: withRedux */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "withRedux", function() { return withRedux; });
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/extends */ "./node_modules/@babel/runtime-corejs2/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/objectWithoutProperties */ "./node_modules/@babel/runtime-corejs2/helpers/esm/objectWithoutProperties.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../store */ "./store/index.ts");
+/* harmony import */ var next_app__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! next/app */ "./node_modules/next/app.js");
+/* harmony import */ var next_app__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(next_app__WEBPACK_IMPORTED_MODULE_12__);
+
+
+
+
+
+
+
+
+
+var _jsxFileName = "/home/rustam/alem-ecommerce/client/withRedux/index.tsx";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement;
+
+function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default()(object); if (_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default.a) { var symbols = _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default()(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(Object(source)).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
+
+
+
+
+
+const withRedux = (PageComponent, {
+  ssr = true
+} = {}) => {
+  const WithRedux = (_ref) => {
+    let {
+      initialReduxState
+    } = _ref,
+        props = Object(_babel_runtime_corejs2_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_8__["default"])(_ref, ["initialReduxState"]);
+
+    const store = getOrInitializeStore(initialReduxState);
+    return __jsx(react_redux__WEBPACK_IMPORTED_MODULE_10__["Provider"], {
+      store: store,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: undefined
+    }, __jsx(PageComponent, Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_7__["default"])({}, props, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 11
+      },
+      __self: undefined
+    })));
+  }; // Make sure people don't use this HOC on _app.js level
+
+
+  if (true) {
+    const isAppHoc = PageComponent === next_app__WEBPACK_IMPORTED_MODULE_12___default.a || PageComponent.prototype instanceof next_app__WEBPACK_IMPORTED_MODULE_12___default.a;
+
+    if (isAppHoc) {
+      throw new Error("The withRedux HOC only works with PageComponents");
+    }
+  } // Set the correct displayName in development
+
+
+  if (true) {
+    const displayName = PageComponent.displayName || PageComponent.name || "Component";
+    WithRedux.displayName = `withRedux(${displayName})`;
+  }
+
+  if (ssr || PageComponent.getInitialProps) {
+    WithRedux.getInitialProps = async context => {
+      // Get or Create the store with `undefined` as initialState
+      // This allows you to set a custom default initialState
+      const storeRedux = getOrInitializeStore(undefined); // Provide the store to getInitialProps of pages
+
+      context.reduxStore = storeRedux; // Run getInitialProps from HOCed PageComponent
+
+      const pageProps = typeof PageComponent.getInitialProps === "function" ? await PageComponent.getInitialProps(context) : {}; // Pass props to PageComponent
+
+      return _objectSpread({}, pageProps, {
+        initialReduxState: storeRedux.getState()
+      });
+    };
+  }
+
+  return WithRedux;
+};
+let reduxStore;
+
+const getOrInitializeStore = initialState => {
+  // Always make a new store if server, otherwise state is shared between requests
+  if (true) {
+    return Object(_store__WEBPACK_IMPORTED_MODULE_11__["initializeStore"])(initialState);
+  } // Create store if unavailable on the client and set it on the window object
+
+
+  if (!reduxStore) {
+    reduxStore = Object(_store__WEBPACK_IMPORTED_MODULE_11__["initializeStore"])(initialState);
+  }
+
+  return reduxStore;
+};
+
+/***/ }),
+
+/***/ 4:
 /*!*******************************!*\
   !*** multi ./pages/index.tsx ***!
   \*******************************/
@@ -1826,6 +3766,17 @@ module.exports = __webpack_require__(/*! /home/rustam/alem-ecommerce/client/page
 
 /***/ }),
 
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("axios");
+
+/***/ }),
+
 /***/ "core-js/library/fn/object/assign":
 /*!***************************************************!*\
   !*** external "core-js/library/fn/object/assign" ***!
@@ -1834,6 +3785,17 @@ module.exports = __webpack_require__(/*! /home/rustam/alem-ecommerce/client/page
 /***/ (function(module, exports) {
 
 module.exports = require("core-js/library/fn/object/assign");
+
+/***/ }),
+
+/***/ "core-js/library/fn/object/create":
+/*!***************************************************!*\
+  !*** external "core-js/library/fn/object/create" ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/object/create");
 
 /***/ }),
 
@@ -1903,6 +3865,50 @@ module.exports = require("core-js/library/fn/object/keys");
 
 /***/ }),
 
+/***/ "core-js/library/fn/promise":
+/*!*********************************************!*\
+  !*** external "core-js/library/fn/promise" ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/promise");
+
+/***/ }),
+
+/***/ "core-js/library/fn/symbol":
+/*!********************************************!*\
+  !*** external "core-js/library/fn/symbol" ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/symbol");
+
+/***/ }),
+
+/***/ "core-js/library/fn/symbol/iterator":
+/*!*****************************************************!*\
+  !*** external "core-js/library/fn/symbol/iterator" ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/symbol/iterator");
+
+/***/ }),
+
+/***/ "core-js/library/fn/weak-map":
+/*!**********************************************!*\
+  !*** external "core-js/library/fn/weak-map" ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/weak-map");
+
+/***/ }),
+
 /***/ "nuka-carousel":
 /*!********************************!*\
   !*** external "nuka-carousel" ***!
@@ -1922,6 +3928,94 @@ module.exports = require("nuka-carousel");
 /***/ (function(module, exports) {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ "react-is":
+/*!***************************!*\
+  !*** external "react-is" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-is");
+
+/***/ }),
+
+/***/ "react-redux":
+/*!******************************!*\
+  !*** external "react-redux" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
+
+/***/ }),
+
+/***/ "redux":
+/*!************************!*\
+  !*** external "redux" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("redux");
+
+/***/ }),
+
+/***/ "redux-actions":
+/*!********************************!*\
+  !*** external "redux-actions" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("redux-actions");
+
+/***/ }),
+
+/***/ "redux-devtools-extension":
+/*!*******************************************!*\
+  !*** external "redux-devtools-extension" ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("redux-devtools-extension");
+
+/***/ }),
+
+/***/ "redux-thunk":
+/*!******************************!*\
+  !*** external "redux-thunk" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("redux-thunk");
+
+/***/ }),
+
+/***/ "styled-jsx/style":
+/*!***********************************!*\
+  !*** external "styled-jsx/style" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("styled-jsx/style");
+
+/***/ }),
+
+/***/ "url":
+/*!**********************!*\
+  !*** external "url" ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("url");
 
 /***/ })
 
