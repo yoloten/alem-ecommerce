@@ -7,7 +7,7 @@ export class Photo {
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", nullable: true, default: v4() })
     public id: string
 
     @Column()
@@ -24,8 +24,4 @@ export class Photo {
 
     @ManyToOne((type) => Product, (product) => product.photos, { nullable: true })
     public product: Product
-
-    constructor() {
-        this.id = v4()
-    }
 }

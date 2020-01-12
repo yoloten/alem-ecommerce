@@ -3,9 +3,8 @@ import { Product } from "../entity/Product"
 import { v4 } from "uuid"
 
 export enum Currency {
-    Manat = "manat",
-    Dollar = "dollar",
-    Ruble = "ruble",
+    Dollar = "RUB",
+    Ruble = "USD",
 }
 
 @Entity()

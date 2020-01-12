@@ -4,6 +4,9 @@ import { getConnection, Between, In } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { filterMany } from "../utils/filterMany"
 import { Request, Response } from "express"
+import * as multer from "multer"
+import * as sharp from "sharp"
+import { v4 } from "uuid"
 
 import { Material } from "../entity/Material"
 import { Category } from "../entity/Category"
@@ -11,8 +14,21 @@ import { Product } from "../entity/Product"
 import { Brand } from "../entity/Brand"
 import { Color } from "../entity/Color"
 import { Price } from "../entity/Price"
+import { Photo } from "../entity/Photo"
 import { Size } from "../entity/Size"
 import { Care } from "../entity/Care"
+
+const storage = multer.memoryStorage()
+
+const multerFilter = (req: any, file: any, cb: any) => {
+    if (file.mimetype.startsWith("image")) {
+        cb(null, true)
+    } else {
+        cb("Please upload only images.", false)
+    }
+}
+
+const upload = multer({ storage, fileFilter: multerFilter })
 
 @Controller("api/product")
 export class ProductController {
@@ -107,6 +123,7 @@ export class ProductController {
     }
 
     @Post("create/")
+    @Middleware(upload.array("photos", 6))
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
@@ -123,35 +140,19 @@ export class ProductController {
 
             const colorList = await connection
                 .getRepository(Color)
-                .find({
-                    where: colors.map((color: string) => {
-                        return { name: color }
-                    })
-                })
+                .find({ where: colors.map((color: string) => ({ name: color })) })
 
             const materialList = await connection
                 .getRepository(Material)
-                .find({
-                    where: materials.map((material: string) => {
-                        return { name: material }
-                    })
-                })
+                .find({ where: materials.map((material: string) => ({ name: material })) })
 
             const sizeList = await connection
                 .getRepository(Size)
-                .find({
-                    where: sizes.map((size: string) => {
-                        return { name: size }
-                    })
-                })
+                .find({ where: sizes.map((size: string) => ({ name: size })) })
 
             const careList = await connection
                 .getRepository(Care)
-                .find({
-                    where: cares.map((care: string) => {
-                        return { name: care }
-                    })
-                })
+                .find({ where: cares.map((care: string) => ({ name: care })) })
 
             if (brand && category) {
                 const priceProps = {
@@ -182,6 +183,33 @@ export class ProductController {
                 Object.assign(product, productProps)
 
                 await connection.manager.save(product)
+
+                const photos = Object.values(req.files)
+
+                await Promise.all(
+                    photos.map(async (file) => {
+                        const extension = file.mimetype.split("/")
+                        const generated = v4() + "." + extension[1]
+
+                        await sharp(file.buffer)
+                            .resize(1024, 640)
+                            .toFormat("jpeg")
+                            .jpeg({ quality: 100 })
+                            .toFile(`src/public/${generated}`)
+
+                        const photoProps = {
+                            filename: generated,
+                            extension: extension[1],
+                            path: `src/public/${generated}`,
+                            size: file.size,
+                            product,
+                        }
+                        const photo = new Photo()
+                        Object.assign(photo, photoProps)
+
+                        await connection.manager.save(photo)
+                    }),
+                )
 
                 res.status(200).json({ success: true })
             } else {

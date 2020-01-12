@@ -1,4 +1,3 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable, OneToMany, OneToOne, JoinColumn, ManyToMany } from "typeorm"
 import { Material } from "./Material"
 import { Category } from "./Category"
 import { Price } from "./Price"
@@ -8,6 +7,18 @@ import { Brand } from "./Brand"
 import { Care } from "./Care"
 import { Size } from "./Size"
 import { v4 } from "uuid"
+import { 
+    Entity, 
+    PrimaryGeneratedColumn, 
+    Column, 
+    ManyToOne, 
+    JoinTable, 
+    OneToMany, 
+    OneToOne, 
+    JoinColumn, 
+    ManyToMany, 
+} from "typeorm"
+
 
 @Entity()
 export class Product {
@@ -23,21 +34,21 @@ export class Product {
     @Column({ type: "varchar", length: 200 })
     public description: string
 
-    @ManyToMany(type => Material)
+    @ManyToMany((type) => Material)
     @JoinTable()
-    materials: Material[]
+    public materials: Material[]
 
-    @ManyToMany(type => Care)
+    @ManyToMany((type) => Care)
     @JoinTable()
-    care: Care[]
+    public care: Care[]
 
-    @ManyToMany(type => Color)
+    @ManyToMany((type) => Color)
     @JoinTable()
-    colors: Color[]
+    public colors: Color[]
 
-    @ManyToMany(type => Size)
+    @ManyToMany((type) => Size)
     @JoinTable()
-    sizes: Size[]
+    public sizes: Size[]
 
     @Column("int")
     public quantity: number
