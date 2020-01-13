@@ -21,15 +21,44 @@ export class CategoryController {
         }
     }
 
-    @Get("onebyid/:id")
-    public async getOneById(req: Request, res: Response): Promise<void> {
+    @Get("bygender/")
+    public async oneByGender(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const id = parseInt(req.params.id, 10)
+        const name = req.query.name
 
         try {
-            const tree = await connection.getTreeRepository(Category).findOne(id)
+            const tree: any = await connection.getTreeRepository(Category).findOne({ name })
+            const childrenTree = await connection.getTreeRepository(Category).findDescendantsTree(tree)
 
-            res.json(tree)
+            res.json(childrenTree)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Get("byparent/")
+    public async oneByParent(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const name = req.query.name
+    
+        try {
+            const tree: any = await connection.getTreeRepository(Category).findOne({ name })
+            const childrenTree = await connection.getTreeRepository(Category).findDescendantsTree(tree)
+            // await connection
+            //     .getTreeRepository(Category)
+            //     .query(`
+            //         select * 
+            //         from category 
+            //         inner join product on product."categoryId" = $1
+            //         where category."parentId" = $1
+            //     `
+            //     , [tree.id],
+            //     )
+            const lol = Object.values(childrenTree.children)
+            lol.map((i: any) => {
+                console.log(i)
+            })
+            res.json(childrenTree)
         } catch (error) {
             res.status(400).json(error)
         }

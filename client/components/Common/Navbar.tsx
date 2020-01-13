@@ -1,15 +1,27 @@
 import * as Icons from "../../public/icons/_compiled"
-import React from "react"
+import Link from "next/link"
+import React, { useState } from "react"
 
-export default function Navbar() {
+namespace Nav {
+    export interface Props {
+        landing?: boolean
+    }
+}
 
+export default function Navbar(props: Nav.Props) {
     return (
         <>
             <div className="navbar">
-                <div className="logo">älem</div>
+                    <Link href="/">
+                        <a className="logo">älem</a>
+                    </Link>
                 <div className="categories">
-                    <div className="men">Men</div>
-                    <div className="women">Women</div>
+                    <Link href="/p/[category]" as={`/p/men`}>
+                        <a className="men">Men</a>
+                    </Link>
+                    <Link href="/p/[category]" as={`/p/women`}>
+                        <a className="men">Women</a>
+                    </Link>
                 </div>
                 <div className="actions">
                     <div className="search">
@@ -25,11 +37,12 @@ export default function Navbar() {
             </div>
             <style jsx>{`
                 .navbar{
+                    font-family: 'SegoeUI', serif;
                     display: flex;
                     justify-content: space-between;
                     margin-left: 170px;
                     margin-right: 170px;
-                    padding-top: 40px
+                    padding-top: ${props.landing ? "40px" : "20px"}
                 }
                 .categories{
                     display: flex;
@@ -43,6 +56,14 @@ export default function Navbar() {
                 }
                 .search{
                     cursor: pointer
+                }
+                .men{
+                    text-decoration: none;
+                    color: #000
+                }
+                .logo{
+                    text-decoration: none;
+                    color: #000
                 }
             `}</style>
         </>

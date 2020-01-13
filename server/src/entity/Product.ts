@@ -4,6 +4,7 @@ import { Price } from "./Price"
 import { Color } from "./Color"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
+import { Sold } from "./Sold"
 import { Care } from "./Care"
 import { Size } from "./Size"
 import { v4 } from "uuid"
@@ -61,6 +62,9 @@ export class Product {
 
     @ManyToOne((type) => Category, (category) => category.products)
     public category: Category
+
+    @ManyToOne((type) => Sold, (sold) => sold.soldProducts)
+    public sold: Sold
 
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand

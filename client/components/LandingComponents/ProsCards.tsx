@@ -5,12 +5,6 @@ import { useEffect } from "react"
 import Card from "../UI/Card"
 
 export default function ProsCards() {
-    const state = useSelector((st: any) => st.product)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getAllProducts())
-    }, [])
-    console.log(state, "test")
     return (
         <>
             <div className="pros-cards">

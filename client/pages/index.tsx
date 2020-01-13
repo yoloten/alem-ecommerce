@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getAllProducts } from "../actions/product"
 import { withRedux } from "../withRedux"
 import Link from "next/link"
+import axios from "axios"
 
 import WithCarousel from "../components/LandingComponents/WithCarousel"
 import PromoCards from "../components/LandingComponents/PromoCards"
@@ -11,8 +12,6 @@ import Footer from "../components/Common/Footer"
 import Button from "../components/UI/Button"
 
 function index() {
-    const state = useSelector((st: any) => st.product)
-    console.log(state, "state")
     const btnClick = (): void => {
         console.log("cliks")
     }
@@ -21,7 +20,7 @@ function index() {
         <>
             <div>
                 <div className="header">
-                    <Navbar />
+                    <Navbar landing={true} />
                     <div className="header-main">
                         <div className="title">Brand new January Collection</div>
                         <Button
@@ -39,9 +38,9 @@ function index() {
                 </div>
                 <div className="main">
                     <PromoCards />
-                    <WithCarousel header="popular-header"/>
+                    <WithCarousel header="popular-header" />
                     <ProsCards />
-                    <WithCarousel header="prod-header"/> 
+                    <WithCarousel header="prod-header" />
                 </div>
             </div>
             <Footer />
@@ -68,11 +67,9 @@ function index() {
     )
 }
 
-index.getInitialProps = ({ reduxStore }: any) => {
-    const { dispatch } = reduxStore
-    dispatch(getAllProducts())
-    
-    return {}
-}
+// index.getInitialProps = () => {
+
+//     return {}
+// }
 
 export default withRedux(index)
