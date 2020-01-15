@@ -6,69 +6,92 @@ import Navbar from "../../../../components/Common/Navbar"
 import CardGrid from "../../../../components/UI/CardGrid"
 import CheckBox from "../../../../components/UI/CheckBox"
 
-function index({ dataFromCategory, dataFromProduct, allSizes, query }: any) {
+function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }: any) {
     const [showSub, setShowSub] = useState("")
     const [checked, setChecked]: any = useState({})
     const [checkedSizes, setCheckedSizes]: any = useState({})
+    const [checkedColors, setCheckedColors]: any = useState({})
     const [targetCategory, setTargetCategory]: any = useState([])
     const [targetSizes, setTargetSizes]: any = useState([])
+    const [targetColors, setTargetColors]: any = useState([])
     const [dataFromFilters, setDataFromFilters]: any = useState([])
 
     useEffect(() => {
-        const filterCategory = async () => {
+        // const filterCategory = async () => {
     
-            const result = await axios.post("http://localhost:8000/api/product/filters",
-                {
-                    categories: targetCategory,
-                    sizes: targetSizes,
-                },
-            )
+        //     const result = await axios.post("http://localhost:8000/api/product/filters",
+        //         {
+        //             categories: targetCategory,
+        //             sizes: targetSizes,
+        //             colors: targetColors,
+        //         },
+        //     )
 
-            setDataFromFilters(result.data)
-        }
-        if (targetCategory.length !== 0) {
-            targetCategory.map((name: any, i: number) => {
-                if (checked[name] === true) {
-                    if (i === 0) {
-                        filterCategory()
-                    }
-                }
-            })
-        } else {
-            setDataFromFilters([])
-        }
-        if (targetSizes.length !== 0) {
-            targetSizes.map((name: any, i: number) => {
-                if (checkedSizes[name] === true) {
-                    if (i === 0) {
-                        filterCategory()
-                    }
-                }
-            })
-        } else {
-            setDataFromFilters([])
-        }
+        //     setDataFromFilters(result.data)
+        // }
+        // if (targetCategory.length !== 0) {
+        //     targetCategory.map((name: any, i: number) => {
+        //         if (checked[name] === true) {
+        //             if (i === 0) {
+        //                 filterCategory()
+        //             }
+        //         }
+        //     })
+        // } else {
+        //     setDataFromFilters([])
+        // }
+        // if (targetSizes.length !== 0) {
+        //     targetSizes.map((name: any, i: number) => {
+        //         if (checkedSizes[name] === true) {
+        //             if (i === 0) {
+        //                 filterCategory()
+        //             }
+        //         }
+        //     })
+        // } else {
+        //     setDataFromFilters([])
+        // }
+        // if (targetColors.length !== 0) {
+        //     targetColors.map((name: any, i: number) => {
+        //         if (checkedColors[name] === true) {
+        //             if (i === 0) {
+        //                 filterCategory()
+        //             }
+        //         }
+        //     })
+        // } else {
+        //     setDataFromFilters([])
+        // }
 
     }, [checked, targetCategory, checkedSizes, targetSizes])
 
     const changeChecked = (event: any) => {
         setChecked({ ...checked, [event.target.name]: event.target.checked })
-        setTargetCategory([...targetCategory, event.target.name])
+        setTargetCategory([...targetCategory, parseInt(event.target.id, 10)])
 
         if (!event.target.checked) {
-            setTargetCategory([...targetCategory.filter((item: any) => item !== event.target.name)])
+            setTargetCategory([...targetCategory.filter((item: any) => item !== parseInt(event.target.id, 10))])
         }
     }
 
     const changeCheckedSizes = (event: any) => {
         setCheckedSizes({ ...checkedSizes, [event.target.name]: event.target.checked })
-        setTargetSizes([...targetSizes, event.target.name])
+        setTargetSizes([...targetSizes, parseInt(event.target.id, 10)])
 
         if (!event.target.checked) {
-            setTargetSizes([...targetSizes.filter((item: any) => item !== event.target.name)])
+            setTargetSizes([...targetSizes.filter((item: any) => item !== parseInt(event.target.id, 10))])
         }
     }
 
+    const changeCheckedColors = (event: any) => {
+        setCheckedColors({ ...checkedColors, [event.target.name]: event.target.checked })
+        setTargetColors([...targetColors, parseInt(event.target.id, 10)])
+
+        if (!event.target.checked) {
+            setTargetColors([...targetColors.filter((item: any) => item !== parseInt(event.target.id, 10))])
+        }
+    }
+    
     return (
         <>
             <div>
@@ -84,6 +107,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, query }: any) {
                                 {dataFromCategory.children.map((child: any, i: number) => (
                                     <div key={i} className="name">
                                         <CheckBox
+                                            id={child.id}
                                             name={child.name}
                                             checked={checked[child.name]}
                                             onChange={changeChecked}
@@ -96,9 +120,23 @@ function index({ dataFromCategory, dataFromProduct, allSizes, query }: any) {
                                 {allSizes.map((child: any, i: number) => (
                                     <div key={i} >
                                         <CheckBox
+                                            id={child.id}
                                             name={child.name}
                                             checked={checkedSizes[child.name]}
                                             onChange={changeCheckedSizes}
+                                        />
+                                        {child.name}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="sizes">
+                                {allColors.map((child: any, i: number) => (
+                                    <div key={i} >
+                                        <CheckBox
+                                            id={child.id}
+                                            name={child.name}
+                                            checked={checkedColors[child.name]}
+                                            onChange={changeCheckedColors}
                                         />
                                         {child.name}
                                     </div>
@@ -170,11 +208,13 @@ index.getInitialProps = async ({ query }: any) => {
     })
 
     const allSizes = await axios.get("http://localhost:8000/api/size/all")
+    const allColors = await axios.get("http://localhost:8000/api/color/all")
 
     return {
         dataFromCategory: resFromCategory.data,
         dataFromProduct: resFromProduct.data,
         allSizes: allSizes.data,
+        allColors: allColors.data,
         query,
     }
 }

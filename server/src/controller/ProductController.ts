@@ -113,7 +113,6 @@ export class ProductController {
                         product_categories_category as category,
                         product_colors_color as color,
                         product_sizes_size as size, 
-                        product_materials_material as material
                     where 
                         product."primaryKey" = category."productPrimaryKey"
                         and category."categoryId" = any ($1)
@@ -121,12 +120,10 @@ export class ProductController {
                         and color."colorId" = any ($2)
                         and product."primaryKey" = size."productPrimaryKey"
                         and size."sizeId" = any ($3)
-                        and product."primaryKey" = material."productPrimaryKey"
-                        and material."materialId" = any ($4)
                     order by 
                         price ${order ? order : ""}
                     limit $5 offset $6
-                `, [categories, colors, sizes, materials, limit, offset])
+                `, [categories, colors, sizes,limit, offset])
 
             const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
             
