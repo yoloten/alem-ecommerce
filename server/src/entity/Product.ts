@@ -4,7 +4,6 @@ import { Price } from "./Price"
 import { Color } from "./Color"
 import { Photo } from "./Photo"
 import { Brand } from "./Brand"
-import { Sold } from "./Sold"
 import { Care } from "./Care"
 import { Size } from "./Size"
 import { v4 } from "uuid"
@@ -19,7 +18,6 @@ import {
     JoinColumn, 
     ManyToMany, 
 } from "typeorm"
-
 
 @Entity()
 export class Product {
@@ -54,17 +52,18 @@ export class Product {
     @Column("int")
     public quantity: number
 
+    @Column({nullable: true})
+    public sold: number
+
     @Column({ type: "timestamp with time zone", default: new Date() })
     public createdAt: Date
 
     @Column({ type: "timestamp with time zone", default: new Date() })
     public updateddAt: Date
 
-    @ManyToOne((type) => Category, (category) => category.products)
-    public category: Category
-
-    @ManyToOne((type) => Sold, (sold) => sold.soldProducts)
-    public sold: Sold
+    @ManyToMany((type) => Category)
+    @JoinTable()
+    public categories: Category[]
 
     @ManyToOne((type) => Brand, (brand) => brand.products)
     public brand: Brand

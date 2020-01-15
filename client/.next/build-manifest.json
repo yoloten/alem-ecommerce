@@ -15,6 +15,14 @@
     "/_polyfills": [
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
+    ],
+    "/p/[category]": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/p/[category]/[filters]": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
     ]
   }
 }

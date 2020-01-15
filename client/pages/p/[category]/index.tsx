@@ -1,14 +1,16 @@
 // import { useRouter } from "next/router"
-import Navbar from "../../../components/Common/Navbar"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
-function index({ data, query }: any) {
+import Navbar from "../../../components/Common/Navbar"
+import CardGrid from "../../../components/UI/CardGrid"
+
+function index({ dataFromCategory, dataFromProduct, query }: any) {
     const [showSub, setShowSub] = useState("")
     const [count, setCount] = useState(0)
     const [child, setChild] = useState()
-    
+
     // useEffect(() => {
     //     if (showSub !== " ") {
     //         setChild(getConutOfProducts(showSub))
@@ -39,7 +41,7 @@ function index({ data, query }: any) {
 
     }
     // const router = useRouter()
-    
+    console.log(dataFromProduct)
     return (
         <>
             <div>
@@ -47,20 +49,20 @@ function index({ data, query }: any) {
                 <div className="main">
                     <div className="routes">
                         {`Men/${showSub}`}
-                </div>
+                    </div>
                     <div className="content">
                         <div className="filters">
                             <div className="categories">
-                                {data.children.map((sub: any, i: number) => (
-                                    count === 0 ? <div className={`parent ${sub.name}`} onClick={onShowSub} key={i}>
+                                {dataFromCategory.children.map((sub: any, i: number) => (
+                                    <div className={`parent ${sub.name}`} onClick={onShowSub} key={i}>
                                         {<Link href="/p/[category]/[filters]" as={`/p/${query.category}/${sub.name.toLowerCase().split(" ").join("-")}`}>
                                             <a className="name">{sub.name}</a>
                                         </Link>}
-                                    </div> : ""
+                                    </div>
                                 ))}
                             </div>
                         </div>
-                        <div className="items">Items</div>
+                        <CardGrid content={dataFromProduct} />
                     </div>
 
                 </div>
@@ -81,7 +83,7 @@ function index({ data, query }: any) {
                 padding-left: 40px;
             }
             .filters{
-                width: 300px
+                width: 350px
             }
             .parent{
                 cursor: pointer;
@@ -98,13 +100,22 @@ function index({ data, query }: any) {
 
 index.getInitialProps = async ({ query }: any) => {
 
-    const res = await axios.get("http://localhost:8000/api/category/bygender", {
+    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender", {
         params: {
-            name: query.category,
+            gender: query.category,
         },
     })
 
-    return { data: res.data, query }
+    const resFromProduct = await axios.get("http://localhost:8000/api/product/productbygender", {
+        params: {
+            gender: query.category,
+        },
+    })
+    return {
+        dataFromCategory: resFromCategory.data,
+        dataFromProduct: resFromProduct.data,
+        query,
+    }
 }
 
 export default index

@@ -69,54 +69,68 @@ export class ProductController {
         }
     }
 
+    @Get("productbygender/")
+    public async productByGender(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const gender = [req.query.gender]
+
+        try {
+            const resultFromCategory: number[] = await filterMany(gender, Category, connection, Product, "category")
+
+            if (resultFromCategory.length > 0) {
+                const product = await connection
+                    .createQueryBuilder(Product, "product")
+                    .select("product")
+                    .leftJoinAndSelect("product.photos", "photos")
+                    .leftJoinAndSelect("product.categories", "categories")
+                    .leftJoinAndSelect("product.price", "price")
+                    .where(resultFromCategory.map((id) => ({ primaryKey: id })))
+                    .orderBy("product.createdAt", "DESC")
+                    .getMany()
+
+                res.json(product)
+            } else {
+                res.send(" ")
+            }
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Post("filters/")
     public async filters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
         try {
-            const { category, colors, min, max, sizes, materials, skip, take, order } = req.body
-            const resultFromColor = await filterMany(colors, Color, connection, Product, "color")
-            const resultFromSize = await filterMany(sizes, Size, connection, Product, "size")
-            const resultFromMaterial = await filterMany(materials, Material, connection, Product, "material")
-            let results = []
-
-            if (resultFromColor.length === 0 || resultFromSize.length === 0 || resultFromMaterial.length === 0) {
-                results = []
-            } else {
-                results = resultFromColor.concat(resultFromSize).concat(resultFromMaterial)
-            }
-
-            results = findDuplicates(results)
-
-            const price = await connection.getRepository(Price).find({ price: Between(min, max) })
-            const priceList = price.map((item) => item.primaryKey)
+            const { categories, colors, min, max, sizes, materials, offset, limit, order } = req.body
 
             const products = await connection
-                .createQueryBuilder(Product, "product")
-                .select("product")
-                .leftJoinAndSelect("product.price", "price")
-                .leftJoinAndSelect("product.colors", "colors")
-                .leftJoinAndSelect("product.category", "category")
-                .leftJoinAndSelect("product.sizes", "sizes")
-                .leftJoinAndSelect("product.materials", "materials")
-                .leftJoinAndSelect("product.care", "care")
-                .where(results.length > 0 ? results.map((id) => {
-                    return {
-                        primaryKey: parseInt(id, 10),
-                        category: parseInt(category, 10),
-                        price: In(priceList)
-                    }
-                })
-                    : {
-                        category: parseInt(category, 10),
-                        price: In(priceList)
-                    })
-                .orderBy({ "price.price": order })
-                .skip(skip)
-                .take(take)
-                .getMany()
+                .getRepository(Product)
+                .query(`
+                    select *
+                    from product 
+                        left join price on product."pricePrimaryKey" = price."primaryKey",
+                        product_categories_category as category,
+                        product_colors_color as color,
+                        product_sizes_size as size, 
+                        product_materials_material as material
+                    where 
+                        product."primaryKey" = category."productPrimaryKey"
+                        and category."categoryId" = any ($1)
+                        and product."primaryKey" = color."productPrimaryKey"
+                        and color."colorId" = any ($2)
+                        and product."primaryKey" = size."productPrimaryKey"
+                        and size."sizeId" = any ($3)
+                        and product."primaryKey" = material."productPrimaryKey"
+                        and material."materialId" = any ($4)
+                    order by 
+                        price ${order ? order : ""}
+                    limit $5 offset $6
+                `, [categories, colors, sizes, materials, limit, offset])
 
-            res.status(200).json(products)
+            const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
+            
+            res.status(200).json(unique)
         } catch (error) {
             res.status(400).json(error)
         }
@@ -128,7 +142,7 @@ export class ProductController {
         const connection = getConnection()
 
         try {
-            const { colors, materials, sizes, cares, brand, category } = req.body
+            const { colors, materials, sizes, cares, brand, categories } = req.body
 
             const productBrand = await connection
                 .getRepository(Brand)
@@ -136,7 +150,7 @@ export class ProductController {
 
             const productCategory = await connection
                 .getRepository(Category)
-                .findOne({ name: category })
+                .find({ where: categories.map((category: string) => ({ name: category })) })
 
             const colorList = await connection
                 .getRepository(Color)
@@ -154,7 +168,7 @@ export class ProductController {
                 .getRepository(Care)
                 .find({ where: cares.map((care: string) => ({ name: care })) })
 
-            if (brand && category) {
+            if (brand && categories) {
                 const priceProps = {
                     price: req.body.price,
                     currency: req.body.currency,
@@ -170,7 +184,7 @@ export class ProductController {
                     description: req.body.description,
                     quantity: req.body.quantity,
                     name: req.body.name,
-                    category: productCategory,
+                    categories: productCategory,
                     materials: materialList,
                     brand: productBrand,
                     colors: colorList,
@@ -195,12 +209,12 @@ export class ProductController {
                             .resize(1024, 640)
                             .toFormat("jpeg")
                             .jpeg({ quality: 100 })
-                            .toFile(`src/public/${generated}`)
+                            .toFile(`public/${generated}`)
 
                         const photoProps = {
                             filename: generated,
                             extension: extension[1],
-                            path: `src/public/${generated}`,
+                            path: `public/${generated}`,
                             size: file.size,
                             product,
                         }

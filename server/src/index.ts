@@ -1,6 +1,7 @@
 import { createConnection, getConnectionOptions } from "typeorm"
 import { Server } from "@overnightjs/core"
 import * as bodyParser from "body-parser"
+import * as express from "express"
 import * as cors from "cors"
 import "reflect-metadata"
 
@@ -22,9 +23,10 @@ export class App extends Server {
     }
 
     private config(): void {
-        this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: false }))
+        this.app.use(bodyParser.json())
         this.app.use(cors())
+        this.app.use("/public", express.static("public"))
     }
 
     private setupControllers(): void {
@@ -46,7 +48,7 @@ export class App extends Server {
                 colorController,
                 sizeController,
                 userController,
-                careController
+                careController,
             ])
     }
 

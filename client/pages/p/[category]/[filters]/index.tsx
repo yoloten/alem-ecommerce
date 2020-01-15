@@ -1,68 +1,116 @@
-import Navbar from "../../../../components/Common/Navbar"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
-function index({ data, query }: any) {
+import Navbar from "../../../../components/Common/Navbar"
+import CardGrid from "../../../../components/UI/CardGrid"
+import CheckBox from "../../../../components/UI/CheckBox"
+
+function index({ dataFromCategory, dataFromProduct, allSizes, query }: any) {
     const [showSub, setShowSub] = useState("")
-    const [count, setCount] = useState(0)
-    const [child, setChild] = useState()
+    const [checked, setChecked]: any = useState({})
+    const [checkedSizes, setCheckedSizes]: any = useState({})
+    const [targetCategory, setTargetCategory]: any = useState([])
+    const [targetSizes, setTargetSizes]: any = useState([])
+    const [dataFromFilters, setDataFromFilters]: any = useState([])
+
+    useEffect(() => {
+        const filterCategory = async () => {
     
-    // useEffect(() => {
-    //     if (showSub !== " ") {
-    //         setChild(getConutOfProducts(showSub))
-    //         console.log(showSub)
-    //     }
-    // }, [showSub])
+            const result = await axios.post("http://localhost:8000/api/product/filters",
+                {
+                    categories: targetCategory,
+                    sizes: targetSizes,
+                },
+            )
 
-    // const getConutOfProducts = async (str: string) => {
-    //     await axios.get("http://localhost:8000/api/category/onebyparent", {
-    //     params: {
-    //         name: str,
-    //     },
-    // })
-    // }
+            setDataFromFilters(result.data)
+        }
+        if (targetCategory.length !== 0) {
+            targetCategory.map((name: any, i: number) => {
+                if (checked[name] === true) {
+                    if (i === 0) {
+                        filterCategory()
+                    }
+                }
+            })
+        } else {
+            setDataFromFilters([])
+        }
+        if (targetSizes.length !== 0) {
+            targetSizes.map((name: any, i: number) => {
+                if (checkedSizes[name] === true) {
+                    if (i === 0) {
+                        filterCategory()
+                    }
+                }
+            })
+        } else {
+            setDataFromFilters([])
+        }
 
-    // const onShowSub = (e: any) => {
-    //     if (count === 0) {
-    //         setShowSub(e.target.className.split(" ").slice(2, 4).join(" "))
-    //         setCount(1)
-    //     } else {
-    //         setShowSub(" ")
-    //         setCount(0)
-    //     }
-    //     // console.log(e.target.children)
-    // }
-    // const subClick = (e: any) => {
-    //     e.stopPropagation()
+    }, [checked, targetCategory, checkedSizes, targetSizes])
 
-    // }
-    // const router = useRouter()
-    console.log(data)
+    const changeChecked = (event: any) => {
+        setChecked({ ...checked, [event.target.name]: event.target.checked })
+        setTargetCategory([...targetCategory, event.target.name])
+
+        if (!event.target.checked) {
+            setTargetCategory([...targetCategory.filter((item: any) => item !== event.target.name)])
+        }
+    }
+
+    const changeCheckedSizes = (event: any) => {
+        setCheckedSizes({ ...checkedSizes, [event.target.name]: event.target.checked })
+        setTargetSizes([...targetSizes, event.target.name])
+
+        if (!event.target.checked) {
+            setTargetSizes([...targetSizes.filter((item: any) => item !== event.target.name)])
+        }
+    }
+
     return (
         <>
             <div>
                 <Navbar />
-                {/* <div className="main">
+                <div className="main">
                     <div className="routes">
                         {`Men/${showSub}`}
-                </div>
+                    </div>
                     <div className="content">
                         <div className="filters">
                             <div className="categories">
-                                {data.children.map((sub: any, i: number) => (
-                                    count === 0 ? <div className={`parent ${sub.name}`} onClick={onShowSub} key={i}>
-                                        {<Link href="/p/[category]/[filters]" as={`/p/${query.category}/${sub.name.toLowerCase().split(" ").join("-")}`}>
-                                            <a className="name">{sub.name}</a>
-                                        </Link>}
-                                    </div> : ""
+                                <div className="categories-header">Product Type</div>
+                                {dataFromCategory.children.map((child: any, i: number) => (
+                                    <div key={i} className="name">
+                                        <CheckBox
+                                            name={child.name}
+                                            checked={checked[child.name]}
+                                            onChange={changeChecked}
+                                        />
+                                        {child.name}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="sizes">
+                                {allSizes.map((child: any, i: number) => (
+                                    <div key={i} >
+                                        <CheckBox
+                                            name={child.name}
+                                            checked={checkedSizes[child.name]}
+                                            onChange={changeCheckedSizes}
+                                        />
+                                        {child.name}
+                                    </div>
                                 ))}
                             </div>
                         </div>
-                        <div className="items">Items</div>
+                        {dataFromFilters.length === 0
+                            ? <CardGrid content={dataFromProduct} />
+                            : <CardGrid content={dataFromFilters} />
+                        }
                     </div>
-
-                </div> */}
+                </div>
             </div>
             <style jsx>{`
             .main{
@@ -80,15 +128,30 @@ function index({ data, query }: any) {
                 padding-left: 40px;
             }
             .filters{
-                width: 300px
+                width: 350px;
             }
-            .parent{
-                cursor: pointer;
-                margin-bottom: 10px
+            .categories{
+                border: 1px solid grey
             }
             .name{
-                text-decoration: none;
-                color: #000
+                display: flex;
+                margin-left: 20px;
+                cursor: pointer;
+                margin-bottom: 10px;
+                margin-right: 3px
+            }
+            .categories-header{
+                margin-left: 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font-family: SegoeUIBold, serif
+            }
+            .sizes{
+                border: 1px solid grey;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                margin-top: 40px
             }
         `}</style>
         </>
@@ -97,11 +160,23 @@ function index({ data, query }: any) {
 
 index.getInitialProps = async ({ query }: any) => {
     const name = query.filters.split("-").map((item: any) => item.slice(0, 1).toUpperCase() + item.slice(1)).join(" ")
-    const res = await axios.get("http://localhost:8000/api/category/byparent", {
-        params: { name },
+
+    const resFromProduct = await axios.get("http://localhost:8000/api/product/productbygender", {
+        params: { gender: name },
     })
 
-    return {  data: res.data }
+    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender", {
+        params: { gender: name },
+    })
+
+    const allSizes = await axios.get("http://localhost:8000/api/size/all")
+
+    return {
+        dataFromCategory: resFromCategory.data,
+        dataFromProduct: resFromProduct.data,
+        allSizes: allSizes.data,
+        query,
+    }
 }
 
 export default index

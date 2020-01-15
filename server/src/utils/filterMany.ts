@@ -11,8 +11,8 @@ export async function filterMany(arrFromReq: string[], Model: any, connection: C
 
     let i = 0
     let temp = []
-    let results = []
-
+    let results: number[] = []
+    
     if (items.length > 0) {
 
         switch (type) {
@@ -31,21 +31,30 @@ export async function filterMany(arrFromReq: string[], Model: any, connection: C
                     temp.push(await connection.query(`select "productPrimaryKey" from product_materials_material where "materialId" = $1`, [items[i].id]))
                     i++
                 }
+            case "category":
+                while (i < items.length) {
+                    temp.push(await connection.query(`select "productPrimaryKey" from product_categories_category where "categoryId" = $1`, [items[i].id]))
+                    i++
+                }
             default:
                 break
         }
 
         const flat = temp.flat().map((item) => item.productPrimaryKey).sort((a, b) => a - b)
-
-        for (let i = 0; i < flat.length - 1; i++) {
-            if (flat[i] === flat[i + 1]) {
-                results.push(flat[i])
+        // console.log(flat)
+        if (type === "category") {
+            results = flat
+        } else {
+            for (let index = 0; index < flat.length - 1; index++) {
+                if (flat[index] === flat[index + 1]) {
+                    results.push(flat[index])
+                }
             }
         }
+       
     } else {
-        temp = await connection.getRepository(Product).find()
-        results = temp.map((item: any) => item.primaryKey)
+        results = []
     }
-
+    
     return results
 }
