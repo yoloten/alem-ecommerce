@@ -83,6 +83,8 @@ export class ProductController {
                     .select("product")
                     .leftJoinAndSelect("product.photos", "photos")
                     .leftJoinAndSelect("product.categories", "categories")
+                    .leftJoinAndSelect("product.sizes", "sizes")
+                    .leftJoinAndSelect("product.colors", "colors")
                     .leftJoinAndSelect("product.price", "price")
                     .where(resultFromCategory.map((id) => ({ primaryKey: id })))
                     .orderBy("product.createdAt", "DESC")
@@ -103,31 +105,30 @@ export class ProductController {
 
         try {
             const { categories, colors, min, max, sizes, materials, offset, limit, order } = req.body
-
+            // console.log(categories)
             const products = await connection
                 .getRepository(Product)
                 .query(`
                     select *
                     from product 
-                        left join price on product."pricePrimaryKey" = price."primaryKey",
+                        left join price on product."pricePrimaryKey" = price."primaryKey"
+                        inner join photo on photo."productPrimaryKey" = product."primaryKey",
                         product_categories_category as category,
                         product_colors_color as color,
-                        product_sizes_size as size, 
+                        product_sizes_size as size 
                     where 
-                        product."primaryKey" = category."productPrimaryKey"
-                        and category."categoryId" = any ($1)
-                        and product."primaryKey" = color."productPrimaryKey"
-                        and color."colorId" = any ($2)
-                        and product."primaryKey" = size."productPrimaryKey"
-                        and size."sizeId" = any ($3)
-                    order by 
-                        price ${order ? order : ""}
-                    limit $5 offset $6
-                `, [categories, colors, sizes,limit, offset])
+                        (product."primaryKey" = category."productPrimaryKey"
+                        and category."categoryId" = any ($1))
+                        and(product."primaryKey" = color."productPrimaryKey"
+                        and color."colorId" = any ($2))
+                        and(product."primaryKey" = size."productPrimaryKey"
+                        and size."sizeId" = any ($3))
+                        and (price between $4 and $5)
+                `, [categories, colors, sizes, min, max])
 
             const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
             
-            res.status(200).json(unique)
+            res.status(200).json(unique.slice(offset, limit))
         } catch (error) {
             res.status(400).json(error)
         }
