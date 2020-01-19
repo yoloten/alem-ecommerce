@@ -23,7 +23,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     const [targetColors, setTargetColors]: any = useState([])
     const [dataFromFilters, setDataFromFilters]: any = useState([])
     const [limit, setLimit]: any = useState(30)
-    const [sort, setSort]: any = useState()
+    const [sort, setSort]: any = useState("price DESC")
     const [state, setState]: any = useState([0, 500])
     const [initialState] = useState({
         categories: dataFromCategory.children.map((child: any) => child.id),
@@ -43,6 +43,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                     colors: targetColors.length === 0 ? initialState.colors : targetColors,
                     min: state[0],
                     max: state[1],
+                    order: sort,
                     limit,
                     offset: 0,
                 },
@@ -92,7 +93,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
 
         // setPageCount(Math.ceil(dataFromFilters.length / limit))
 
-    }, [checked, targetCategory, checkedSizes, targetSizes, targetColors, checkedColors, limit, state])
+    }, [checked, targetCategory, checkedSizes, targetSizes, targetColors, checkedColors, limit, state, sort])
 
     const changeChecked = (event: any) => {
         setChecked({ ...checked, [event.target.id]: event.target.checked })
@@ -126,7 +127,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     }
 
     const onSort = (event: any) => {
-        setSort(parseInt(event.target.value, 10))
+        setSort(event.target.value)
     }
 
     // const onPageChanged = (data: any) => {
@@ -328,7 +329,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                                 </div>
                             </div>
                             {/* <CardGrid content={dataFromFilters} fromFilters={true} /> */}
-                            <Pagination items={dataFromFilters} itemsPerPage={6}/>
+                            <Pagination items={dataFromFilters} itemsPerPage={3}/>
                         </div>
 
                     </div>

@@ -13,9 +13,33 @@ export default function Pagination({ itemsPerPage, items }: Paginate.Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [upperPageBound, setUpperPageBound] = useState(3)
     const [lowerPageBound, setLowerPageBound] = useState(0)
-    const [pageBound, setPageBound] = useState(2)
+    const [pageBound, setPageBound] = useState(3)
+    const [isPrevActive, setIsPrevActive] = useState(false)
+    const [isNextActive, setIsNextActive] = useState(true)
 
-    const handleClick = (e: any) => setCurrentPage(parseInt(e.target.id, 10))
+    useEffect(() => {
+        if (Math.ceil(items.length / itemsPerPage) > 0) {
+            if (currentPage >= Math.ceil(items.length / itemsPerPage)) {
+                setIsNextActive(false)
+            }
+
+            if (currentPage > 1) {
+                setIsPrevActive(true)
+            }
+
+            if (currentPage < Math.ceil(items.length / itemsPerPage)) {
+                setIsNextActive(true)
+            }
+
+            if (currentPage === 1) {
+                setIsPrevActive(false)
+            }
+        }
+    }, [currentPage])
+
+    const handleClick = (e: any) => {
+        setCurrentPage(parseInt(e.target.id, 10))
+    }
 
     const increment = () => {
         setUpperPageBound(upperPageBound + pageBound)
@@ -60,26 +84,61 @@ export default function Pagination({ itemsPerPage, items }: Paginate.Props) {
         for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
             pageNumbers.push(i)
         }
-        
-        return pageNumbers.map((number) => <div key={number} onClick={handleClick}>{number}</div>)
+
+        return (
+            <>
+                {pageNumbers.map((number) => {
+                    if (number === 1 && currentPage === 1) {
+                        return (
+                            <div
+                                style={{
+                                    marginRight: "3px",
+                                    color: currentPage === number ? "red" : "#000"
+                                }}
+                                id={`${number}`}
+                                onClick={handleClick}
+                                key={number}
+                            >
+                                {number}
+                            </div>
+                        )
+                    }
+                    else if ((number < upperPageBound + 1) && number > lowerPageBound) {
+                        return (
+                            <div
+                                className="number"
+                                style={{
+                                    marginRight: "3px",
+                                    color: currentPage === number ? "red" : "#000"
+                                }}
+                                id={`${number}`}
+                                onClick={handleClick}
+                                key={number}
+                            >
+                                {number}
+                            </div>
+                        )
+                    }
+                })}
+                {pageNumbers.length > upperPageBound ? <div className="decrement" onClick={increment}>...</div> : ""}
+            </>)
     }
 
     return (
         <div>
             {renderItems()}
             <div className="page-numbers">
-                {lowerPageBound >= 1 ? <div className="decrement" onClick={decrement}>...</div> : ""}
-                <div className="prev" onClick={prev}>Prev</div>
+                <div className="prev" onClick={prev}>{isPrevActive ? "Prev" : ""}</div>
                 <div className="numbers">
+                    {lowerPageBound >= 1 ? <div className="decrement" onClick={decrement}>...</div> : ""}
                     {renderPageNumbers()}
-                    {currentPage > upperPageBound ? <div className="decrement" onClick={increment}>...</div> : ""}
+
                 </div>
-                <div className="prev" onClick={next}>Next</div>
+                <div className="prev" onClick={next}>{isNextActive ? "Next" : ""}</div>
             </div>
             <style jsx>{`
                 .page-numbers{
                     display: flex;
-                    border: 1px solid red;
                     margin-bottom: 80px;
                     margin-left: 2.85vw;
                     align-items: center;
@@ -87,14 +146,11 @@ export default function Pagination({ itemsPerPage, items }: Paginate.Props) {
                 }
                 .numbers{
                     display: flex;
-                    justify-content: space-between;
-                    width: 30px;
-                    cursor: pointer
+                    cursor: pointer;
                 }
                 .prev{
                     cursor: pointer
                 }
-                
             `}</style>
         </div>
     )

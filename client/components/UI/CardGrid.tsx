@@ -1,3 +1,4 @@
+import Link from "next/link"
 import React from "react"
 
 import Card from "./Card"
@@ -15,72 +16,49 @@ namespace Grid {
 }
 
 export default function CardGrid(props: Grid.Props) {
-    const showPrice = (product: any) => {
-        if (props.fromFilters) {
-            if (product.discount) {
-                const price = parseInt(product.price, 10)
-                const discount = parseInt(product.discount, 10)
-                const withDiscount = Math.round((price - price * discount) * 100) / 100
-
-                return <>
-                    <div className="price">{withDiscount + " " + product.currency}</div>
-                    <div className="old-price">{price + " " + product.currency}</div>
-                </>
-            } else {
-                return <div className="price">{product.price + " " + product.currency}</div>
-            }
-        } else {
-            if (product.price.discount) {
-                const price = parseInt(product.price.price, 10)
-                const discount = parseInt(product.price.discount, 10)
-
-                const withDiscount = Math.round((price - price * discount) * 100) / 100
-
-                return <>
-                    <div className="price">{withDiscount + " " + product.price.currency}</div>
-                    <div className="old-price">{price + " " + product.price.currency}</div>
-                </>
-            } else {
-                return <div className="old-price">{product.price.price + " " + product.price.currency}</div>
-            }
-        }
-    }
-
+   
     return (
         <>
             <div className="grid">
-                {props.content !== " " ? props.content.map((product: any) => (
-                    <div className="card">
-                        <Card
-                            bgImage={"http://localhost:8000/" + (props.fromFilters
-                                ? product.path
-                                : product.photos[0].path)
-                            }
-                            height="375px"
-                            width="330px"
-                            key={product.primaryKey}
-                            borderRadius="0px"
-                        />
-                        <div className="name">{product.name}</div>
-                        <div >
-                            <div className="prices">
-                                {product.discount
-                                    ? <>
-                                        <div className="price">
-                                            {
-                                                Math.round(
-                                                    (product.price - product.price * product.discount) * 100
-                                                ) / 100 + " " + product.currency
-                                            }
-                                        </div>
-                                        <div className="old-price">{product.price + " " + product.currency}</div>
-                                    </>
-                                    : <div className="old-price">{product.price + " " + product.currency}</div>
-                                }
+                {props.content !== " " ? props.content.map((product: any, index: number) => {
+                    const discount = parseInt(product.discount, 10)
+                    const price = parseInt(product.price, 10)
+
+                    return (
+                        <Link href={`/product?primarykey=${product.productPrimaryKey}`}>
+                            <div className="card" key={index}>
+                                <Card
+                                    bgImage={"http://localhost:8000/" + (props.fromFilters
+                                        ? product.path
+                                        : product.photos[0].path)
+                                    }
+                                    height="375px"
+                                    width="330px"
+                                    key={product.primaryKey}
+                                    borderRadius="0px"
+                                />
+                                <div className="name">{product.name}</div>
+                                <div >
+                                    <div className="prices">
+                                        {discount
+                                            ? <>
+                                                <div className="price">
+                                                    {
+                                                        Math.round(
+                                                            (price - price * discount) * 100
+                                                        ) / 100 + " " + product.currency
+                                                    }
+                                                </div>
+                                                <div className="old-price">{price + " " + product.currency}</div>
+                                            </>
+                                            : <div className="old-price">{price + " " + product.currency}</div>
+                                        }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                )) : ""}
+                        </Link>
+                    )
+                }) : ""}
             </div>
             <style jsx>{`
                 .grid{
@@ -108,7 +86,6 @@ export default function CardGrid(props: Grid.Props) {
                 }
                 .old-price{
                     color: grey;
-                    text-decoration: line-through
                 }
             `}</style>
         </>

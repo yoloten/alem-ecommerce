@@ -46,21 +46,27 @@ export class ProductController {
         }
     }
 
-    @Get("onebyid/:id")
-    public async getOneById(req: Request, res: Response): Promise<void> {
+    @Get("onebyprimarykey/")
+    public async getOneByPrimaryKey(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-
+      
         try {
             const product = await connection
                 .getRepository(Product)
-                .find({
+                .findOne({
                     join: {
                         alias: "product",
                         leftJoinAndSelect: {
                             price: "product.price",
+                            photos: "product.photos",
+                            colors: "product.colors",
+                            brand: "product.brand",
+                            sizes: "product.sizes",
+                            materials: "product.materials",
+                            care: "product.care",
                         },
                     },
-                    where: { id: req.params.id },
+                    where: { primaryKey: req.query.primarykey },
                 })
 
             res.json(product)
@@ -124,6 +130,8 @@ export class ProductController {
                         and(product."primaryKey" = size."productPrimaryKey"
                         and size."sizeId" = any ($3))
                         and (price between $4 and $5)
+                    order by
+                        ${order}
                 `, [categories, colors, sizes, min, max])
 
             const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))

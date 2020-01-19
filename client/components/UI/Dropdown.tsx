@@ -9,8 +9,8 @@ export default function Dropdown(props: any) {
     return (
         <>
             <select onClick={onOpen} onChange={props.onChange} >
-                {props.options.map((opt: any) => (
-                    <option value={opt.val}>{opt.val}</option>
+                {props.options.map((opt: any, index: number) => (
+                    <option key={index} value={opt.val}>{opt.val}</option>
                 ))}
             </select>
                 <div className="arrow">
