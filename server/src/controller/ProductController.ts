@@ -64,6 +64,7 @@ export class ProductController {
                             sizes: "product.sizes",
                             materials: "product.materials",
                             care: "product.care",
+                            categories: "product.categories",
                         },
                     },
                     where: { primaryKey: req.query.primarykey },

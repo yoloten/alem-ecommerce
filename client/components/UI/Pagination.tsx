@@ -5,11 +5,12 @@ import CardGrid from "./CardGrid"
 namespace Paginate {
     export interface Props {
         itemsPerPage: number
+        fromFilters: boolean
         items: any[]
     }
 }
 
-export default function Pagination({ itemsPerPage, items }: Paginate.Props) {
+export default function Pagination({ itemsPerPage, items, fromFilters }: Paginate.Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [upperPageBound, setUpperPageBound] = useState(3)
     const [lowerPageBound, setLowerPageBound] = useState(0)
@@ -76,7 +77,7 @@ export default function Pagination({ itemsPerPage, items }: Paginate.Props) {
         const indexOfFirstTodo = indexOfLastTodo - itemsPerPage
         const currentItems = items.slice(indexOfFirstTodo, indexOfLastTodo)
 
-        return <CardGrid content={currentItems} fromFilters={true} />
+        return <CardGrid content={currentItems} fromFilters={fromFilters} />
     }
 
     const renderPageNumbers = () => {

@@ -5,121 +5,115 @@ const STEP = 1
 const MIN = 0
 const MAX = 500
 
-class TwoThumbs extends React.Component {
-    state = {
-        values: [0, 500]
-    }
+function TwoThumbs({price, onChange}: any) {
 
-    render() {
-        return (
-            <div
+    return (
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                width: "300px",
+                marginBottom: "20px",
+                marginLeft: "20px",
+            }}
+        >
+            <output
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                    width: '300px',
-                    marginBottom: "20px"
+                    marginTop: "20px",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
                 }}
+                id="output"
             >
-                <output
+                <div
                     style={{
-                        marginTop: '20px',
-                        width: "100%",
+                        background: "#d9d9d9",
+                        height: "25px",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
                         display: "flex",
-                        justifyContent: "space-between"
+                        alignItems: "center",
+                        borderRadius: "3px",
+                        justifyContent: "center",
                     }}
-                    id="output"
                 >
-                    <div
-                        style={{
-                            background: "#d9d9d9",
-                            height: "25px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            display: "flex",
-                            alignItems: "center",
-                            borderRadius: "3px",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {this.state.values[0] + " USD"}
-                    </div>
-                    <div
-                        style={{
-                            background: "#d9d9d9",
-                            height: "25px",
-                            display: "flex",
-                            alignItems: "center",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            borderRadius: "3px",
-                            justifyContent: "center",
-                        }}
-                    >
-                        {this.state.values[1] + " USD"}
-                    </div>
-                </output>
-                <Range
-                    values={this.state.values}
-                    step={STEP}
-                    min={MIN}
-                    max={MAX}
-                    onChange={values => {
-                        this.setState({ values })
+                    {price[0] + " USD"}
+                </div>
+                <div
+                    style={{
+                        background: "#d9d9d9",
+                        height: "25px",
+                        display: "flex",
+                        alignItems: "center",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
+                        borderRadius: "3px",
+                        justifyContent: "center",
                     }}
-                    renderTrack={({ props, children }) => (
+                >
+                    {price[1] + " USD"}
+                </div>
+            </output>
+            <Range
+                values={price}
+                step={STEP}
+                min={MIN}
+                max={MAX}
+                onChange={onChange}
+                renderTrack={({ props, children }) => (
+                    <div
+                        onMouseDown={props.onMouseDown}
+                        onTouchStart={props.onTouchStart}
+                        style={{
+                            ...props.style,
+                            height: "36px",
+                            display: "flex",
+                            width: "250px",
+                        }}
+                    >
                         <div
-                            onMouseDown={props.onMouseDown}
-                            onTouchStart={props.onTouchStart}
+                            ref={props.ref}
                             style={{
-                                ...props.style,
-                                height: '36px',
-                                display: 'flex',
-                                width: '250px'
+                                height: "3px",
+                                width: "100%",
+                                borderRadius: "4px",
+                                background: getTrackBackground({
+                                    values: price,
+                                    colors: ["#d9d9d9", "#000", "#d9d9d9"],
+                                    min: MIN,
+                                    max: MAX,
+                                }),
+                                alignSelf: "center",
                             }}
                         >
-                            <div
-                                ref={props.ref}
-                                style={{
-                                    height: '3px',
-                                    width: '100%',
-                                    borderRadius: '4px',
-                                    background: getTrackBackground({
-                                        values: this.state.values,
-                                        colors: ['#d9d9d9', '#000', '#d9d9d9'],
-                                        min: MIN,
-                                        max: MAX
-                                    }),
-                                    alignSelf: 'center'
-                                }}
-                            >
-                                {children}
-                            </div>
+                            {children}
                         </div>
-                    )}
-                    renderThumb={({ props, isDragged }) => (
-                        <div
-                            {...props}
-                            style={{
-                                ...props.style,
-                                height: '22px',
-                                width: '22px',
-                                borderRadius: '100px',
-                                backgroundColor: '#FFF',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                border: "2px solid #000"
-                            }}
-                        >
+                    </div>
+                )}
+                renderThumb={({ props, isDragged }) => (
+                    <div
+                        {...props}
+                        style={{
+                            ...props.style,
+                            height: "22px",
+                            width: "22px",
+                            borderRadius: "100px",
+                            backgroundColor: "#FFF",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            border: "2px solid #000",
+                        }}
+                    >
 
-                        </div>
-                    )}
-                />
+                    </div>
+                )}
+            />
 
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default TwoThumbs

@@ -9,7 +9,7 @@ import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
 import Button from "../components/UI/Button"
 
-function product({ dataFromProduct }: any) {
+function index({ dataFromProduct, query }: any) {
     const [photo, setPhoto] = useState(dataFromProduct.photos[0].path)
     const [checkedSize, setCheckedSize]: any = useState({})
     const [checkedColor, setCheckedColor]: any = useState({})
@@ -17,7 +17,7 @@ function product({ dataFromProduct }: any) {
     const [targetColor, setTargetColor]: any = useState()
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
-
+   
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -39,7 +39,7 @@ function product({ dataFromProduct }: any) {
             setTargetColor()
         }
     }
-    
+
     const addToCart = () => {
         const toCart = {
             discount: dataFromProduct.price.discount,
@@ -69,7 +69,7 @@ function product({ dataFromProduct }: any) {
     }
 
     const incrementAmount = () => setAmount(amount + 1)
-
+    console.log(query, dataFromProduct)
     return (
         <div>
             <Navbar />
@@ -77,9 +77,9 @@ function product({ dataFromProduct }: any) {
                 <div className="main-info">
                     <div className="photos">
                         <div className="photo-list">
-                            {dataFromProduct ? dataFromProduct.photos.map((photo: any) => (
-                                <div id={photo.path} onClick={changePhoto} style={{
-                                    backgroundImage: "url(" + "http://localhost:8000/" + photo.path + ")",
+                            {dataFromProduct ? dataFromProduct.photos.map((item: any) => (
+                                <div key={item.primaryKey} id={item.path} onClick={changePhoto} style={{
+                                    backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
                                     backgroundPosition: "center center",
                                     backgroundRepeat: "no-repeat",
                                     backgroundSize: "cover",
@@ -213,12 +213,12 @@ function product({ dataFromProduct }: any) {
                             <div className="material-care">
                                 <div className="materials">
                                     {dataFromProduct.materials.map((item: any) => (
-                                        <div className="material">{item.name}</div>
+                                        <div key={item.id} className="material">{item.name}</div>
                                     ))}
                                 </div>
                                 <div className="materials">
                                     {dataFromProduct.care.map((item: any) => (
-                                        <div className="material">{item.name}</div>
+                                        <div key={item.id} className="material">{item.name}</div>
                                     ))}
                                 </div>
                             </div>
@@ -253,7 +253,7 @@ function product({ dataFromProduct }: any) {
                     margin-left: 50px
                 }
                 .photos{
-                    
+
                     margin-top: 80px;
                     display: flex
                 }
@@ -373,14 +373,14 @@ function product({ dataFromProduct }: any) {
                    align-items: center;
                    margin-top: 40px;
                 }
-                
+
                 .description{
                    display: flex;
                    flex-direction: column;
                    align-items: center;
                    height: 200px;
                 }
-    
+
                 .description-title{
                     font-family: SegoeUIBold, serif;
                     margin-top: 25px
@@ -411,7 +411,7 @@ function product({ dataFromProduct }: any) {
     )
 }
 
-product.getInitialProps = async ({ query }: any) => {
+index.getInitialProps = async ({ query }: any) => {
 
     const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
         params: { primarykey: query.primarykey },
@@ -419,7 +419,8 @@ product.getInitialProps = async ({ query }: any) => {
 
     return {
         dataFromProduct: resFromProduct.data,
+        query,
     }
 }
 
-export default product
+export default index

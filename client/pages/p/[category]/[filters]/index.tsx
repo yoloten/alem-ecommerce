@@ -1,17 +1,12 @@
-import { Range, getTrackBackground } from "react-range"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
 import RangeSlider from "../../../../components/UI/RangeSlider"
+import Pagination from "../../../../components/UI/Pagination"
 import Navbar from "../../../../components/Common/Navbar"
 import CheckBox from "../../../../components/UI/CheckBox"
 import Dropdown from "../../../../components/UI/Dropdown"
-import Pagination from "../../../../components/UI/Pagination"
-
-const STEP = 1
-const MIN = 0
-const MAX = 500
 
 function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }: any) {
     const [showSub, setShowSub] = useState("")
@@ -24,34 +19,34 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     const [dataFromFilters, setDataFromFilters]: any = useState([])
     const [limit, setLimit]: any = useState(30)
     const [sort, setSort]: any = useState("price DESC")
-    const [state, setState]: any = useState([0, 500])
+    const [price, setPrice]: any = useState([0, 500])
     const [initialState] = useState({
-        categories: dataFromCategory.children.map((child: any) => child.id),
-        sizes: Array.from(new Set(dataFromProduct.map((i: any) => i.sizes.map((j: any) => j.id)).flat())),
         colors: Array.from(new Set(dataFromProduct.map((i: any) => i.colors.map((j: any) => j.id)).flat())),
-        price: state,
+        sizes: Array.from(new Set(dataFromProduct.map((i: any) => i.sizes.map((j: any) => j.id)).flat())),
+        categories: dataFromCategory.children.map((child: any) => child.id),
         limit: 10,
         offset: 0,
+        price,
     })
-   
+
     useEffect(() => {
         const filterCategory = async () => {
             const result = await axios.post("http://localhost:8000/api/product/filters",
                 {
                     categories: targetCategory.length === 0 ? initialState.categories : targetCategory,
-                    sizes: targetSizes.length === 0 ? initialState.sizes : targetSizes,
                     colors: targetColors.length === 0 ? initialState.colors : targetColors,
-                    min: state[0],
-                    max: state[1],
+                    sizes: targetSizes.length === 0 ? initialState.sizes : targetSizes,
+                    min: price[0],
+                    max: price[1],
                     order: sort,
-                    limit,
                     offset: 0,
+                    limit,
                 },
             )
 
             setDataFromFilters(result.data)
         }
-        
+
         if (targetCategory.length !== 0) {
             targetCategory.map((id: any, i: number) => {
                 if (checked[id] === true) {
@@ -61,7 +56,9 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 }
             })
         } else {
-            filterCategory()
+            if (targetSizes.length === 0 && targetColors.length === 0) {
+                filterCategory()
+            }
             setDataFromFilters([])
         }
 
@@ -70,11 +67,11 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 if (checkedSizes[id] === true) {
                     if (i === 0) {
                         filterCategory()
+                        console.log("3")
                     }
                 }
             })
         } else {
-            filterCategory()
             setDataFromFilters([])
         }
 
@@ -88,17 +85,13 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
             })
         } else {
             setDataFromFilters([])
-            filterCategory()
         }
-
-        // setPageCount(Math.ceil(dataFromFilters.length / limit))
-
-    }, [checked, targetCategory, checkedSizes, targetSizes, targetColors, checkedColors, limit, state, sort])
+    }, [checked, targetCategory, checkedSizes, targetSizes, targetColors, checkedColors, limit, price, sort])
 
     const changeChecked = (event: any) => {
         setChecked({ ...checked, [event.target.id]: event.target.checked })
         setTargetCategory([...targetCategory, parseInt(event.target.id, 10)])
-        // console.log(event.target.checked)
+       
         if (!event.target.checked) {
             setTargetCategory([...targetCategory.filter((item: any) => item !== parseInt(event.target.id, 10))])
         }
@@ -121,7 +114,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
             setTargetColors([...targetColors.filter((item: any) => item !== parseInt(event.target.id, 10))])
         }
     }
-    // console.log(targetCategory)
+
     const onLimit = (event: any) => {
         setLimit(parseInt(event.target.value, 10))
     }
@@ -130,19 +123,19 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
         setSort(event.target.value)
     }
 
-    // const onPageChanged = (data: any) => {
-    //     const { current, totalPages, pageLimit } = data
-
-
-    // } 
-
+    console.log(query)
     return (
         <>
             <div>
                 <Navbar />
                 <div className="main">
                     <div className="routes">
-                        {`Men/${showSub}`}
+                        <Link href="/p/[category]" as={`/p/${query.category}`}>
+                            <a className="navigation">{query.category + "/"}</a>
+                        </Link> 
+                        <Link href="/p/[category]/[filters]" as={`/p/${query.category}/${query.filters}`}>
+                            <a className="navigation">{query.filters}</a>
+                        </Link> 
                     </div>
                     <div className="content">
                         <div className="filters">
@@ -162,113 +155,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                             </div>
                             <div className="sizes">
                                 <div className="categories-header">Price</div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        flexWrap: 'wrap',
-                                        width: '300px',
-                                        marginBottom: "20px",
-                                        marginLeft: "20px"
-                                    }}
-                                >
-                                    <output
-                                        style={{
-                                            marginTop: '20px',
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}
-                                        id="output"
-                                    >
-                                        <div
-                                            style={{
-                                                background: "#d9d9d9",
-                                                height: "25px",
-                                                paddingLeft: "10px",
-                                                paddingRight: "10px",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                borderRadius: "3px",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            {state[0] + " USD"}
-                                        </div>
-                                        <div
-                                            style={{
-                                                background: "#d9d9d9",
-                                                height: "25px",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                paddingLeft: "10px",
-                                                paddingRight: "10px",
-                                                borderRadius: "3px",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            {state[1] + " USD"}
-                                        </div>
-                                    </output>
-                                    <Range
-                                        values={state}
-                                        step={STEP}
-                                        min={MIN}
-                                        max={MAX}
-                                        onChange={(values) => {
-                                            setState(values)
-                                        }}
-                                        renderTrack={({ props, children }) => (
-                                            <div
-                                                onMouseDown={props.onMouseDown}
-                                                onTouchStart={props.onTouchStart}
-                                                style={{
-                                                    ...props.style,
-                                                    height: '36px',
-                                                    display: 'flex',
-                                                    width: '250px'
-                                                }}
-                                            >
-                                                <div
-                                                    ref={props.ref}
-                                                    style={{
-                                                        height: '3px',
-                                                        width: '100%',
-                                                        borderRadius: '4px',
-                                                        background: getTrackBackground({
-                                                            values: state,
-                                                            colors: ['#d9d9d9', '#000', '#d9d9d9'],
-                                                            min: MIN,
-                                                            max: MAX
-                                                        }),
-                                                        alignSelf: 'center'
-                                                    }}
-                                                >
-                                                    {children}
-                                                </div>
-                                            </div>
-                                        )}
-                                        renderThumb={({ props, isDragged }) => (
-                                            <div
-                                                {...props}
-                                                style={{
-                                                    ...props.style,
-                                                    height: '22px',
-                                                    width: '22px',
-                                                    borderRadius: '100px',
-                                                    backgroundColor: '#FFF',
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    border: "2px solid #000"
-                                                }}
-                                            >
-
-                                            </div>
-                                        )}
-                                    />
-
-                                </div>
+                                <RangeSlider price={price} onChange={(value: any) => setPrice(value)} />
                             </div>
                             <div className="sizes">
                                 <div className="categories-header">Size</div>
@@ -313,7 +200,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                                             value={limit}
                                             width={100}
                                             onChange={onLimit}
-                                            options={[{ val: 10 }, { val: 20 }, { val: 30 }, { val: 40 }, { val: 50 }]}
+                                            options={[{ val: 10 }, { val: 20 }, { val: 30 }, { val: 50 }]}
                                         />
                                     </div>
                                     <div className="limit">
@@ -325,13 +212,10 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                                             options={[{ val: "price ASC" }, { val: "price DESC" }]}
                                         />
                                     </div>
-
                                 </div>
                             </div>
-                            {/* <CardGrid content={dataFromFilters} fromFilters={true} /> */}
-                            <Pagination items={dataFromFilters} itemsPerPage={3}/>
+                            <Pagination fromFilters={true} items={dataFromFilters} itemsPerPage={3} />
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -410,6 +294,10 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 margin-right: 5px;
                 font-family: SegoeUIBold
             }
+            .navigation{
+                text-decoration: none;
+                color: #000
+            }
         `}</style>
         </>
     )
@@ -418,20 +306,14 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
 index.getInitialProps = async ({ query }: any) => {
     const name = query.filters.split("-").map((item: any) => item.slice(0, 1).toUpperCase() + item.slice(1)).join(" ")
 
-    const resFromProduct = await axios.get("http://localhost:8000/api/product/productbygender", {
-        params: { gender: name },
-    })
-
-    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender", {
-        params: { gender: name },
-    })
-
-    const allSizes = await axios.get("http://localhost:8000/api/size/all")
+    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender", { params: { gender: name } })
+    const products = await axios.get("http://localhost:8000/api/product/productbygender", { params: { gender: name } })
     const allColors = await axios.get("http://localhost:8000/api/color/all")
-
+    const allSizes = await axios.get("http://localhost:8000/api/size/all")
+   
     return {
         dataFromCategory: resFromCategory.data,
-        dataFromProduct: resFromProduct.data,
+        dataFromProduct: products.data,
         allSizes: allSizes.data,
         allColors: allColors.data,
         query,

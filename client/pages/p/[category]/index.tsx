@@ -1,30 +1,14 @@
-// import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
+import Pagination from "../../../components/UI/Pagination"
 import Navbar from "../../../components/Common/Navbar"
-import CardGrid from "../../../components/UI/CardGrid"
 
 function index({ dataFromCategory, dataFromProduct, query }: any) {
     const [showSub, setShowSub] = useState("")
     const [count, setCount] = useState(0)
     const [child, setChild] = useState()
-
-    // useEffect(() => {
-    //     if (showSub !== " ") {
-    //         setChild(getConutOfProducts(showSub))
-    //         console.log(showSub)
-    //     }
-    // }, [showSub])
-
-    // const getConutOfProducts = async (str: string) => {
-    //     await axios.get("http://localhost:8000/api/category/onebyparent", {
-    //     params: {
-    //         name: str,
-    //     },
-    // })
-    // }
 
     const onShowSub = (e: any) => {
         if (count === 0) {
@@ -34,21 +18,17 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             setShowSub(" ")
             setCount(0)
         }
-        // console.log(e.target.children)
     }
-    const subClick = (e: any) => {
-        e.stopPropagation()
-
-    }
-    // const router = useRouter()
-    console.log(dataFromProduct)
+    
     return (
         <>
             <div>
                 <Navbar />
                 <div className="main">
                     <div className="routes">
-                        {`Men/${showSub}`}
+                        <Link href="/p/[category]" as={`/p/${query.category}`}>
+                            <a className="navigation">{query.category + "/"}</a>
+                        </Link>  
                     </div>
                     <div className="content">
                         <div className="filters">
@@ -62,7 +42,10 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
                                 ))}
                             </div>
                         </div>
-                        <CardGrid content={dataFromProduct} />
+                        <div className="grid">
+                            <div className="title">All</div>
+                            <Pagination fromFilters={false} items={dataFromProduct} itemsPerPage={6}/>
+                        </div>
                     </div>
 
                 </div>
@@ -76,20 +59,33 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             }
             .content{
                 display: flex;
-                margin-top: 40px
+                margin-top: 40px;
             }
             .items{
                 width: 100%;
                 padding-left: 40px;
             }
             .filters{
-                width: 350px
+                min-width: 200px;
             }
             .parent{
                 cursor: pointer;
                 margin-bottom: 10px
             }
             .name{
+                text-decoration: none;
+                color: #000
+            }
+            .grid{
+                dispaly: flex;
+                flex-direction: column;
+                align-self: flex-start
+            }
+            .title{
+                font-size: 29px;
+                margin-left: 2.85vw
+            }
+            .navigation{
                 text-decoration: none;
                 color: #000
             }
