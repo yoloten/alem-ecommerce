@@ -27,9 +27,9 @@ export default function Navbar(props: Nav.Props) {
                     <div className="search">
                         <Icons.Search />
                     </div>
-                    <div className="search">
-                        <Icons.Cart />
-                    </div>
+                    <Link href="/cart">
+                        <a><Icons.Cart /></a>
+                    </Link>
                     <div className="search">
                         <Icons.Avatar />
                     </div>

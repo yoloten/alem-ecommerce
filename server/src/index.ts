@@ -9,6 +9,7 @@ import { CategoryController } from "./controller/CategoryController"
 import { MaterialController } from "./controller/MaterialController"
 import { ProductController } from "./controller/ProductController"
 import { ColorController } from "./controller/ColorController"
+import { OrderController } from "./controller/OrderController"
 import { BrandController } from "./controller/BrandController"
 import { UserController } from "./controller/UserController"
 import { SizeController } from "./controller/SizeController"
@@ -34,6 +35,7 @@ export class App extends Server {
         const materialController = new MaterialController()
         const productController = new ProductController()
         const colorController = new ColorController()
+        const orderController = new OrderController()
         const brandController = new BrandController()
         const userController = new UserController()
         const sizeController = new SizeController()
@@ -46,6 +48,7 @@ export class App extends Server {
                 productController,
                 brandController,
                 colorController,
+                orderController,
                 sizeController,
                 userController,
                 careController,

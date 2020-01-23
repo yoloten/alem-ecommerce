@@ -2,6 +2,7 @@ import * as Icons from "../public/icons/_compiled"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import axios from "axios"
+import { v4 } from "uuid"
 
 import WithCarousel from "../components/LandingComponents/WithCarousel"
 import Navbar from "../components/Common/Navbar"
@@ -17,7 +18,8 @@ function index({ dataFromProduct, query }: any) {
     const [targetColor, setTargetColor]: any = useState()
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
-   
+    const [addedItem, setAddedItem]: any = useState(1)
+
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -43,6 +45,8 @@ function index({ dataFromProduct, query }: any) {
     const addToCart = () => {
         const toCart = {
             discount: dataFromProduct.price.discount,
+            currency: dataFromProduct.price.currency,
+            primaryKey: dataFromProduct.primaryKey,
             price: dataFromProduct.price.price,
             name: dataFromProduct.name,
             color: targetColor,
@@ -58,7 +62,13 @@ function index({ dataFromProduct, query }: any) {
             setAlert("Choose size")
         } else {
             setAlert("")
-            sessionStorage.setItem(toCart.name, JSON.stringify(toCart))
+            sessionStorage.setItem(v4(), JSON.stringify(toCart))
+
+            const id = sessionStorage.getItem("id")
+
+            if (!id) {
+                sessionStorage.setItem("id", v4())
+            }
         }
     }
 
@@ -69,7 +79,7 @@ function index({ dataFromProduct, query }: any) {
     }
 
     const incrementAmount = () => setAmount(amount + 1)
-    console.log(query, dataFromProduct)
+   
     return (
         <div>
             <Navbar />
@@ -128,8 +138,9 @@ function index({ dataFromProduct, query }: any) {
                                             {
                                                 Math.round(
                                                     (dataFromProduct.price.price - dataFromProduct.price.price * dataFromProduct.price.discount) * 100
-                                                ) / 100 + " " + dataFromProduct.price.currency
+                                                ) / 100 
                                             }
+                                            {dataFromProduct.price.currency}
                                         </div>
                                         <div className="old-price">
                                             {dataFromProduct.price.price + " " + dataFromProduct.price.currency}
@@ -196,7 +207,7 @@ function index({ dataFromProduct, query }: any) {
                                 onClick={addToCart}
                             />
                         </div>
-                        <div style={{height: "16px", color: "red"}}>{alert.toUpperCase()}</div>
+                        <div style={{ height: "16px", color: "red" }}>{alert.toUpperCase()}</div>
                     </div>
                 </div>
                 <div className="additional-main">

@@ -1,11 +1,13 @@
 import { Controller, Post, Get, Middleware } from "@overnightjs/core"
 import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
+import * as jwt_decode from "jwt-decode"
 import { getConnection } from "typeorm"
 import { secret } from "../keys/secret"
 import * as jwt from "jsonwebtoken"
 import * as bcrypt from "bcrypt"
 
+import { Address } from "../entity/Address"
 import { User } from "../entity/User"
 
 const saltRounds = 10
@@ -38,7 +40,7 @@ export class UserController {
                         name: req.body.name,
                         email: req.body.email,
                         password: req.body.password,
-                        role: req.body.role
+                        role: req.body.role,
                     }])
                     .execute()
 
@@ -59,12 +61,12 @@ export class UserController {
                 .createQueryBuilder("user")
                 .where("user.email = :email", { email: req.body.email })
                 .getOne()
-            
+
             if (!user) {
                 res.status(404).json({ msg: "User not found" })
             } else {
                 const isMatch = await bcrypt.compare(req.body.password, user.password)
-               
+
                 if (isMatch) {
                     const payload = {
                         name: user.name,
@@ -72,7 +74,7 @@ export class UserController {
                         email: user.email,
                     }
 
-                    const token = jwt.sign(payload, secret.secretOrKey, { expiresIn: 3600 * 24})
+                    const token = jwt.sign(payload, secret.secretOrKey, { expiresIn: 3600 * 24 })
 
                     res.json({ success: true, token: "Bearer " + token })
                 } else {
@@ -80,6 +82,38 @@ export class UserController {
                 }
             }
 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    @Post("createadress/")
+    @Middleware(jwtVerify)
+    public async createAddress(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
+
+        try {
+            const user = await connection
+                .getRepository(User)
+                .createQueryBuilder("user")
+                .where("user.email = :email", { email: decoded.email })
+                .getOne()
+
+            const addressProps = {
+                postalcode: req.body.postalcode,
+                country: req.body.country,
+                address: req.body.address,
+                city: req.body.city,
+                user,
+            }
+
+            const address = new Address()
+            Object.assign(address, addressProps)
+
+            await connection.manager.save(address)
+
+            res.json({ success: true })
         } catch (error) {
             console.log(error)
         }

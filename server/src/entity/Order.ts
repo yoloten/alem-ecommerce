@@ -1,7 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne, OneToMany } from "typeorm"
-import { Address } from "./Address"
-import { User } from "./User"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne } from "typeorm"
 import { v4 } from "uuid"
+
+import { OrderDetails } from "./OrderDetails"
+import { Address } from "./Address"
+import { Status } from "./Status"
+import { User } from "./User"
 
 @Entity()
 export class Order {
@@ -9,11 +12,8 @@ export class Order {
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", nullable: true, default: v4() })
     public id: string
-
-    @Column()
-    public totalPrice: number
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
@@ -28,7 +28,11 @@ export class Order {
     @JoinColumn()
     public address: Address
 
-    constructor() {
-        this.id = v4()
-    }
+    @OneToOne((type) => OrderDetails)
+    @JoinColumn()
+    public orderDetails: OrderDetails
+
+    @OneToOne((type) => Status)
+    @JoinColumn()
+    public status: Status
 }

@@ -11,7 +11,6 @@
             "allow-pascal-case",
             "allow-snake-case"
         ],
-        
         "object-literal-sort-keys": false,
         "no-trailing-whitespace": false,
         "no-string-literal": false,
@@ -22,6 +21,7 @@
         "member-ordering": false,
         "no-unused-vars": false,
         "interface-name": false,
+        "prefer-for-of": false,
         "no-namespace": false,
         "no-console": false,
         "semicolon": [

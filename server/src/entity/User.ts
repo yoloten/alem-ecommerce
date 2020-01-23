@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
-import { Order } from "./Order"
 import { v4 } from "uuid"
+
+import { Address } from "./Address"
+import { Order } from "./Order"
 
 export enum Role {
     Superadmin = "superadmin",
@@ -40,4 +42,7 @@ export class User {
 
     @OneToMany((type) => Order, (order) => order.user)
     public orders: Order[]
+
+    @OneToMany((type) => Address, (address) => address.user)
+    public addresses: Address[]
 }

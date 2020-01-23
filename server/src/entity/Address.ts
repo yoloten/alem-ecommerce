@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { v4 } from "uuid"
+
+import { User } from "./User"
 
 @Entity()
 export class Address {
@@ -7,7 +9,7 @@ export class Address {
     @PrimaryGeneratedColumn()
     public primaryKey: number
 
-    @Column({ type: "uuid", nullable: true })
+    @Column({ type: "uuid", default: v4() })
     public id: string
 
     @Column({ nullable: true })
@@ -17,15 +19,14 @@ export class Address {
     public city: string
 
     @Column({ nullable: true })
-    public postascode: number
+    public postalcode: number
 
     @Column({ nullable: true })
     public country: string
 
+    @ManyToOne((type) => User, (user) => user.addresses)
+    public user: User
+
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date
-
-    constructor() {
-        this.id = v4()
-    }
 }
