@@ -1,5 +1,7 @@
 import * as Icons from "../public/icons/_compiled"
-import { useRouter } from "next/router"
+import { withAuthSync } from "../utils/auth"
+import Router from "next/router"
+import nextCookie from "next-cookies"
 import { useState } from "react"
 import axios from "axios"
 import { v4 } from "uuid"
@@ -10,7 +12,7 @@ import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
 import Button from "../components/UI/Button"
 
-function index({ dataFromProduct, query }: any) {
+function index({ dataFromProduct, query, token }: any) {
     const [photo, setPhoto] = useState(dataFromProduct.photos[0].path)
     const [checkedSize, setCheckedSize]: any = useState({})
     const [checkedColor, setCheckedColor]: any = useState({})
@@ -19,7 +21,7 @@ function index({ dataFromProduct, query }: any) {
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
     const [addedItem, setAddedItem]: any = useState(1)
-
+    console.log(token)
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -79,7 +81,7 @@ function index({ dataFromProduct, query }: any) {
     }
 
     const incrementAmount = () => setAmount(amount + 1)
-   
+
     return (
         <div>
             <Navbar />
@@ -138,7 +140,7 @@ function index({ dataFromProduct, query }: any) {
                                             {
                                                 Math.round(
                                                     (dataFromProduct.price.price - dataFromProduct.price.price * dataFromProduct.price.discount) * 100
-                                                ) / 100 
+                                                ) / 100
                                             }
                                             {dataFromProduct.price.currency}
                                         </div>
@@ -422,16 +424,28 @@ function index({ dataFromProduct, query }: any) {
     )
 }
 
-index.getInitialProps = async ({ query }: any) => {
+index.getInitialProps = async (ctx: any) => {
+    const { token } = nextCookie(ctx)
 
-    const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
-        params: { primarykey: query.primarykey },
-    })
+    const redirectOnError = () =>
+        typeof window !== "undefined"
+            ? Router.push("/")
+            : ctx.res.writeHead(302, { Location: "/" }).end()
 
-    return {
-        dataFromProduct: resFromProduct.data,
-        query,
+    try {
+        const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
+            params: { primarykey: ctx.query.primarykey },
+        })
+    
+        return {
+            dataFromProduct: resFromProduct.data,
+            query: ctx.query,
+            token,
+        }
+    } catch (error) {
+        // Implementation or Network error
+        return redirectOnError()
     }
 }
 
-export default index
+export default withAuthSync(index)

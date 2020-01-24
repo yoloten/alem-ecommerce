@@ -39,9 +39,9 @@ export default function Button(props: Btn.Props) {
     }
 
     const style = props.customStyleObject ? { ...btnStyle, ...props.customStyleObject } : { ...btnStyle }
-    
+
     return (
-        <div
+        <button
             className={props.className}
             onClick={props.onClick}
             onMouseEnter={props.onMouseEnter}
@@ -49,6 +49,6 @@ export default function Button(props: Btn.Props) {
             style={style}
         >
             {props.content}
-        </div>
+        </button>
     )
 }

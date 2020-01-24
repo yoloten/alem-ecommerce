@@ -30,9 +30,9 @@ export default function Navbar(props: Nav.Props) {
                     <Link href="/cart">
                         <a><Icons.Cart /></a>
                     </Link>
-                    <div className="search">
-                        <Icons.Avatar />
-                    </div>
+                    <Link href="/auth">
+                        <a><Icons.Avatar /></a>
+                    </Link>
                 </div>
             </div>
             <style jsx>{`

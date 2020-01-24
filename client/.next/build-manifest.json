@@ -16,7 +16,7 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/cart": [
+    "/auth": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
