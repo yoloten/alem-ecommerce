@@ -14,17 +14,18 @@ import { Status } from "../entity/Status"
 @Controller("api/order")
 export class OrderController {
 
-    @Get("all/")
-    public async getAll(req: Request, res: Response): Promise<void> {
-        // const connection = getConnection()
+    @Get("orderdetails/")
+    @Middleware(jwtVerify)
+    public async getOrderDetails(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
 
-        // try {
-        //     const brands = await connection.getRepository(Brand).find()
+        try {
+            const details = await connection.getRepository(OrderDetails).findOne({id: req.query.id})
 
-        //     res.json(brands)
-        // } catch (error) {
-        //     res.status(400).json(error)
-        // }
+            res.json(details)
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 
     @Post("create/")
@@ -34,7 +35,7 @@ export class OrderController {
         const decoded: any = jwt_decode(req.token)
 
         try {
-            const { cartItems, id } = req.body
+            const { id } = req.body
 
             const user: any = await connection
                 .getRepository(User)

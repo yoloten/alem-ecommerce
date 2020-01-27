@@ -3,18 +3,37 @@ import Router from "next/router"
 import nextCookie from "next-cookies"
 import cookie from "js-cookie"
 import jwtDecode from "jwt-decode"
+import axios from "axios"
 
-export const login = (token: any) => {
-    cookie.set("token", token)
-    Router.push("/")
+export const login = (token: any, toAddress?: boolean) => {
+    if (toAddress) {
+        cookie.set("token", token)
+        Router.push("/address")
+    } else {
+        cookie.set("token", token)
+        Router.push("/")
+    }
 }
 
 export const auth = (ctx: any) => {
     const { token }: any = nextCookie(ctx)
-    const decoded: any = jwtDecode(token)
-    const current = Date.now() / 1000
-    // If there's no token, it means the user is not logged in.
-    if (decoded.exp < current) {
+
+    if (token) {
+        const decoded: any = jwtDecode(token)
+        const current = Date.now() / 1000
+        // If there's no token, it means the user is not logged in.
+
+        if (decoded.exp < current) {
+    
+
+            if (typeof window === "undefined") {
+                ctx.res.writeHead(302, { Location: "/auth" })
+                ctx.res.end()
+            } else {
+                Router.push("/auth")
+            }
+        }
+    } else {
         if (typeof window === "undefined") {
             ctx.res.writeHead(302, { Location: "/auth" })
             ctx.res.end()
@@ -51,8 +70,8 @@ export const withAuthSync = (WrappedComponent: any) => {
             }
         }, [])
 
-        return <WrappedComponent { ...props } />
-  }
+        return <WrappedComponent {...props} />
+    }
 
     Wrapper.getInitialProps = async (ctx: any) => {
         const token = auth(ctx)

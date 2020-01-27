@@ -3,562 +3,858 @@
     {
       "id": "./components/Auth/Login.tsx",
       "name": "./components/Auth/Login.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./components/UI/Button.tsx",
       "name": "./components/UI/Button.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/date/now.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/date/now.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
       "name": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/index.js",
       "name": "./node_modules/axios/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/adapters/xhr.js",
       "name": "./node_modules/axios/lib/adapters/xhr.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/axios.js",
       "name": "./node_modules/axios/lib/axios.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/Cancel.js",
       "name": "./node_modules/axios/lib/cancel/Cancel.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/CancelToken.js",
       "name": "./node_modules/axios/lib/cancel/CancelToken.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/isCancel.js",
       "name": "./node_modules/axios/lib/cancel/isCancel.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/Axios.js",
       "name": "./node_modules/axios/lib/core/Axios.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/InterceptorManager.js",
       "name": "./node_modules/axios/lib/core/InterceptorManager.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/buildFullPath.js",
       "name": "./node_modules/axios/lib/core/buildFullPath.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/createError.js",
       "name": "./node_modules/axios/lib/core/createError.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/dispatchRequest.js",
       "name": "./node_modules/axios/lib/core/dispatchRequest.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/enhanceError.js",
       "name": "./node_modules/axios/lib/core/enhanceError.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/mergeConfig.js",
       "name": "./node_modules/axios/lib/core/mergeConfig.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/settle.js",
       "name": "./node_modules/axios/lib/core/settle.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/core/transformData.js",
       "name": "./node_modules/axios/lib/core/transformData.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/defaults.js",
       "name": "./node_modules/axios/lib/defaults.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/bind.js",
       "name": "./node_modules/axios/lib/helpers/bind.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/buildURL.js",
       "name": "./node_modules/axios/lib/helpers/buildURL.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/combineURLs.js",
       "name": "./node_modules/axios/lib/helpers/combineURLs.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/cookies.js",
       "name": "./node_modules/axios/lib/helpers/cookies.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
       "name": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
       "name": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isValidXss.js",
       "name": "./node_modules/axios/lib/helpers/isValidXss.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
       "name": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/parseHeaders.js",
       "name": "./node_modules/axios/lib/helpers/parseHeaders.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/spread.js",
       "name": "./node_modules/axios/lib/helpers/spread.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/axios/lib/utils.js",
       "name": "./node_modules/axios/lib/utils.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/cookie/index.js",
       "name": "./node_modules/cookie/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/date/now.js",
       "name": "./node_modules/core-js/library/fn/date/now.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/define-properties.js",
       "name": "./node_modules/core-js/library/fn/object/define-properties.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
       "name": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
       "name": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/_create-property.js",
       "name": "./node_modules/core-js/library/modules/_create-property.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/_own-keys.js",
       "name": "./node_modules/core-js/library/modules/_own-keys.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/es6.date.now.js",
       "name": "./node_modules/core-js/library/modules/es6.date.now.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
       "name": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
       "name": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/js-cookie/src/js.cookie.js",
       "name": "./node_modules/js-cookie/src/js.cookie.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/jwt-decode/lib/atob.js",
       "name": "./node_modules/jwt-decode/lib/atob.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/jwt-decode/lib/base64_url_decode.js",
       "name": "./node_modules/jwt-decode/lib/base64_url_decode.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/jwt-decode/lib/index.js",
       "name": "./node_modules/jwt-decode/lib/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/next-cookies/index.js",
       "name": "./node_modules/next-cookies/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/universal-cookie/es6/Cookies.js",
       "name": "./node_modules/universal-cookie/es6/Cookies.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/universal-cookie/es6/index.js",
       "name": "./node_modules/universal-cookie/es6/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./node_modules/universal-cookie/es6/utils.js",
       "name": "./node_modules/universal-cookie/es6/utils.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     },
     {
       "id": "./utils/auth.tsx",
       "name": "./utils/auth.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
+      "file": "static/chunks/3.js",
+      "publicPath": "static/chunks/3.js"
     }
   ],
   "../components/Auth/Register": [
     {
       "id": "./components/Auth/Register.tsx",
       "name": "./components/Auth/Register.tsx",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./components/UI/Button.tsx",
       "name": "./components/UI/Button.tsx",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
       "name": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/index.js",
       "name": "./node_modules/axios/index.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/adapters/xhr.js",
       "name": "./node_modules/axios/lib/adapters/xhr.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/axios.js",
       "name": "./node_modules/axios/lib/axios.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/Cancel.js",
       "name": "./node_modules/axios/lib/cancel/Cancel.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/CancelToken.js",
       "name": "./node_modules/axios/lib/cancel/CancelToken.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/cancel/isCancel.js",
       "name": "./node_modules/axios/lib/cancel/isCancel.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/Axios.js",
       "name": "./node_modules/axios/lib/core/Axios.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/InterceptorManager.js",
       "name": "./node_modules/axios/lib/core/InterceptorManager.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/buildFullPath.js",
       "name": "./node_modules/axios/lib/core/buildFullPath.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/createError.js",
       "name": "./node_modules/axios/lib/core/createError.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/dispatchRequest.js",
       "name": "./node_modules/axios/lib/core/dispatchRequest.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/enhanceError.js",
       "name": "./node_modules/axios/lib/core/enhanceError.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/mergeConfig.js",
       "name": "./node_modules/axios/lib/core/mergeConfig.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/settle.js",
       "name": "./node_modules/axios/lib/core/settle.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/core/transformData.js",
       "name": "./node_modules/axios/lib/core/transformData.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/defaults.js",
       "name": "./node_modules/axios/lib/defaults.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/bind.js",
       "name": "./node_modules/axios/lib/helpers/bind.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/buildURL.js",
       "name": "./node_modules/axios/lib/helpers/buildURL.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/combineURLs.js",
       "name": "./node_modules/axios/lib/helpers/combineURLs.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/cookies.js",
       "name": "./node_modules/axios/lib/helpers/cookies.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
       "name": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
       "name": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/isValidXss.js",
       "name": "./node_modules/axios/lib/helpers/isValidXss.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
       "name": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/parseHeaders.js",
       "name": "./node_modules/axios/lib/helpers/parseHeaders.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/helpers/spread.js",
       "name": "./node_modules/axios/lib/helpers/spread.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/axios/lib/utils.js",
       "name": "./node_modules/axios/lib/utils.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/define-properties.js",
       "name": "./node_modules/core-js/library/fn/object/define-properties.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
       "name": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
       "name": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/_create-property.js",
       "name": "./node_modules/core-js/library/modules/_create-property.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/_own-keys.js",
       "name": "./node_modules/core-js/library/modules/_own-keys.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
       "name": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
     },
     {
       "id": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
       "name": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
-      "file": "static/chunks/2.js",
-      "publicPath": "static/chunks/2.js"
+      "file": "static/chunks/4.js",
+      "publicPath": "static/chunks/4.js"
+    }
+  ],
+  "../components/Order": [
+    {
+      "id": "./components/Order/index.tsx",
+      "name": "./components/Order/index.tsx",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./components/UI/Button.tsx",
+      "name": "./components/UI/Button.tsx",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
+      "name": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
+      "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
+      "name": "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime-corejs2/core-js/parse-float.js",
+      "name": "./node_modules/@babel/runtime-corejs2/core-js/parse-float.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
+      "name": "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/index.js",
+      "name": "./node_modules/axios/index.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/adapters/xhr.js",
+      "name": "./node_modules/axios/lib/adapters/xhr.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/axios.js",
+      "name": "./node_modules/axios/lib/axios.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/cancel/Cancel.js",
+      "name": "./node_modules/axios/lib/cancel/Cancel.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/cancel/CancelToken.js",
+      "name": "./node_modules/axios/lib/cancel/CancelToken.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/cancel/isCancel.js",
+      "name": "./node_modules/axios/lib/cancel/isCancel.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/Axios.js",
+      "name": "./node_modules/axios/lib/core/Axios.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/InterceptorManager.js",
+      "name": "./node_modules/axios/lib/core/InterceptorManager.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/buildFullPath.js",
+      "name": "./node_modules/axios/lib/core/buildFullPath.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/createError.js",
+      "name": "./node_modules/axios/lib/core/createError.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/dispatchRequest.js",
+      "name": "./node_modules/axios/lib/core/dispatchRequest.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/enhanceError.js",
+      "name": "./node_modules/axios/lib/core/enhanceError.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/mergeConfig.js",
+      "name": "./node_modules/axios/lib/core/mergeConfig.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/settle.js",
+      "name": "./node_modules/axios/lib/core/settle.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/core/transformData.js",
+      "name": "./node_modules/axios/lib/core/transformData.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/defaults.js",
+      "name": "./node_modules/axios/lib/defaults.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/bind.js",
+      "name": "./node_modules/axios/lib/helpers/bind.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/buildURL.js",
+      "name": "./node_modules/axios/lib/helpers/buildURL.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/combineURLs.js",
+      "name": "./node_modules/axios/lib/helpers/combineURLs.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/cookies.js",
+      "name": "./node_modules/axios/lib/helpers/cookies.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
+      "name": "./node_modules/axios/lib/helpers/isAbsoluteURL.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
+      "name": "./node_modules/axios/lib/helpers/isURLSameOrigin.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/isValidXss.js",
+      "name": "./node_modules/axios/lib/helpers/isValidXss.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
+      "name": "./node_modules/axios/lib/helpers/normalizeHeaderName.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/parseHeaders.js",
+      "name": "./node_modules/axios/lib/helpers/parseHeaders.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/helpers/spread.js",
+      "name": "./node_modules/axios/lib/helpers/spread.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/axios/lib/utils.js",
+      "name": "./node_modules/axios/lib/utils.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/fn/object/define-properties.js",
+      "name": "./node_modules/core-js/library/fn/object/define-properties.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
+      "name": "./node_modules/core-js/library/fn/object/get-own-property-descriptors.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
+      "name": "./node_modules/core-js/library/fn/object/get-own-property-symbols.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/fn/parse-float.js",
+      "name": "./node_modules/core-js/library/fn/parse-float.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/_create-property.js",
+      "name": "./node_modules/core-js/library/modules/_create-property.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/_own-keys.js",
+      "name": "./node_modules/core-js/library/modules/_own-keys.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/_parse-float.js",
+      "name": "./node_modules/core-js/library/modules/_parse-float.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/_string-trim.js",
+      "name": "./node_modules/core-js/library/modules/_string-trim.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/_string-ws.js",
+      "name": "./node_modules/core-js/library/modules/_string-ws.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
+      "name": "./node_modules/core-js/library/modules/es6.object.define-properties.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/es6.parse-float.js",
+      "name": "./node_modules/core-js/library/modules/es6.parse-float.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
+      "name": "./node_modules/core-js/library/modules/es7.object.get-own-property-descriptors.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/jwt-decode/lib/atob.js",
+      "name": "./node_modules/jwt-decode/lib/atob.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/jwt-decode/lib/base64_url_decode.js",
+      "name": "./node_modules/jwt-decode/lib/base64_url_decode.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
+      "id": "./node_modules/jwt-decode/lib/index.js",
+      "name": "./node_modules/jwt-decode/lib/index.js",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
     }
   ],
   "./dev/noop": [

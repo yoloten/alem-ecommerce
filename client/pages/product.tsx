@@ -12,7 +12,7 @@ import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
 import Button from "../components/UI/Button"
 
-function index({ dataFromProduct, query, token }: any) {
+function index({ dataFromProduct, query }: any) {
     const [photo, setPhoto] = useState(dataFromProduct.photos[0].path)
     const [checkedSize, setCheckedSize]: any = useState({})
     const [checkedColor, setCheckedColor]: any = useState({})
@@ -21,7 +21,7 @@ function index({ dataFromProduct, query, token }: any) {
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
     const [addedItem, setAddedItem]: any = useState(1)
-    console.log(token)
+  
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -425,27 +425,15 @@ function index({ dataFromProduct, query, token }: any) {
 }
 
 index.getInitialProps = async (ctx: any) => {
-    const { token } = nextCookie(ctx)
 
-    const redirectOnError = () =>
-        typeof window !== "undefined"
-            ? Router.push("/")
-            : ctx.res.writeHead(302, { Location: "/" }).end()
+    const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
+        params: { primarykey: ctx.query.primarykey },
+    })
 
-    try {
-        const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
-            params: { primarykey: ctx.query.primarykey },
-        })
-    
-        return {
-            dataFromProduct: resFromProduct.data,
-            query: ctx.query,
-            token,
-        }
-    } catch (error) {
-        // Implementation or Network error
-        return redirectOnError()
+    return {
+        dataFromProduct: resFromProduct.data,
+        query: ctx.query,
     }
 }
 
-export default withAuthSync(index)
+export default index

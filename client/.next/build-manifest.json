@@ -20,7 +20,7 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/product": [
+    "/order": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

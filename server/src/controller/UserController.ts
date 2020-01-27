@@ -15,6 +15,46 @@ const saltRounds = 10
 @Controller("api/user")
 export class UserController {
 
+    @Get("getuseraddress/")
+    @Middleware(jwtVerify)
+    public async getUserAddress(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
+
+        try {
+            const address = await connection
+                .getRepository(Address)
+                .createQueryBuilder("address")
+                .where("address.user = :user", { user: decoded.primaryKey })
+                .orderBy("address.createdAt", "DESC")
+                .getOne()
+
+            res.status(200).json(address)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    @Get("getuserphone/")
+    @Middleware(jwtVerify)
+    public async getUserPhone(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
+
+        try {
+            const phone = await connection
+                .getRepository(User)
+                .createQueryBuilder("user")
+                .select("user.phone")
+                .where("user.id = :user", { user: decoded.id })
+                .getOne()
+
+            res.status(200).json(phone)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     @Post("register/")
     public async register(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
@@ -72,6 +112,8 @@ export class UserController {
                         name: user.name,
                         id: user.id,
                         email: user.email,
+                        phone: user.phone,
+                        primaryKey: user.primaryKey,
                     }
 
                     const token = jwt.sign(payload, secret.secretOrKey, { expiresIn: 3600 * 24 })
@@ -87,7 +129,7 @@ export class UserController {
         }
     }
 
-    @Post("createadress/")
+    @Post("createaddress/")
     @Middleware(jwtVerify)
     public async createAddress(req: any, res: Response): Promise<void> {
         const connection = getConnection()
@@ -112,6 +154,26 @@ export class UserController {
             Object.assign(address, addressProps)
 
             await connection.manager.save(address)
+
+            res.json({ success: true })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    @Post("updatephone/")
+    @Middleware(jwtVerify)
+    public async updatePhone(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
+
+        try {
+            await connection
+                .createQueryBuilder()
+                .update(User)
+                .set({ phone: req.body.phone })
+                .where("id = :id", { id: decoded.id })
+                .execute()
 
             res.json({ success: true })
         } catch (error) {

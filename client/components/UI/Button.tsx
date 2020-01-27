@@ -10,7 +10,7 @@ namespace Btn {
         [propName: string]: any
         size?: "big" | "small"
         borderRadius?: string
-        onClick?: () => void
+        onClick?: any
         borderColor?: string
         focusable?: boolean
         className?: string
@@ -19,6 +19,7 @@ namespace Btn {
         height?: string
         color?: string
         width?: string
+        border?: boolean
     }
 }
 

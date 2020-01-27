@@ -18,7 +18,7 @@ export default function Login(props: any) {
         const res = await axios.post("http://localhost:8000/api/user/login", { email, password })
         const token = res.data.token
 
-        login(token)
+        login(token, props.toAddress)
     }
 
     return (

@@ -6,7 +6,7 @@ import axios from "axios"
 import Navbar from "../Common/Navbar"
 import Button from "../UI/Button"
 
-export default function index() {
+export default function index(props: any) {
     const [sessionData, setSessionData] = useState(
         Object.keys(sessionStorage).map((key: string) => {
             if (key !== "id") {
@@ -32,17 +32,19 @@ export default function index() {
                 return parsed
             }
         }))
-        
+
     }, [amount])
     // console.log(id)
     useEffect(() => {
         const createOrUpdateCart = async () => {
-            const res = await axios.post("http://localhost:8000/api/order/createcart", {
-                cartItems: sessionData.filter((i) => i !== undefined ),
-                id,
-            })
+            if (sessionData.length > 0) {
+                const res = await axios.post("http://localhost:8000/api/order/createcart", {
+                    cartItems: sessionData.filter((i) => i !== undefined),
+                    id,
+                })
+            }
         }
-        
+
         // createOrUpdateCart()
         createOrUpdateCart()
         const totalPrice: number[] = []
@@ -56,9 +58,11 @@ export default function index() {
             }
         }
 
-        const reduced = totalPrice.reduce((acc: number, curr: number) => acc + curr)
+        if (totalPrice.length > 0) {
+            const reduced = totalPrice.reduce((acc: number, curr: number) => acc + curr)
 
-        setTotal(reduced)
+            setTotal(reduced)
+        }
     }, [sessionData])
 
     const decrementAmount = (e: any) => {
@@ -66,9 +70,9 @@ export default function index() {
         const parsed = JSON.parse(item)
 
         if (parsed.quantity > 1) {
-            parsed.price = parsed.price / parsed.quantity 
+            parsed.price = parsed.price / parsed.quantity
             parsed.quantity = parsed.quantity - 1
-            
+
             sessionStorage.setItem(e.target.id, JSON.stringify(parsed))
             setAmount(amount - 1)
         }
@@ -88,6 +92,8 @@ export default function index() {
         sessionStorage.removeItem(e.target.id)
         setAmount(amount - 1)
     }
+
+    const nextStep = () => Router.push("/address")
 
     return (
         <div>
@@ -153,14 +159,19 @@ export default function index() {
                                 <div>Total:</div>
                                 <div className="total-price">{total + totalCurrency}</div>
                             </div>
-                            <Button
-                                content="CHECKOUT"
-                                color="#fff"
-                                backgroundColor="#ff7070"
-                                borderRadius="30px"
-                                height="50px"
-                                width="180px"
-                            />
+                            {sessionData.length > 0
+                                ? <Button
+                                    content="CHECKOUT"
+                                    color="#fff"
+                                    backgroundColor="#ff7070"
+                                    borderRadius="30px"
+                                    height="50px"
+                                    width="180px"
+                                    className="toAddress"
+                                    onClick={nextStep}
+                                />
+                                : "Cart is empty"
+                            }
                         </div>
                     </div>
                 </div>
