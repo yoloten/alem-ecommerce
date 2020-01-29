@@ -575,6 +575,12 @@
       "publicPath": "static/chunks/5.js"
     },
     {
+      "id": "./components/UI/Progress.tsx",
+      "name": "./components/UI/Progress.tsx",
+      "file": "static/chunks/5.js",
+      "publicPath": "static/chunks/5.js"
+    },
+    {
       "id": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
       "name": "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js",
       "file": "static/chunks/5.js",

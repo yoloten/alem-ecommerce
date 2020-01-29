@@ -28,7 +28,7 @@ export default function Navbar(props: Nav.Props) {
                         <Icons.Search />
                     </div>
                     <Link href="/cart">
-                        <a><Icons.Cart /></a>
+                        <a><Icons.Cart color="#000000"/></a>
                     </Link>
                     <Link href="/auth">
                         <a><Icons.Avatar /></a>

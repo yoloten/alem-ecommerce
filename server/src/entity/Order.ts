@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOn
 import { v4 } from "uuid"
 
 import { OrderDetails } from "./OrderDetails"
+import { Delivery } from "./Delivery"
 import { Address } from "./Address"
 import { Status } from "./Status"
 import { User } from "./User"
@@ -31,6 +32,9 @@ export class Order {
     @OneToOne((type) => OrderDetails)
     @JoinColumn()
     public orderDetails: OrderDetails
+
+    @ManyToOne((type) => Delivery, (delivery) => delivery.orders)
+    public delivery: Delivery
 
     @OneToOne((type) => Status)
     @JoinColumn()

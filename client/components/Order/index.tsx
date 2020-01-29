@@ -4,15 +4,17 @@ import Link from "next/link"
 import axios from "axios"
 
 import Button from "../UI/Button"
+import Progress from "../UI/Progress"
 
 export default function index(props: any) {
     const [orderDetails, setOrderDetails] = useState()
     const [address, setAddress] = useState()
     const [phone, setPhone] = useState()
+    const [delivery, setDelivery] = useState()
     const [decoded, setDecoded] = useState(jwtDecode(props.token))
     const [sessionData, setSessionData] = useState(
         Object.keys(sessionStorage).map((key: string) => {
-            if (key !== "id") {
+            if (key !== "id" && key !== "deliveryPrimaryKey") {
                 const data: any = sessionStorage.getItem(key)
                 const parsed = JSON.parse(data)
                 parsed.key = key
@@ -38,6 +40,14 @@ export default function index(props: any) {
                 },
             })
 
+            const oneDelivery = await axios.get("http://localhost:8000/api/order/onedelivery", {
+                headers: { "Authorization": props.token },
+                params: {
+                    primaryKey: sessionStorage.getItem("deliveryPrimaryKey"),
+                },
+            })
+
+            setDelivery(oneDelivery.data)
             setOrderDetails(details.data)
             setPhone(userPhone.data.phone)
             setAddress(userAddress.data)
@@ -59,20 +69,30 @@ export default function index(props: any) {
             <div className="main">
                 <div className="header">
                     <div className="title">Summary</div>
-                    <div className="progress">Progress</div>
+                    <Progress status="order" />
                 </div>
                 <div className="methods">
                     <div className="payment">
                         <div className="payment-title">Payment method</div>
                         <div className="payment-cards">
-                            {[0, 1, 2, 3, 4, 5].map((items) => (
-                                <div className="payment-card" key={items}></div>
+                            {[0, 1, 2, 3, 4, 5].map((items, i: number) => (
+                                <div className="payment-card" key={i}></div>
                             ))}
                         </div>
                     </div>
                     <div className="delivery">
                         <div className="payment-title">Delivery method</div>
-                        <div className="delivery-card"></div>
+                        <div className="delivery-card">
+                            {delivery
+                                ? <>
+                                    <div className="label" id={delivery.primaryKey}>{delivery.label}</div>
+                                    <div className="price" id=
+                                        {delivery.primaryKey}>{delivery.price + " " + delivery.currency}
+                                    </div>
+                                </>
+                                : ""
+                            }
+                        </div>
                     </div>
                     <div className="address">
                         <div className="payment-title">Address delivery</div>
@@ -234,9 +254,20 @@ export default function index(props: any) {
                     width: 200px;
                     height 250px;
                     border-radius: 15px;
-                    border: 1px solid #d9d9d9;
+                    border: 1px solid #ff7070;
                     margin-top: 25px;
-                    margin-right: 40px
+                    margin-right: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer
+                }
+                .label{
+                    color: grey;
+                    font-size: 20px;
+                    text-align: center;
+                    margin-bottom: 10px
                 }
                 .product{
                     display: flex;

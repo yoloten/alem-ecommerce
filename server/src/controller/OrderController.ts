@@ -3,13 +3,30 @@ import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
 import * as jwt_decode from "jwt-decode"
 import { getConnection } from "typeorm"
+import * as multer from "multer"
+import * as sharp from "sharp"
+import { v4 } from "uuid"
 
-import { Order } from "../entity/Order"
-import { User } from "../entity/User"
-import { Address } from "../entity/Address"
-import { CartItem } from "../entity/CartItem"
 import { OrderDetails } from "../entity/OrderDetails"
+import { CartItem } from "../entity/CartItem"
+import { Delivery } from "../entity/Delivery"
+import { Address } from "../entity/Address"
 import { Status } from "../entity/Status"
+import { Order } from "../entity/Order"
+import { Photo } from "../entity/Photo"
+import { User } from "../entity/User"
+
+const storage = multer.memoryStorage()
+
+const multerFilter = (req: any, file: any, cb: any) => {
+    if (file.mimetype.startsWith("image")) {
+        cb(null, true)
+    } else {
+        cb("Please upload only images.", false)
+    }
+}
+
+const upload = multer({ storage, fileFilter: multerFilter })
 
 @Controller("api/order")
 export class OrderController {
@@ -20,9 +37,44 @@ export class OrderController {
         const connection = getConnection()
 
         try {
-            const details = await connection.getRepository(OrderDetails).findOne({id: req.query.id})
+            const details = await connection.getRepository(OrderDetails).findOne({ id: req.query.id })
 
             res.json(details)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Get("alldelivery/")
+    @Middleware(jwtVerify)
+    public async allDelivery(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const delivery = await connection.getRepository(Delivery).find({
+                order: {
+                    price: "ASC",
+                },
+                take: 6,
+            })
+
+            res.json(delivery)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Get("onedelivery/")
+    @Middleware(jwtVerify)
+    public async oneDelivery(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const delivery = await connection
+                .getRepository(Delivery)
+                .findOne({ primaryKey: parseInt(req.query.primaryKey, 10) })
+
+            res.json(delivery)
         } catch (error) {
             res.status(400).json(error)
         }
@@ -85,20 +137,16 @@ export class OrderController {
     }
 
     @Post("createcart/")
-    // @Middleware(jwtVerify)
+    @Middleware(jwtVerify)
     public async createCart(req: any, res: Response): Promise<void> {
         const connection = getConnection()
 
         try {
             const { id, cartItems } = req.body
-
-            // console.log(id, cartItems)
-
             const details = await connection.getRepository(OrderDetails).findOne({ id })
 
             if (details) {
                 const totalAndCurrency: any = await createNewItems(connection, cartItems, details, res)
-
                 if (totalAndCurrency) {
                     await getConnection()
                         .createQueryBuilder()
@@ -134,6 +182,26 @@ export class OrderController {
                     res.json({ success: true })
                 }
             }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    @Post("createdelivery/")
+    @Middleware(upload.single("photo"))
+    // @Middleware(jwtVerify)
+    public async createDelivery(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const { value, label, price, currency, meta } = req.body
+            const deliveryProps = { value, label, price, currency, meta }
+            const delivery = new Delivery()
+
+            Object.assign(delivery, deliveryProps)
+            await connection.manager.save(delivery)
+
+            res.status(200).json({ success: true })
         } catch (error) {
             console.log(error)
         }
@@ -177,7 +245,7 @@ const createNewItems = async (connection: any, cartItems: any, details: any, res
                         color: cartItems[i].color,
                         size: cartItems[i].size,
                     })
-                    .where("id = :id", { id: item.id })
+                    .where("id = :id", { id: cartItems[i].key })
                     .execute()
 
                 totalPrice.push(discount !== 1 ? (price - price * discount) : price)

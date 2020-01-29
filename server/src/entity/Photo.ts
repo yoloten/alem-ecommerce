@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Product } from "./Product"
 import { v4 } from "uuid"
+
+import { Product } from "./Product"
 
 @Entity()
 export class Photo {

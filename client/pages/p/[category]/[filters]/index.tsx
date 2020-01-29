@@ -67,7 +67,6 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 if (checkedSizes[id] === true) {
                     if (i === 0) {
                         filterCategory()
-                        console.log("3")
                     }
                 }
             })
@@ -123,7 +122,6 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
         setSort(event.target.value)
     }
 
-    console.log(query)
     return (
         <>
             <div>

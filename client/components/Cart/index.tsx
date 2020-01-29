@@ -5,11 +5,12 @@ import axios from "axios"
 
 import Navbar from "../Common/Navbar"
 import Button from "../UI/Button"
+import Progress from "../UI/Progress"
 
 export default function index(props: any) {
     const [sessionData, setSessionData] = useState(
         Object.keys(sessionStorage).map((key: string) => {
-            if (key !== "id") {
+            if (key !== "id" && key !== "deliveryPrimaryKey") {
                 const data: any = sessionStorage.getItem(key)
                 const parsed = JSON.parse(data)
                 parsed.key = key
@@ -24,7 +25,7 @@ export default function index(props: any) {
 
     useEffect(() => {
         setSessionData(Object.keys(sessionStorage).map((key: string) => {
-            if (key !== "id") {
+            if (key !== "id" && key !== "deliveryPrimaryKey") {
                 const data: any = sessionStorage.getItem(key)
                 const parsed = JSON.parse(data)
                 parsed.key = key
@@ -34,7 +35,7 @@ export default function index(props: any) {
         }))
 
     }, [amount])
-    // console.log(id)
+    
     useEffect(() => {
         const createOrUpdateCart = async () => {
             if (sessionData.length > 0) {
@@ -53,6 +54,7 @@ export default function index(props: any) {
             if (sessionData[i]) {
                 const price = parseFloat(sessionData[i].price)
                 const discount = parseFloat(sessionData[i].discount)
+                const quantity = parseFloat(sessionData[i].quantity)
 
                 totalPrice.push(discount ? (price - price * discount) : price)
             }
@@ -101,7 +103,7 @@ export default function index(props: any) {
             <div className="main">
                 <div className="header">
                     <div className="title">Shopping Cart</div>
-                    <div className="icon"><Icons.Cart /></div>
+                    <Progress status="cart"/>
                 </div>
                 <div className="table">
                     <div className="table-titles">
@@ -113,12 +115,12 @@ export default function index(props: any) {
                         <div className="table-title title-remove"></div>
                     </div>
                     <div className="table-content">
-                        {sessionData.map((product: any) => {
+                        {sessionData.map((product: any, i: number) => {
                             if (product) {
                                 const price = parseFloat(product.price)
                                 const discount = parseFloat(product.discount)
 
-                                return <div key={product.primaryKey} className="product">
+                                return <div key={i} className="product">
                                     <div className="name">
                                         <div
                                             style={{
@@ -159,7 +161,7 @@ export default function index(props: any) {
                                 <div>Total:</div>
                                 <div className="total-price">{total + totalCurrency}</div>
                             </div>
-                            {sessionData.length > 0
+                            {sessionData.filter((i) => i !== undefined).length > 0
                                 ? <Button
                                     content="CHECKOUT"
                                     color="#fff"
