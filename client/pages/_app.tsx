@@ -9,12 +9,32 @@ function MyApp({ Component, pageProps }: any) {
                 }
 
                 @font-face {
+                    font-family: 'Poppins';
+                    src: url('fonts/Poppins-Medium.ttf');
+                }
+
+                @font-face {
+                    font-family: 'PoppinsLight';
+                    src: url('fonts/Poppins-Light.ttf');
+                }
+
+                @font-face {
+                    font-family: 'PoppinsSemiBold';
+                    src: url('fonts/Poppins-SemiBold.ttf');
+                }
+
+                @font-face {
+                    font-family: 'TimeBurner';
+                    src: url('fonts/timeburnernormal.ttf');
+                }
+
+                @font-face {
                     font-family: 'SegoeUIBold';
                     src: url('fonts/SegoeUI-Bold.ttf');
                 }
 
                 body{
-                    font-family: 'SegoeUI', serif;
+                    font-family: 'PoppinsLight', serif;
                     margin: 0;
                 }
             `}</style>

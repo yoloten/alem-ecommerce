@@ -48,8 +48,8 @@ export default function CardGrid(props: Grid.Props) {
                                         ? product.path
                                         : product.photos[0].path)
                                     }
-                                    height="375px"
-                                    width="330px"
+                                    height="300px"
+                                    width="300px"
                                     key={product.primaryKey}
                                     borderRadius="0px"
                                 />
@@ -85,17 +85,19 @@ export default function CardGrid(props: Grid.Props) {
                 }
                 .card{
                     margin-bottom: 60px;
-                    margin-left: 2.84vw
+                    margin-left: 2.84vw;
+                    cursor: pointer
                 }
                 .name{
-                    font-size: 16px;
-                    margin-top: 40px
+                    font-size: 14px;
+                    margin-top: 20px
                 }
                 .prices{
                     display: flex;
                     width: 200px;
-                    font-size: 20px;
+                    font-size: 16px;
                     justify-content: space-between;
+                    font-family: 'Poppins', serif;
                 }
                 .price{
                     color: red

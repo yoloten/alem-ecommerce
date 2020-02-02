@@ -15,33 +15,52 @@ export default function Login(props: any) {
     const openLogin = async (e: any) => {
         e.preventDefault()
 
+        const sessionData = Object.keys(sessionStorage).map((key: string) => {
+            if (key !== "id" && key !== "deliveryPrimaryKey") {
+                const data: any = sessionStorage.getItem(key)
+                const parsed = JSON.parse(data)
+                parsed.key = key
+
+                return parsed
+            }
+        })
+
         const res = await axios.post("http://localhost:8000/api/user/login", { email, password })
         const token = res.data.token
+
+        await axios.post("http://localhost:8000/api/order/createcart", {
+            cartItems: sessionData.filter((i) => i !== undefined),
+            id: sessionStorage.getItem("id"),
+        },
+            {
+                headers: { "Authorization": token }
+            }
+        )
 
         login(token, props.toAddress)
     }
 
     return (
         <>
-           <div className="login">
-            <div className="title">Sign in</div>
-            <div className="sub-title">Please fill all forms</div>
-            <form onSubmit={openLogin} action="submit" className="inputs">
-                <input className="input" type="email" onChange={emailChange} placeholder="Email" />
-                <input className="input" type="password" onChange={passwordChange} placeholder="Password" />
-                <Button
-                    content="Sign In"
-                    color="#fff"
-                    backgroundColor="#ff7070"
-                    borderRadius="30px"
-                    height="50px"
-                    width="432px"
-                    type="submit"
-                    customStyleObject={{marginTop: "40px"}}
-                />
-            </form>
-        </div>
-        <style jsx>{`
+            <div className="login">
+                <div className="title">Sign in</div>
+                <div className="sub-title">Please fill all forms</div>
+                <form onSubmit={openLogin} action="submit" className="inputs">
+                    <input className="input" type="email" onChange={emailChange} placeholder="Email" />
+                    <input className="input" type="password" onChange={passwordChange} placeholder="Password" />
+                    <Button
+                        content="Sign In"
+                        color="#fff"
+                        backgroundColor="#ff7070"
+                        borderRadius="30px"
+                        height="50px"
+                        width="432px"
+                        type="submit"
+                        customStyleObject={{ marginTop: "40px" }}
+                    />
+                </form>
+            </div>
+            <style jsx>{`
             .login{
                 display: flex;
                 justify-content: center;

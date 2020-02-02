@@ -1495,7 +1495,14 @@ class MyDocument extends next_document__WEBPACK_IMPORTED_MODULE_8___default.a {
         lineNumber: 12
       },
       __self: this
-    }), __jsx("body", {
+    }, __jsx("script", {
+      src: "https://js.stripe.com/v3/",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 13
+      },
+      __self: this
+    })), __jsx("body", {
       __source: {
         fileName: _jsxFileName,
         lineNumber: 15

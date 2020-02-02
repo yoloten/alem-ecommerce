@@ -96,7 +96,7 @@ export class ProductController {
                     .where(resultFromCategory.map((id) => ({ primaryKey: id })))
                     .orderBy("product.createdAt", "DESC")
                     .getMany()
-
+                
                 res.json(product)
             } else {
                 res.send(" ")

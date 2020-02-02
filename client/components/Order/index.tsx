@@ -1,3 +1,4 @@
+import { StripeProvider, Elements } from "react-stripe-elements"
 import React, { useState, useEffect } from "react"
 import jwtDecode from "jwt-decode"
 import Link from "next/link"
@@ -5,8 +6,10 @@ import axios from "axios"
 
 import Button from "../UI/Button"
 import Progress from "../UI/Progress"
+import PaymentProvider from "./PaymentProvider"
 
 export default function index(props: any) {
+    const [toPayment, setToPayment] = useState(false)
     const [orderDetails, setOrderDetails] = useState()
     const [address, setAddress] = useState()
     const [phone, setPhone] = useState()
@@ -57,135 +60,130 @@ export default function index(props: any) {
     }, [])
 
     const onSubmit = async () => {
-        if (orderDetails.id) {
-            await axios.post("http://localhost:8000/api/order/create", { id: orderDetails.id }, {
-                headers: { "Authorization": props.token },
-            })
-        }
+        setToPayment(!toPayment)
     }
-
+    console.log(orderDetails)
     return (
         <>
-            <div className="main">
-                <div className="header">
-                    <div className="title">Summary</div>
-                    <Progress status="order" />
-                </div>
-                <div className="methods">
-                    <div className="payment">
-                        <div className="payment-title">Payment method</div>
-                        <div className="payment-cards">
-                            {[0, 1, 2, 3, 4, 5].map((items, i: number) => (
-                                <div className="payment-card" key={i}></div>
-                            ))}
-                        </div>
+            {!toPayment
+                ? <div className="main">
+                    <div className="header">
+                        <div className="title">Summary</div>
+                        <Progress status="order" />
                     </div>
-                    <div className="delivery">
-                        <div className="payment-title">Delivery method</div>
-                        <div className="delivery-card">
-                            {delivery
-                                ? <>
-                                    <div className="label" id={delivery.primaryKey}>{delivery.label}</div>
-                                    <div className="price" id=
-                                        {delivery.primaryKey}>{delivery.price + " " + delivery.currency}
+                    <div className="methods">
+                        <div className="payment">
+                            <div className="payment-title">Payment method</div>
+                            <div className="payment-cards"/>
+                        </div>
+                        <div className="delivery">
+                            <div className="payment-title">Delivery method</div>
+                            <div className="delivery-card">
+                                {delivery
+                                    ? <>
+                                        <div className="label" id={delivery.primaryKey}>{delivery.label}</div>
+                                        <div className="price" id=
+                                            {delivery.primaryKey}>{delivery.price + " " + delivery.currency}
+                                        </div>
+                                    </>
+                                    : ""
+                                }
+                            </div>
+                        </div>
+                        <div className="address">
+                            <div className="payment-title">Address delivery</div>
+                            {address && phone
+                                ? <div className="address-box">
+                                    <div className="address-name">{decoded.name}</div>
+                                    <div className="address-name">
+                                        {address.address + ", " + address.city + ", " + address.postalcode}
                                     </div>
-                                </>
+                                    <div className="address-name">{address.country}</div>
+                                    <div className="address-name">{phone}</div>
+                                    <div className="address-name">{decoded.email}</div>
+                                </div>
                                 : ""
                             }
                         </div>
                     </div>
-                    <div className="address">
-                        <div className="payment-title">Address delivery</div>
-                        {address && phone
-                            ? <div className="address-box">
-                                <div className="address-name">{decoded.name}</div>
-                                <div className="address-name">
-                                    {address.address + ", " + address.city + ", " + address.postalcode}
-                                </div>
-                                <div className="address-name">{address.country}</div>
-                                <div className="address-name">{phone}</div>
-                                <div className="address-name">{decoded.email}</div>
-                            </div>
-                            : ""
-                        }
-                    </div>
-                </div>
-                <div className="cart">
-                    <div className="grid">
-                        <div className="payment-title">Your cart</div>
-                        <div className="table-content">
-                            {sessionData.map((product: any) => {
-                                if (product) {
-                                    const price = parseFloat(product.price)
-                                    const discount = parseFloat(product.discount)
+                    <div className="cart">
+                        <div className="grid">
+                            <div className="payment-title">Your cart</div>
+                            <div className="table-content">
+                                {sessionData.map((product: any) => {
+                                    if (product) {
+                                        const price = parseFloat(product.price)
+                                        const discount = parseFloat(product.discount)
 
-                                    return <div key={product.primaryKey} className="product">
-                                        <div className="name">
-                                            <div
-                                                style={{
-                                                    backgroundImage: "url(" +
-                                                        "http://localhost:8000/" + product.photo
-                                                        + ")",
-                                                    backgroundPosition: "center center",
-                                                    backgroundRepeat: "no-repeat",
-                                                    backgroundSize: "cover",
-                                                    width: "50px",
-                                                    height: "50px",
-                                                    borderRadius: "100%",
-                                                    marginRight: "10px",
-                                                }}
-                                            />
-                                            {product.name}
+                                        return <div key={product.primaryKey} className="product">
+                                            <div className="name">
+                                                <div
+                                                    style={{
+                                                        backgroundImage: "url(" +
+                                                            "http://localhost:8000/" + product.photo
+                                                            + ")",
+                                                        backgroundPosition: "center center",
+                                                        backgroundRepeat: "no-repeat",
+                                                        backgroundSize: "cover",
+                                                        width: "50px",
+                                                        height: "50px",
+                                                        borderRadius: "100%",
+                                                        marginRight: "10px",
+                                                    }}
+                                                />
+                                                {product.name}
+                                            </div>
+                                            <div className="color">{product.color}</div>
+                                            <div className="color">{product.size.toUpperCase()}</div>
+                                            <div className="color">{product.quantity}</div>
+                                            <div className="color price">
+                                                {discount ? (price - price * discount) : price}
+                                                {product.currency}
+                                            </div>
                                         </div>
-                                        <div className="color">{product.color}</div>
-                                        <div className="color">{product.size.toUpperCase()}</div>
-                                        <div className="color">{product.quantity}</div>
-                                        <div className="color price">
-                                            {discount ? (price - price * discount) : price}
-                                            {product.currency}
-                                        </div>
-                                    </div>
-                                }
-                            })}
+                                    }
+                                })}
+                            </div>
+                        </div>
+                        <div className="total">
+                            <div className="total-title">Total Cost</div>
+                            <div className="price">
+                                {orderDetails ? orderDetails.totalPrice + orderDetails.currency : ""}
+                            </div>
                         </div>
                     </div>
-                    <div className="total">
-                        <div className="total-title">Total Cost</div>
-                        <div className="price">
-                            {orderDetails ? orderDetails.totalPrice + orderDetails.currency : ""}
+                    <div className="actions">
+                        <Link href="/address">
+                            <a className="back">Back</a>
+                        </Link>
+                        <div className="buttons">
+                            <Button
+                                content="CONTINUE SHOPPING"
+                                color="#000"
+                                borderColor="#d9d9d9"
+                                backgroundColor="#fff"
+                                borderRadius="30px"
+                                height="50px"
+                                width="220px"
+                                type="submit"
+                                border={true}
+                            //onClick={continueShopping}
+                            />
+                            <Button
+                                onClick={onSubmit}
+                                content="PROCEED TO PAYMENT"
+                                color="#fff"
+                                backgroundColor="#ff7070"
+                                borderRadius="30px"
+                                height="50px"
+                                width="220px"
+                                type="submit"
+                            />
                         </div>
                     </div>
                 </div>
-                <div className="actions">
-                    <Link href="/address">
-                        <a className="back">Back</a>
-                    </Link>
-                    <div className="buttons">
-                        <Button
-                            content="CONTINUE SHOPPING"
-                            color="#000"
-                            borderColor="#d9d9d9"
-                            backgroundColor="#fff"
-                            borderRadius="30px"
-                            height="50px"
-                            width="220px"
-                            type="submit"
-                            border={true}
-                        //onClick={continueShopping}
-                        />
-                        <Button
-                            onClick={onSubmit}
-                            content="PROCEED TO PAYMENT"
-                            color="#fff"
-                            backgroundColor="#ff7070"
-                            borderRadius="30px"
-                            height="50px"
-                            width="220px"
-                            type="submit"
-                        />
-                    </div>
-                </div>
-            </div>
+                : <PaymentProvider orderDetails={orderDetails} authToken={props.token} />
+            }
             <style jsx>{`
                 .main{
                     margin-left: 170px;
@@ -198,7 +196,7 @@ export default function index(props: any) {
                     justify-content: space-between
                 }
                 .title{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     font-size: 20px
                 }
                 .methods{
@@ -230,22 +228,18 @@ export default function index(props: any) {
                     color: #000
                 }
                 .payment-title{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     margin-bottom: 15px
                 }
                 .payment-cards{
                     width: 370px;
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                    margin-right: 40px
-                }
-                .payment-card{
-                    width: 115px;
-                    height: 40px;
-                    border: 1px solid #d9d9d9;
+                    height: 250px;
+                    background-image: url(${"https://img5.goodfon.ru/wallpaper/nbig/5/cb/fon-logo-logo-blue-visa-fon-viza.jpg"}); 
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
                     border-radius: 15px;
-                    margin-top: 10px
+                    margin-right: 40px
                 }
                 .address-box{
                     margin-top: 20px
@@ -277,7 +271,7 @@ export default function index(props: any) {
                     display: flex;
                     align-items: center;
                     width: 300px;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .title-product{
                     width: 300px
@@ -308,7 +302,7 @@ export default function index(props: any) {
                     justify-content: center;
                 }
                 .price{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .total{
                     min-width: 150px; 

@@ -14,15 +14,15 @@ import React, { useState, useEffect } from "react"
 //     }
 // }
 
-const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, dataType }: any) => {
+const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, dataType, width, height }: any) => {
 
     const showContent = () => {
         switch (dataType) {
             case "color":
                 return <div 
                     style={{
-                        width: checked ? "38px" : "28px",
-                        height: checked ? "38px" : "28px",
+                        width: checked ? "42px" : "32px",
+                        height: checked ? "42px" : "32px",
                         background: name,
                         margin: checked ? "auto" : "4px 0px 0px 4px",
                         border: "0.5px solid #d9d9d9",
@@ -31,10 +31,10 @@ const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, data
             case "size": 
                 return <div 
                     style={{
-                        width: "36px",
-                        height: "31px",
+                        width: "42px",
+                        height: "34px",
                         background: checked ? "#d9d9d9" : "transparent",
-                        paddingTop:  "5px" ,
+                        paddingTop:  "8px" ,
                         alignSelf: "center",
                         border: checked ? "0.5px solid #d9d9d9" : "none",
                         textAlign: "center",
@@ -53,14 +53,14 @@ const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, data
                 input[type=checkbox]{
                     opacity: 0;
                     margin-left: 3px ;
-                    width: 36px;
-                    height: 36px;
+                    width: ${ width ? width : "42px"};
+                    height: ${ height ? height : "42px"};
                     cursor: pointer
                 }
                 .styled{
                     position: absolute;
-                    width: 38px;
-                    height: 38px;
+                    width: ${ width ? width : "42px"};
+                    height: ${ height ? height : "42px"};
                     border: ${checked ? "1px solid transparent" : "1px solid #d9d9d9"};
                     z-index: -1;
                     dispay: flex;

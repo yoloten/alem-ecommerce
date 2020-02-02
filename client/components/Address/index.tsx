@@ -231,7 +231,7 @@ function index(props: any) {
                 justify-content: space-between
             }
             .title{
-                font-family: SegoeUIBold, serif;
+                font-family: 'PoppinsSemiBold', serif;
                 font-size: 20px
             }
             .content{
@@ -246,7 +246,7 @@ function index(props: any) {
               
             }
             label{
-                font-family: SegoeUIBold, serif; 
+                font-family: 'PoppinsSemiBold', serif; 
             }
 
             .input{
@@ -302,7 +302,7 @@ function index(props: any) {
             }
             .price{
                 font-size: 20px;
-                font-family: SegoeUIBold, serif; 
+                font-family: 'PoppinsSemiBold', serif; 
                 margin-top: 20px;
                 z-index: -1;
                 text-align: center

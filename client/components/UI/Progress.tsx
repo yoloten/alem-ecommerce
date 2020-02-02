@@ -29,9 +29,9 @@ export default function Progress(props: any) {
                             <Icons.Cart color="#fff" />
                         </div>
                         <div className="line" style={line} />
-                        <div className="icon"><Icons.Truck color="#c5c5c5" /></div>
+                        <div className="icon" style={icon}><Icons.Truck color="#c5c5c5" /></div>
                         <div className="line" style={line} />
-                        <div className="icon"><Icons.CreditCard color="#c5c5c5" /></div>
+                        <div className="icon" style={icon}><Icons.CreditCard color="#c5c5c5" /></div>
                     </>
                 )
             case "address":
@@ -45,7 +45,7 @@ export default function Progress(props: any) {
                             <Icons.Truck color="#fff" />
                         </div>
                         <div className="line" style={line} />
-                        <div className="icon"><Icons.CreditCard color="#c5c5c5" /></div>
+                        <div className="icon" style={icon}><Icons.CreditCard color="#c5c5c5" /></div>
                     </>
                 )
             case "order":

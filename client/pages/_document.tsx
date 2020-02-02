@@ -10,7 +10,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          
+          <script src="https://js.stripe.com/v3/"></script>
         </Head>
         <body>
           <Main />

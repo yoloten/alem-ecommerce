@@ -35,7 +35,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
                             <div className="categories">
                                 {dataFromCategory.children.map((sub: any, i: number) => (
                                     <div className={`parent ${sub.name}`} onClick={onShowSub} key={i}>
-                                        {<Link href="/p/[category]/[filters]" as={`/p/${query.category}/${sub.name.toLowerCase().split(" ").join("-")}`}>
+                                        {<Link href="/p/[category]/[filters]" as={`/p/${query.category}/${sub.name}`}>
                                             <a className="name">{sub.name}</a>
                                         </Link>}
                                     </div>
@@ -53,7 +53,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             <style jsx>{`
             .main{
                 border-top: 1px solid #d9d9d9;
-                margin-top: 20px;
+                
                 padding-left: 170px;
                 padding-right: 170px;
             }
@@ -66,7 +66,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
                 padding-left: 40px;
             }
             .filters{
-                min-width: 200px;
+                min-width: 310px;
             }
             .parent{
                 cursor: pointer;
@@ -83,11 +83,15 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             }
             .title{
                 font-size: 29px;
-                margin-left: 2.85vw
+                margin-left: 2.85vw;
+                font-family: 'PoppinsSemiBold', serif;
             }
             .navigation{
                 text-decoration: none;
                 color: #000
+            }
+            .routes{
+                margin-top: 10px
             }
         `}</style>
         </>

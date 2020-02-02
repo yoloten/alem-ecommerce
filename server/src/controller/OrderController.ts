@@ -5,6 +5,7 @@ import * as jwt_decode from "jwt-decode"
 import { getConnection } from "typeorm"
 import * as multer from "multer"
 import * as sharp from "sharp"
+import Stripe from "stripe"
 import { v4 } from "uuid"
 
 import { OrderDetails } from "../entity/OrderDetails"
@@ -17,7 +18,6 @@ import { Photo } from "../entity/Photo"
 import { User } from "../entity/User"
 
 const storage = multer.memoryStorage()
-
 const multerFilter = (req: any, file: any, cb: any) => {
     if (file.mimetype.startsWith("image")) {
         cb(null, true)
@@ -25,7 +25,6 @@ const multerFilter = (req: any, file: any, cb: any) => {
         cb("Please upload only images.", false)
     }
 }
-
 const upload = multer({ storage, fileFilter: multerFilter })
 
 @Controller("api/order")
@@ -87,7 +86,7 @@ export class OrderController {
         const decoded: any = jwt_decode(req.token)
 
         try {
-            const { id } = req.body
+            const { id, source } = req.body
 
             const user: any = await connection
                 .getRepository(User)
@@ -102,17 +101,17 @@ export class OrderController {
                 .orderBy("address.createdAt", "DESC")
                 .getOne()
 
-            const orderDetails = await connection
+            const orderDetails: any = await connection
                 .getRepository(OrderDetails)
                 .createQueryBuilder("details")
                 .where("details.id = :id", { id })
                 .getOne()
-
+            
             const statusProps = {
                 status: "New Order",
                 comment: "Your order has been created successfully",
             }
-
+         
             const status = new Status()
             Object.assign(status, statusProps)
 
@@ -127,10 +126,24 @@ export class OrderController {
 
             const order = new Order()
             Object.assign(order, orderProps)
-
+            
             await connection.manager.save(order)
+           
+            const stripe = new Stripe("sk_test_tbRPOqykVPe6Fol8VTrJyZum00pdbo5Dzr", {
+                apiVersion: "2019-12-03",
+                typescript: true,
+            })
+            const params: Stripe.ChargeCreateParams = {
+                amount: parseFloat(orderDetails.totalPrice) * 100,
+                currency: orderDetails?.currency.toLowerCase(),
+                receipt_email: decoded.email,
+                source,
+            }
 
-            res.json({ success: true })
+            const charge: Stripe.Charge = await stripe.charges.create(params)
+
+            res.json(charge.id)
+
         } catch (error) {
             console.log(error)
         }
@@ -234,13 +247,14 @@ const createNewItems = async (connection: any, cartItems: any, details: any, res
             if (cartItems[i].key === item.id) {
                 const price = parseFloat(cartItems[i].price)
                 const discount = parseFloat(cartItems[i].discount)
+                const quantity = parseInt(cartItems[i].quantity, 10)
 
                 await getConnection()
                     .createQueryBuilder()
                     .update(CartItem)
                     .set({
                         price: discount !== 1 ? (price - price * discount) : price,
-                        quantity: parseInt(cartItems[i].quantity, 10),
+                        quantity,
                         currency: cartItems[i].currency,
                         color: cartItems[i].color,
                         size: cartItems[i].size,
@@ -248,7 +262,7 @@ const createNewItems = async (connection: any, cartItems: any, details: any, res
                     .where("id = :id", { id: cartItems[i].key })
                     .execute()
 
-                totalPrice.push(discount !== 1 ? (price - price * discount) : price)
+                totalPrice.push(discount !== 1 ? ((price - price * discount) * quantity) : price * quantity)
                 currency = cartItems[i].currency
             }
         } else {
@@ -271,7 +285,7 @@ const createNewItems = async (connection: any, cartItems: any, details: any, res
             Object.assign(newItem, itemProps)
             await connection.manager.save(newItem)
 
-            totalPrice.push(itemProps.price)
+            totalPrice.push(itemProps.price * itemProps.quantity)
             currency = cartItems[i].currency
         }
     }

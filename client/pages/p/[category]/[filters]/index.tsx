@@ -21,8 +21,12 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     const [sort, setSort]: any = useState("price DESC")
     const [price, setPrice]: any = useState([0, 500])
     const [initialState] = useState({
-        colors: Array.from(new Set(dataFromProduct.map((i: any) => i.colors.map((j: any) => j.id)).flat())),
-        sizes: Array.from(new Set(dataFromProduct.map((i: any) => i.sizes.map((j: any) => j.id)).flat())),
+        colors: dataFromProduct.length > 0 && typeof dataFromProduct !== "string"
+            ? Array.from(new Set(dataFromProduct.map((i: any) => i.colors.map((j: any) => j.id)).flat()))
+            : [],
+        sizes: dataFromProduct.length > 0 && typeof dataFromProduct !== "string"
+            ? Array.from(new Set(dataFromProduct.map((i: any) => i.sizes.map((j: any) => j.id)).flat()))
+            : [],
         categories: dataFromCategory.children.map((child: any) => child.id),
         limit: 10,
         offset: 0,
@@ -90,7 +94,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     const changeChecked = (event: any) => {
         setChecked({ ...checked, [event.target.id]: event.target.checked })
         setTargetCategory([...targetCategory, parseInt(event.target.id, 10)])
-       
+
         if (!event.target.checked) {
             setTargetCategory([...targetCategory.filter((item: any) => item !== parseInt(event.target.id, 10))])
         }
@@ -130,10 +134,10 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                     <div className="routes">
                         <Link href="/p/[category]" as={`/p/${query.category}`}>
                             <a className="navigation">{query.category + "/"}</a>
-                        </Link> 
+                        </Link>
                         <Link href="/p/[category]/[filters]" as={`/p/${query.category}/${query.filters}`}>
                             <a className="navigation">{query.filters}</a>
-                        </Link> 
+                        </Link>
                     </div>
                     <div className="content">
                         <div className="filters">
@@ -146,6 +150,8 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                                             name={child.name}
                                             checked={checked[child.id]}
                                             onChange={changeChecked}
+                                            width="26px"
+                                            height="26px"
                                         />
                                         <div className="childname">{child.name}</div>
                                     </div>
@@ -212,7 +218,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                                     </div>
                                 </div>
                             </div>
-                            <Pagination fromFilters={true} items={dataFromFilters} itemsPerPage={3} />
+                            <Pagination fromFilters={true} items={dataFromFilters} itemsPerPage={6} />
                         </div>
                     </div>
                 </div>
@@ -220,7 +226,6 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
             <style jsx>{`
             .main{
                 border-top: 1px solid #d9d9d9;
-                margin-top: 20px;
                 padding-left: 170px;
                 padding-right: 170px;
             }
@@ -233,7 +238,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 padding-left: 40px;
             }
             .filters{
-                width: 350px;
+                width: 310px;
             }
             .categories{
                 border: 1px solid #d9d9d9
@@ -252,7 +257,7 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 margin-left: 20px;
                 margin-top: 20px;
                 margin-bottom: 20px;
-                font-family: SegoeUIBold, serif
+                font-family: 'PoppinsSemiBold', serif;
             }
             .sizes{
                 border: 1px solid #d9d9d9;
@@ -274,7 +279,8 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
             }
             .title{
                 font-size: 29px;
-                margin-left: 2.8vw
+                margin-left: 2.8vw;
+                font-family: 'PoppinsSemiBold', serif;
             }
             .sort{
                 display: flex;
@@ -290,11 +296,14 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
             }
             .limit-title{
                 margin-right: 5px;
-                font-family: SegoeUIBold
+                font-family: 'PoppinsSemiBold', serif;
             }
             .navigation{
                 text-decoration: none;
                 color: #000
+            }
+            .routes{
+                margin-top: 10px
             }
         `}</style>
         </>
@@ -302,13 +311,17 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
 }
 
 index.getInitialProps = async ({ query }: any) => {
-    const name = query.filters.split("-").map((item: any) => item.slice(0, 1).toUpperCase() + item.slice(1)).join(" ")
-
-    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender", { params: { gender: name } })
-    const products = await axios.get("http://localhost:8000/api/product/productbygender", { params: { gender: name } })
+    const resFromCategory = await axios.get("http://localhost:8000/api/category/bygender",
+        {
+            params: { gender: query.filters },
+        })
+    const products = await axios.get("http://localhost:8000/api/product/productbygender",
+        {
+            params: { gender: query.filters },
+        })
     const allColors = await axios.get("http://localhost:8000/api/color/all")
     const allSizes = await axios.get("http://localhost:8000/api/size/all")
-   
+
     return {
         dataFromCategory: resFromCategory.data,
         dataFromProduct: products.data,

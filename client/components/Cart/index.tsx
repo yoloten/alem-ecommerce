@@ -1,11 +1,13 @@
 import * as Icons from "../../public/icons/_compiled"
 import React, { useState, useEffect } from "react"
+import jwtDecode from "jwt-decode"
 import Router from "next/router"
+import { v4 } from "uuid"
 import axios from "axios"
 
+import Progress from "../UI/Progress"
 import Navbar from "../Common/Navbar"
 import Button from "../UI/Button"
-import Progress from "../UI/Progress"
 
 export default function index(props: any) {
     const [sessionData, setSessionData] = useState(
@@ -21,7 +23,7 @@ export default function index(props: any) {
     const [amount, setAmount]: any = useState(1)
     const [total, setTotal]: any = useState(0)
     const [totalCurrency, setTotalCurrency]: any = useState("USD")
-    const [id]: any = useState(sessionStorage.getItem("id"))
+    const [forNavbar, setForNavbar]: any = useState("")
 
     useEffect(() => {
         setSessionData(Object.keys(sessionStorage).map((key: string) => {
@@ -35,18 +37,28 @@ export default function index(props: any) {
         }))
 
     }, [amount])
-    
+
     useEffect(() => {
         const createOrUpdateCart = async () => {
             if (sessionData.length > 0) {
-                const res = await axios.post("http://localhost:8000/api/order/createcart", {
-                    cartItems: sessionData.filter((i) => i !== undefined),
-                    id,
-                })
+                if (props.token) {
+                    const decoded: any = jwtDecode(props.token)
+                    const current = Date.now() / 1000
+
+                    if (decoded.exp >= current) {
+                        await axios.post("http://localhost:8000/api/order/createcart", {
+                            cartItems: sessionData.filter((i) => i !== undefined),
+                            id: sessionStorage.getItem("id"),
+                        },
+                            {
+                                headers: { "Authorization": props.token }
+                            }
+                        )
+                    }
+                }
             }
         }
 
-        // createOrUpdateCart()
         createOrUpdateCart()
         const totalPrice: number[] = []
 
@@ -56,7 +68,7 @@ export default function index(props: any) {
                 const discount = parseFloat(sessionData[i].discount)
                 const quantity = parseFloat(sessionData[i].quantity)
 
-                totalPrice.push(discount ? (price - price * discount) : price)
+                totalPrice.push(discount ? ((price - price * discount) * quantity) : price * quantity)
             }
         }
 
@@ -72,7 +84,7 @@ export default function index(props: any) {
         const parsed = JSON.parse(item)
 
         if (parsed.quantity > 1) {
-            parsed.price = parsed.price / parsed.quantity
+            // parsed.price = parsed.price / parsed.quantity
             parsed.quantity = parsed.quantity - 1
 
             sessionStorage.setItem(e.target.id, JSON.stringify(parsed))
@@ -84,7 +96,7 @@ export default function index(props: any) {
         const item: any = sessionStorage.getItem(e.target.id)
         const parsed = JSON.parse(item)
         parsed.quantity = parsed.quantity + 1
-        parsed.price = parsed.price * parsed.quantity
+        // parsed.price = parsed.price * parsed.quantity
 
         sessionStorage.setItem(e.target.id, JSON.stringify(parsed))
         setAmount(amount + 1)
@@ -93,17 +105,18 @@ export default function index(props: any) {
     const removeItem = (e: any) => {
         sessionStorage.removeItem(e.target.id)
         setAmount(amount - 1)
+        setForNavbar(v4())
     }
 
     const nextStep = () => Router.push("/address")
 
     return (
         <div>
-            <Navbar />
+            <Navbar removeData={forNavbar}/>
             <div className="main">
                 <div className="header">
                     <div className="title">Shopping Cart</div>
-                    <Progress status="cart"/>
+                    <Progress status="cart" />
                 </div>
                 <div className="table">
                     <div className="table-titles">
@@ -119,6 +132,7 @@ export default function index(props: any) {
                             if (product) {
                                 const price = parseFloat(product.price)
                                 const discount = parseFloat(product.discount)
+                                const quantity = parseFloat(product.quantity)
 
                                 return <div key={i} className="product">
                                     <div className="name">
@@ -146,7 +160,10 @@ export default function index(props: any) {
                                         <div className="remove" onClick={incrementAmount} id={product.key}>+</div>
                                     </div>
                                     <div className="color price">
-                                        {discount ? (price - price * discount) : price}
+                                        {discount
+                                            ? ((price - price * discount) * quantity).toFixed(2)
+                                            : (price * quantity).toFixed(2)
+                                        }
                                         {product.currency}
                                     </div>
                                     <div onClick={removeItem} id={product.key} className="color-remove">x</div>
@@ -159,7 +176,7 @@ export default function index(props: any) {
                         <div className="total-checkout">
                             <div className="total">
                                 <div>Total:</div>
-                                <div className="total-price">{total + totalCurrency}</div>
+                                <div className="total-price">{total.toFixed(2) + totalCurrency}</div>
                             </div>
                             {sessionData.filter((i) => i !== undefined).length > 0
                                 ? <Button
@@ -181,7 +198,6 @@ export default function index(props: any) {
             <style jsx>{`
                 .main{
                     border-top: 1px solid #d9d9d9;
-                    margin-top: 20px
                 }
                 .table{
                     margin-left: 170px;
@@ -195,7 +211,7 @@ export default function index(props: any) {
                     margin-right: 170px;
                 }
                 .title{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     font-size: 20px;
                 }
                 .icon{
@@ -222,7 +238,7 @@ export default function index(props: any) {
                     display: flex;
                     align-items: center;
                     width: 300px;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .title-product{
                     width: 300px
@@ -261,14 +277,14 @@ export default function index(props: any) {
                     border: 1px solid #d9d9d9;
                     border-radius: 30px;
                     align-items: center;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .remove{
                     cursor: pointer;
                     user-select: none;
                 }
                 .price{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .actions{
                     display: flex;
@@ -292,7 +308,7 @@ export default function index(props: any) {
                 }
                 .total-price{
                     margin-left: 5px;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
             `}</style>
         </div>

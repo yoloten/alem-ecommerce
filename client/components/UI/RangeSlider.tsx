@@ -13,7 +13,7 @@ function TwoThumbs({price, onChange}: any) {
                 display: "flex",
                 justifyContent: "center",
                 flexWrap: "wrap",
-                width: "300px",
+                width: "270px",
                 marginBottom: "20px",
                 marginLeft: "20px",
             }}
@@ -30,7 +30,7 @@ function TwoThumbs({price, onChange}: any) {
                 <div
                     style={{
                         background: "#d9d9d9",
-                        height: "25px",
+                        height: "27px",
                         paddingLeft: "10px",
                         paddingRight: "10px",
                         display: "flex",
@@ -70,7 +70,7 @@ function TwoThumbs({price, onChange}: any) {
                             ...props.style,
                             height: "36px",
                             display: "flex",
-                            width: "250px",
+                            width: "200px",
                         }}
                     >
                         <div

@@ -1,7 +1,4 @@
 import * as Icons from "../public/icons/_compiled"
-import { withAuthSync } from "../utils/auth"
-import Router from "next/router"
-import nextCookie from "next-cookies"
 import { useState } from "react"
 import axios from "axios"
 import { v4 } from "uuid"
@@ -21,7 +18,8 @@ function index({ dataFromProduct, query }: any) {
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
     const [addedItem, setAddedItem]: any = useState(1)
-  
+    const [forNavbar, setForNavbar] = useState("")
+
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -71,6 +69,8 @@ function index({ dataFromProduct, query }: any) {
             if (!id) {
                 sessionStorage.setItem("id", v4())
             }
+
+            setForNavbar(v4())
         }
     }
 
@@ -84,7 +84,7 @@ function index({ dataFromProduct, query }: any) {
 
     return (
         <div>
-            <Navbar />
+            <Navbar data={forNavbar} />
             <div className="main">
                 <div className="main-info">
                     <div className="photos">
@@ -95,8 +95,8 @@ function index({ dataFromProduct, query }: any) {
                                     backgroundPosition: "center center",
                                     backgroundRepeat: "no-repeat",
                                     backgroundSize: "cover",
-                                    width: "85px",
-                                    height: "85px",
+                                    width: "100px",
+                                    height: "100px",
                                     marginBottom: "10px",
                                     cursor: "pointer",
                                 }} />
@@ -134,22 +134,21 @@ function index({ dataFromProduct, query }: any) {
                                 {dataFromProduct.name}
                             </div>
                             <div className="price-brand">
-                                {dataFromProduct.price.discount
+                                {parseFloat(dataFromProduct.price.discount)
+                                    && parseFloat(dataFromProduct.price.discount) !== 0
                                     ? <div className="prices">
                                         <div className="price">
                                             {
-                                                Math.round(
-                                                    (dataFromProduct.price.price - dataFromProduct.price.price * dataFromProduct.price.discount) * 100
-                                                ) / 100
+                                                (parseFloat(dataFromProduct.price.price) - parseFloat(dataFromProduct.price.price) * parseFloat(dataFromProduct.price.discount)).toFixed(2)
                                             }
                                             {dataFromProduct.price.currency}
                                         </div>
                                         <div className="old-price">
-                                            {dataFromProduct.price.price + " " + dataFromProduct.price.currency}
+                                            {parseFloat(dataFromProduct.price.price).toFixed(2) + " " + dataFromProduct.price.currency}
                                         </div>
                                     </div>
                                     : <div className="old-price">
-                                        {dataFromProduct.price.price + " " + dataFromProduct.price.currency}
+                                        {parseFloat(dataFromProduct.price.price) + " " + dataFromProduct.price.currency}
                                     </div>
                                 }
                                 <div className="brand">{dataFromProduct.brand.name}</div>
@@ -247,7 +246,6 @@ function index({ dataFromProduct, query }: any) {
             <style jsx>{`
                 .main{
                     border-top: 1px solid #d9d9d9;
-                    margin-top: 20px
                 }
                 .main-info{
                     display: flex;
@@ -281,7 +279,7 @@ function index({ dataFromProduct, query }: any) {
                     font-size: 13px
                 }
                 .shipping-title{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .shipping-info{
                     margin-left: 20px
@@ -300,7 +298,7 @@ function index({ dataFromProduct, query }: any) {
                     color: #fff;
                     padding: 6px 12px 6px 12px;
                     border-radius: 30px;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .id{
                     color: #c4c4c4;
@@ -316,16 +314,16 @@ function index({ dataFromProduct, query }: any) {
                 }
                 .prices{
                     display: flex;
-                    font-size: 29px;
                     width: 275px;
                     justify-content: space-between;
                 }
                 .price{
                     color: red;
+                    font-size: 29px;
                 }
                 .old-price{
+                    font-size: 29px;
                     color: grey;
-                    text-decoration: line-through
                 }
                 .colors{
                     margin-top: 40px;
@@ -357,7 +355,7 @@ function index({ dataFromProduct, query }: any) {
                     border-radius: 30px;
                     align-items: center;
                     font-size: 20px;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     margin-top: 20px
                 }
                 .additional-main{
@@ -376,7 +374,7 @@ function index({ dataFromProduct, query }: any) {
                     border: 1px solid #ff7070;
                     border-radius: 30px;
                     align-items: center;
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     font-size: 14px
                 }
                 .additional{
@@ -395,7 +393,7 @@ function index({ dataFromProduct, query }: any) {
                 }
 
                 .description-title{
-                    font-family: SegoeUIBold, serif;
+                    font-family: 'PoppinsSemiBold', serif;
                     margin-top: 25px
                 }
                 .description-text{

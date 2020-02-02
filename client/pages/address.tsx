@@ -10,19 +10,16 @@ const Address = dynamic(() => import("../components/Address"), {
     ssr: false,
 })
 
-function address({ token }: any) {
+function address(props: any) {
 
     const showAddress = () => {
-        if (token) {
-            const decoded: any = jwtDecode(token)
-            const current = Date.now() / 1000
-
-            if (decoded.exp < current) {
-                return <Login />
-            } else {
-                return <Address decoded={decoded} token={token}/>
-            }
-        } else {
+        if (props.login) {
+          return <Login />
+        }
+        if (props.address) {
+            return <Address decoded={props.decoded} token={props.token} />
+        }
+        if (props.loginToAddress) {
             return <Login toAddress={true} />
         }
     }
@@ -47,7 +44,27 @@ function address({ token }: any) {
 address.getInitialProps = async (ctx: any) => {
     const { token } = nextCookie(ctx)
 
-    return { token }
+    if (token) {
+        const decoded: any = jwtDecode(token)
+        const current = Date.now() / 1000
+
+        if (decoded.exp < current) {
+            return { login: "login" }
+        } else {
+            if (ctx.req) {
+                ctx.res.writeHead(302, { Location: '/' })
+                ctx.res.end()
+            } else {
+                return { 
+                    address: "address",
+                    decoded,
+                    token,
+                }
+            }
+        }
+    } else {
+        return { loginToAddress: "loginToAddress" }
+    }
 }
 
 export default address

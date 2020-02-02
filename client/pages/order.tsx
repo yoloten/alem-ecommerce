@@ -1,5 +1,6 @@
 import nextCookie from "next-cookies"
 import dynamic from "next/dynamic"
+import { withAuthSync } from "../utils/auth"
 
 import Navbar from "../components/Common/Navbar"
 
@@ -17,7 +18,6 @@ function order({token}: any) {
             <style jsx>{`
                 .order{
                     border-top: 1px solid #d9d9d9;
-                    margin-top: 20px;
                     padding-top: 40px
                 }
             `}</style>
@@ -31,4 +31,4 @@ order.getInitialProps = async (ctx: any) => {
     return { token }
 }
 
-export default order
+export default withAuthSync(order)
