@@ -65,15 +65,16 @@ export default function Card(props: CardNamespace.Props) {
         ...commonTextStyle,
         marginTop: "30px",
         fontSize: props.fontSize ? props.fontSize : "16px",
-        width: "200px",
+        maxWidth: "200px",
         alignSelf: props.textPosition ? btnPosition(props.textPosition) : "center",
     }
 
     const subTitleStyle = {
         ...commonTextStyle,
         marginTop: "10px",
-        fontSize: "14px",
+        fontSize: props.fontSize ? props.fontSize : "14px",
         color: "#bababa",
+        marginRight: "10px"
     }
 
     const btnStyle = {

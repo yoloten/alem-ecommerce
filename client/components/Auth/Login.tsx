@@ -7,7 +7,7 @@ import Button from "../UI/Button"
 export default function Login(props: any) {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
-
+    
     const emailChange = (e: any) => setEmail(e.target.value)
 
     const passwordChange = (e: any) => setPassword(e.target.value)
@@ -39,7 +39,7 @@ export default function Login(props: any) {
 
         login(token, props.toAddress)
     }
-
+    
     return (
         <>
             <div className="login">
@@ -54,7 +54,7 @@ export default function Login(props: any) {
                         backgroundColor="#ff7070"
                         borderRadius="30px"
                         height="50px"
-                        width="432px"
+                        width="302px"
                         type="submit"
                         customStyleObject={{ marginTop: "40px" }}
                     />
@@ -84,7 +84,7 @@ export default function Login(props: any) {
                 text-align: center
             }
             .input{
-                width: 400px;
+                width: 270px;
                 height: 50px;
                 border-radius: 30px;
                 border: 1px solid #d9d9d9;

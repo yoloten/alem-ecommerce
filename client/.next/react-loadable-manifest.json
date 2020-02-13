@@ -1,4 +1,24 @@
 {
+  "../components/Address": [
+    {
+      "id": "./components/Address/index.tsx",
+      "name": "./components/Address/index.tsx",
+      "file": "static/chunks/2.js",
+      "publicPath": "static/chunks/2.js"
+    },
+    {
+      "id": "./components/UI/Dropdown.tsx",
+      "name": "./components/UI/Dropdown.tsx",
+      "file": "static/chunks/2.js",
+      "publicPath": "static/chunks/2.js"
+    },
+    {
+      "id": "./components/UI/Progress.tsx",
+      "name": "./components/UI/Progress.tsx",
+      "file": "static/chunks/2.js",
+      "publicPath": "static/chunks/2.js"
+    }
+  ],
   "../components/Cart": [
     {
       "id": "./components/Cart/index.tsx",
@@ -1011,6 +1031,12 @@
     {
       "id": "./public/icons/_compiled/CreditCard.tsx",
       "name": "./public/icons/_compiled/CreditCard.tsx",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./public/icons/_compiled/Filter.tsx",
+      "name": "./public/icons/_compiled/Filter.tsx",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },

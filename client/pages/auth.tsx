@@ -1,7 +1,7 @@
 import nextCookie from "next-cookies"
 import dynamic from "next/dynamic"
 import jwtDecode from "jwt-decode"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Router from "next/router"
 import Link from "next/link"
 

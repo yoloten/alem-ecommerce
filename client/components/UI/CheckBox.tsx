@@ -55,10 +55,10 @@ const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, data
                     margin-left: 3px ;
                     width: ${ width ? width : "42px"};
                     height: ${ height ? height : "42px"};
-                    cursor: pointer
+                    cursor: pointer;
                 }
                 .styled{
-                    position: absolute;
+                    margin-left: ${ width ? "-" + width : "-44px"};
                     width: ${ width ? width : "42px"};
                     height: ${ height ? height : "42px"};
                     border: ${checked ? "1px solid transparent" : "1px solid #d9d9d9"};

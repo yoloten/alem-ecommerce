@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useState, useEffect } from "react"
 
 import Card from "./Card"
 
@@ -18,6 +18,22 @@ namespace Grid {
 
 export default function CardGrid(props: Grid.Props) {
     const router = useRouter()
+
+    const [windowWidth, setWindowWidth] = useState()
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     return (
         <>
@@ -48,8 +64,8 @@ export default function CardGrid(props: Grid.Props) {
                                         ? product.path
                                         : product.photos[0].path)
                                     }
-                                    height="300px"
-                                    width="300px"
+                                    height={windowWidth < 1560 ? "220px" : "300px"}
+                                    width={windowWidth < 1560 ? "220px" : "300px"}
                                     key={product.primaryKey}
                                     borderRadius="0px"
                                 />
@@ -104,6 +120,20 @@ export default function CardGrid(props: Grid.Props) {
                 }
                 .old-price{
                     color: grey;
+                }
+                @media (max-width: 1560px) { 
+                    .card{
+                        margin-bottom: 60px;
+                        margin-left: 20px;
+                        cursor: pointer
+                    }
+                }
+                @media (max-width: 780px) { 
+                    .card{
+                        margin-bottom: 60px;
+                        margin-left: 2.84vw;
+                        cursor: pointer
+                    }
                 }
             `}</style>
         </>

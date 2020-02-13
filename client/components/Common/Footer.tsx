@@ -12,8 +12,9 @@ export default function Footer() {
                     align-items: center;
                     height: 100px;
                     border-top: 1px solid #d9d9d9;
-                    font-size: 18px;
-                    color:  gray
+                    font-size: 16px;
+                    color:  gray;
+                    text-align: center
                 }
             `}</style>
         </>

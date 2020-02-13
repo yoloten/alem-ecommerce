@@ -53,17 +53,12 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             <style jsx>{`
             .main{
                 border-top: 1px solid #d9d9d9;
-                
                 padding-left: 170px;
                 padding-right: 170px;
             }
             .content{
                 display: flex;
                 margin-top: 40px;
-            }
-            .items{
-                width: 100%;
-                padding-left: 40px;
             }
             .filters{
                 min-width: 310px;
@@ -74,7 +69,8 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             }
             .name{
                 text-decoration: none;
-                color: #000
+                color: #000;
+                margin-right: 10px
             }
             .grid{
                 dispaly: flex;
@@ -92,6 +88,44 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
             }
             .routes{
                 margin-top: 10px
+            }
+            @media (max-width: 1700px) { 
+                .filters{
+                    min-width: 180px;
+                }
+            }
+           
+            @media (max-width: 1200px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 60px;
+                    padding-right: 60px;
+                }
+               
+            }
+            @media (max-width: 1000px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
+               
+            }
+            @media (max-width: 700px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                }
+                .content{
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 40px;
+                }
+                .categories{
+                    display: flex;
+                    flex-wrap: wrap
+                }
             }
         `}</style>
         </>

@@ -1,3 +1,5 @@
+import * as Icons from "../../../../public/icons/_compiled"
+import { slide as Menu } from "react-burger-menu"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
@@ -32,6 +34,21 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
         offset: 0,
         price,
     })
+    const [windowWidth, setWindowWidth] = useState()
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     useEffect(() => {
         const filterCategory = async () => {
@@ -125,6 +142,156 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
     const onSort = (event: any) => {
         setSort(event.target.value)
     }
+ 
+    // Приходится писать инлайн, так как некст не видит классы)))))))))))
+    const showSort = (
+        <div
+            className="sort"
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: windowWidth < 881 ? "column" : "row",
+                maxWidth: "520px",
+                marginLeft: windowWidth < 571 ? "-20px" : "",
+                paddingBottom: windowWidth < 571 ? "40px" : "",
+                alignItems: windowWidth < 881 ? "flex-end" : "",
+            }}
+        >
+            <div style={{
+                marginBottom: windowWidth < 571 ? "10px" : "0px",
+                marginLeft: windowWidth < 571 ? "20px" : "20px",
+                display: "flex",
+                alignItems: "center",
+            }}>
+                {windowWidth > 571
+                    ? <div style={{ marginRight: "5px", fontFamily: "PoppinsSemiBold, serif" }}>Show products:</div>
+                    : ""
+                }
+                <Dropdown
+                    value={limit}
+                    width={100}
+                    onChange={onLimit}
+                    options={[{ val: 10 }, { val: 20 }, { val: 30 }, { val: 50 }]}
+                />
+            </div>
+            <div style={{ 
+                    marginLeft: windowWidth < 571 ? "20px" : "40px",
+                    display: "flex",
+                    alignItems: "center",
+                }}>
+                {windowWidth > 571 
+                ? <div style={{ marginRight: "5px", fontFamily: "PoppinsSemiBold, serif" }}>Sort:</div> 
+                : ""
+                }
+                <Dropdown
+                    value={"price DESC"}
+                    width={150}
+                    onChange={onSort}
+                    options={[{ val: "price ASC" }, { val: "price DESC" }]}
+                />
+            </div>
+        </div>
+    )
+
+    const sizesStyle = {
+        border: "1px solid #d9d9d9",
+        marginTop: "40px",
+    }
+
+    const header = {
+        marginLeft: "20px",
+        marginTop: "20px",
+        marginBottom: "20px",
+        fontFamily: "PoppinsSemiBold, serif",
+    }
+
+    const name = {
+        display: "flex",
+        cursor: "pointer",
+        alignItems: "center",
+        marginRight: "3px",
+        marginBottom: "20px",
+    }
+
+    const showFilters = (
+        <div className="filters" style={{ minWidth: windowWidth < 1371 ? "220px" : "310px" }}>
+            <div className="categories" style={{ border: "1px solid #d9d9d9" }}>
+                <div
+                    className="categories-header"
+                    style={header}
+                >
+                    Product Type
+                    </div>
+                {dataFromCategory.children.map((child: any, i: number) => (
+                    <div key={i} style={{ ...name, marginLeft: "20px" }}>
+                        <CheckBox
+                            id={child.id}
+                            name={child.name}
+                            checked={checked[child.id]}
+                            onChange={changeChecked}
+                            width="26px"
+                            height="26px"
+                        />
+                        <div className="childname" style={{ marginLeft: "20px" }}>{child.name}</div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="sizes" style={{ ...sizesStyle, flexDirection: "column" }}>
+                <div className="categories-header" style={header}>Price</div>
+                <RangeSlider price={price} onChange={(value: any) => setPrice(value)} />
+            </div>
+            <div className="sizes" style={{ ...sizesStyle, flexDirection: "column" }}>
+                <div className="categories-header" style={header}>Size</div>
+                <div
+                    className="size-items"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        marginLeft: "20px",
+                        width: windowWidth < 1371 ? "200px" : "",
+                    }}
+                >
+                    {allSizes.map((child: any, i: number) => (
+                        <div key={i} style={name}>
+                            <CheckBox
+                                id={child.id}
+                                name={child.name}
+                                checked={checkedSizes[child.id]}
+                                onChange={changeCheckedSizes}
+                                dataType="size"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="sizes" style={{ ...sizesStyle, flexDirection: "column" }}>
+                <div className="categories-header" style={header}>Color</div>
+                <div className="size-items"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        marginLeft: "20px",
+                        width: windowWidth < 1371 ? "200px" : "",
+                    }}
+                >
+                    {allColors.map((child: any, i: number) => (
+                        <div key={i} style={name}>
+                            <CheckBox
+                                id={child.id}
+                                name={child.name}
+                                checked={checkedColors[child.id]}
+                                onChange={changeCheckedColors}
+                                dataType="color"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
 
     return (
         <>
@@ -140,83 +307,37 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                         </Link>
                     </div>
                     <div className="content">
-                        <div className="filters">
-                            <div className="categories">
-                                <div className="categories-header">Product Type</div>
-                                {dataFromCategory.children.map((child: any, i: number) => (
-                                    <div key={i} className="categories-name name">
-                                        <CheckBox
-                                            id={child.id}
-                                            name={child.name}
-                                            checked={checked[child.id]}
-                                            onChange={changeChecked}
-                                            width="26px"
-                                            height="26px"
-                                        />
-                                        <div className="childname">{child.name}</div>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="sizes">
-                                <div className="categories-header">Price</div>
-                                <RangeSlider price={price} onChange={(value: any) => setPrice(value)} />
-                            </div>
-                            <div className="sizes">
-                                <div className="categories-header">Size</div>
-                                <div className="size-items">
-                                    {allSizes.map((child: any, i: number) => (
-                                        <div key={i} className="name">
-                                            <CheckBox
-                                                id={child.id}
-                                                name={child.name}
-                                                checked={checkedSizes[child.id]}
-                                                onChange={changeCheckedSizes}
-                                                dataType="size"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="sizes">
-                                <div className="categories-header">Color</div>
-                                <div className="size-items">
-                                    {allColors.map((child: any, i: number) => (
-                                        <div key={i} className="name">
-                                            <CheckBox
-                                                id={child.id}
-                                                name={child.name}
-                                                checked={checkedColors[child.id]}
-                                                onChange={changeCheckedColors}
-                                                dataType="color"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                        {windowWidth < 571
+                            ?
+                            <Menu
+                                className="menu"
+                                width="280px"
+                                pageWrapId={"hidden"}
+                                right
+                                customBurgerIcon={<Icons.Filter />}
+                                outerContainerId={"details-page"}
+                                styles={{
+                                    ...{
+                                        bmBurgerButton: {
+                                            position: "fixed",
+                                            left: (windowWidth - 45) + "px",
+                                            top: "130px",
+                                        },
+                                    }, ...styles,
+                                }}
+                            >
+                                {showSort}
+                                {showFilters}
+                            </Menu>
+                            : showFilters
+                        }
                         <div className="content-main">
                             <div className="header">
                                 <div className="title">Men's Top</div>
-                                <div className="sort">
-                                    <div className="limit">
-                                        <div className="limit-title">Show products:</div>
-                                        <Dropdown
-                                            value={limit}
-                                            width={100}
-                                            onChange={onLimit}
-                                            options={[{ val: 10 }, { val: 20 }, { val: 30 }, { val: 50 }]}
-                                        />
-                                    </div>
-                                    <div className="limit">
-                                        <div className="limit-title">Sort:</div>
-                                        <Dropdown
-                                            value={"price DESC"}
-                                            width={150}
-                                            onChange={onSort}
-                                            options={[{ val: "price ASC" }, { val: "price DESC" }]}
-                                        />
-                                    </div>
-                                </div>
+                                {windowWidth < 571
+                                    ? ""
+                                    : showSort
+                                }
                             </div>
                             <Pagination fromFilters={true} items={dataFromFilters} itemsPerPage={6} />
                         </div>
@@ -237,42 +358,6 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 width: 100%;
                 padding-left: 40px;
             }
-            .filters{
-                width: 310px;
-            }
-            .categories{
-                border: 1px solid #d9d9d9
-            }
-            .name{
-                display: flex;
-                cursor: pointer;
-                align-items: center;
-                margin-right: 3px;
-                margin-bottom: 20px;
-            }
-            .categories-name{
-                margin-left: 20px;
-            }
-            .categories-header{
-                margin-left: 20px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-                font-family: 'PoppinsSemiBold', serif;
-            }
-            .sizes{
-                border: 1px solid #d9d9d9;
-               
-                margin-top: 40px;
-                flex-direction: column;
-            }
-            .size-items{
-                display: flex;
-                align-items: center;
-                margin-left: 20px;
-            }
-            .content-main{
-                width: 77%
-            }
             .header{
                 display: flex;
                 justify-content: space-between;
@@ -282,28 +367,52 @@ function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }
                 margin-left: 2.8vw;
                 font-family: 'PoppinsSemiBold', serif;
             }
-            .sort{
-                display: flex;
-                justify-content: space-between;
-                width: 480px; 
-            }
-            .limit{
-                display: flex;
-                align-items: center;
-            }
-            .childname{
-                margin-left: 10px
-            }
-            .limit-title{
-                margin-right: 5px;
-                font-family: 'PoppinsSemiBold', serif;
-            }
             .navigation{
                 text-decoration: none;
                 color: #000
             }
             .routes{
                 margin-top: 10px
+            }
+
+            @media (max-width: 1200px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 60px;
+                    padding-right: 60px;
+                }
+            }
+            @media (max-width: 1000px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
+            }
+            @media (max-width: 880px) { 
+                .header{
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+            @media (max-width: 700px) { 
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                }
+            }
+            @media (max-width: 570px) { 
+                .content{
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 40px
+                }
+                .main{
+                    border-top: 1px solid #d9d9d9;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
             }
         `}</style>
         </>
@@ -332,3 +441,42 @@ index.getInitialProps = async ({ query }: any) => {
 }
 
 export default index
+
+const styles = {
+    bmBurgerBars: {
+        background: "#373a47",
+    },
+    bmBurgerBarsHover: {
+        background: "#a90000",
+    },
+    bmCrossButton: {
+        height: "24px",
+        width: "24px",
+        top: "-5px",
+    },
+    bmCross: {
+        background: "#bdc3c7",
+    },
+    bmMenuWrap: {
+        marginTop: "-110px",
+        position: "fixed",
+        height: "100%",
+        background: "#fff",
+    },
+    bmMenu: {
+
+    },
+    bmMorphShape: {
+        fill: "#373a47",
+    },
+    bmItemList: {
+        // color: "#b8b7ad",
+        padding: "20px",
+    },
+    bmItem: {
+        display: "inline-block",
+    },
+    bmOverlay: {
+        background: "transparent",
+    },
+}

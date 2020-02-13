@@ -1,11 +1,26 @@
 import { Range, getTrackBackground } from "react-range"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 const STEP = 1
 const MIN = 0
 const MAX = 500
 
 function TwoThumbs({price, onChange}: any) {
+    const [windowWidth, setWindowWidth] = useState()
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     return (
         <div
@@ -13,7 +28,7 @@ function TwoThumbs({price, onChange}: any) {
                 display: "flex",
                 justifyContent: "center",
                 flexWrap: "wrap",
-                width: "270px",
+                width: windowWidth < 1370 ? "180px" : "270px",
                 marginBottom: "20px",
                 marginLeft: "20px",
             }}
@@ -70,7 +85,7 @@ function TwoThumbs({price, onChange}: any) {
                             ...props.style,
                             height: "36px",
                             display: "flex",
-                            width: "200px",
+                            width: windowWidth < 1370 ? "120px" : "200px",
                         }}
                     >
                         <div

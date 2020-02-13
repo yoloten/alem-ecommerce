@@ -98,6 +98,7 @@ function index({ dataFromProduct, query }: any) {
                                     width: "100px",
                                     height: "100px",
                                     marginBottom: "10px",
+                                    marginRight: "10px",
                                     cursor: "pointer",
                                 }} />
                             )) : "..."}
@@ -264,9 +265,11 @@ function index({ dataFromProduct, query }: any) {
                     margin-left: 50px
                 }
                 .photos{
-
                     margin-top: 80px;
                     display: flex
+                }
+                .info{
+                    margin-left: 30px
                 }
                 .delivery{
                     display: flex;
@@ -378,7 +381,7 @@ function index({ dataFromProduct, query }: any) {
                     font-size: 14px
                 }
                 .additional{
-                   width: 1000px;
+                   width: 70%;
                    display: flex;
                    justify-content: space-between;
                    align-items: center;
@@ -417,6 +420,199 @@ function index({ dataFromProduct, query }: any) {
                     cursor: pointer;
                     user-select: none;
                 }
+                @media (max-width: 1700px) { 
+                    .product{
+                        width: 500px
+                    }
+                    .first-photo{
+                        width: 450px;
+                        height: 450px;
+                    }
+                }
+                @media (max-width: 1470px) { 
+                    .product{
+                        width: 450px
+                    }
+                    .first-photo{
+                        width: 385px;
+                        height: 385px;
+                        margin-left: 0px;
+                        margin-bottom: 20px
+                    }
+                    .photos{
+                        display: flex;
+                        flex-direction: column-reverse;
+                    }
+                    .photo-list{
+                        display: flex;
+                        margin-bottom: 40px
+                    }
+                }
+                @media (max-width: 1200px) { 
+                    .main-info{
+                        margin-right: 60px;
+                        margin-left: 60px;
+                    }
+                    .description-text{
+                        width: 300px;
+                    }
+                    .additional{
+                        width: 100%;
+                     }
+                }
+                @media (max-width: 1000px) { 
+                    .main-info{
+                        margin-right: 30px;
+                        margin-left: 30px;
+                    }
+                    .first-photo{
+                        width: 300px;
+                        height: 300px;
+                        margin-left: 0px;
+                        margin-bottom: 20px
+                    }
+                    .photo-list{
+                        margin-bottom: 130px
+                    }
+                    .product{
+                        width: 400px
+                    }
+                    .product-name{
+                        font-size: 22px
+                    }
+                    .prices{
+                        display: flex;
+                        width: 275px;
+                        justify-content: space-between;
+                    }
+                    .price{
+                        font-size: 22px;
+                    }
+                    .old-price{
+                        font-size: 22px;
+                    }
+                    .delivery{
+                        width: 400px;
+                    }
+                    .additional-main{
+                        margin-right: 60px;
+                        margin-left: 60px;
+                        margin-top: 64px;
+                        
+                    }
+                    .carousel{
+                        margin-right: 60px;
+                        margin-left: 60px;
+                    }
+                }
+                @media (max-width: 800px) { 
+                   .checkboxes{
+                       display: flex;
+                   }
+                   .color-list{
+                       margin-right: 30px;
+                       flex-wrap: wrap
+                   }
+                   .main-info{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                    }
+                    .photos{
+                        margin-top: 0px
+                    }
+                    .info{
+                        margin-top: -80px;
+                        margin-left: 0px
+                    }
+                    .additional{
+                        display: flex;
+                        flex-direction: column;
+                        margin-top: 20px
+                    }
+                    .description-text{
+                        text-align: center
+                    }
+                    .additional-main{
+                        margin-top: 20px;
+                    }
+                    .carousel{
+                        margin-right: 30px;
+                        margin-left: 30px;
+                    }
+                }
+                @media (max-width: 430px) { 
+                    .info{
+                        width: 280px
+                    }
+                    .checkboxes{
+                        display: inline-block;
+                    }
+                    .color-list{
+                        flex-wrap: wrap;
+                        margin: auto
+                    }
+                    .delivery{
+                        width: 250px;
+                        flex-direction: column;
+                        margin: auto;
+                        margin-top: -50px;
+                    }
+                    .standard{
+                        margin-top: 20px;
+                        
+                    }
+                    .product-name{
+                        font-size: 18px
+                    }
+                    .prices{
+                        width: 205px;
+                    }
+                    .price{
+                        font-size: 18px;
+                    }
+                    .old-price{
+                        font-size: 18px;
+                    }
+                    .product{
+                        width: 280px;
+                    }
+                    .sale-id{
+                        margin-top: 20px;
+                    }
+                    .colors{
+                        margin-top: 20px;
+                    }
+                    .actions{
+                        margin-top: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        width: 280px;
+                    }
+                    .quantity-box{
+                        margin-top: 0px;
+                        margin-bottom: 20px
+                    }
+                    .checkboxes{
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .quantity-title{
+                        text-align: center
+                    }
+                    .colors-title{
+                        text-align: center
+                    }
+                    .carousel{
+                        margin-right: 15px;
+                        margin-left: 15px;
+                    }
+                 }
             `}</style>
         </div>
     )

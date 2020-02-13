@@ -1,10 +1,24 @@
-import { useDispatch, useSelector } from "react-redux"
-import { getAllProducts } from "../../actions/product"
 import * as Icons from "../../public/icons/_compiled"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Card from "../UI/Card"
 
 export default function ProsCards() {
+    const [windowWidth, setWindowWidth] = useState()
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
+    
     return (
         <>
             <div className="pros-cards">
@@ -14,13 +28,14 @@ export default function ProsCards() {
                         <Card
                             key={i}
                             header={<div className="pros-card-icon">{element.iconSmall}</div>}
-                            height="200px"
                             width="450px"
                             title={element.title}
                             subTitle={element.subTitle}
                             color="#000"
-                            textPosition="left"
+                            textPosition={windowWidth < 600 ? "center" : "left"}
                             border={true}
+                            fontSize={windowWidth < 600 ? "12px" : ""}
+                            customStyleObject={i !== 2 ? {marginRight: "15px"} : {}}
                         />
                     ))}
                 </div>
@@ -37,7 +52,7 @@ export default function ProsCards() {
                 .pros-list{
                     display: flex;
                     justify-content: space-between;
-                    font-family: 'SegoeUIBold', serif;
+                    font-family: 'PoppinsSemiBold', serif;
                 }
                 .pros-card-icon{
                     height: 70px;

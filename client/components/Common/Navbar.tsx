@@ -119,6 +119,71 @@ export default function Navbar(props: Nav.Props) {
                     margin-left: 10px;
                     z-index: 10
                 }
+
+                @media (max-width: 1200px) { 
+                    .navbar{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-left: 60px;
+                        margin-right: 60px; 
+                        padding-top: ${props.landing ? "40px" : "10px"};
+                    }
+                    .logo{
+                        text-decoration: none;
+                        color: #000;
+                        font-size: 30px;
+                        font-family: TimeBurner
+                    }
+                }
+
+                @media (max-width: 1000px) { 
+                    .navbar{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-left: 30px;
+                        margin-right: 30px; 
+                        padding-top: ${props.landing ? "40px" : "10px"};
+                    }
+                    .logo{
+                        text-decoration: none;
+                        color: #000;
+                        font-size: 22px;
+                        font-family: TimeBurner
+                    }
+                    .actions{
+                        display: flex;
+                        width: 90px;
+                        justify-content: space-between;
+                    }
+                    .categories{
+                        display: flex;
+                        width: 100px;
+                        justify-content: space-between;
+                        font-size: 15px
+                    }
+                }
+                @media (max-width: 700px) { 
+                    .navbar{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-left: 15px;
+                        margin-right: 15px; 
+                        padding-top: ${props.landing ? "40px" : "10px"};
+                    }
+                }
+                @media (max-width: 370px) { 
+                    .navbar{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-left: 5px;
+                        margin-right: 5px; 
+                        padding-top: ${props.landing ? "40px" : "10px"};
+                    }
+                }
             `}</style>
         </>
     )

@@ -16,11 +16,11 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/cart": [
+    "/address": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/p/[category]": [
+    "/cart": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

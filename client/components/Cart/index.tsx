@@ -144,8 +144,8 @@ export default function index(props: any) {
                                                 backgroundPosition: "center center",
                                                 backgroundRepeat: "no-repeat",
                                                 backgroundSize: "cover",
-                                                width: "50px",
-                                                height: "50px",
+                                                minWidth: "50px",
+                                                minHeight: "50px",
                                                 borderRadius: "100%",
                                                 marginRight: "10px",
                                             }}
@@ -216,8 +216,8 @@ export default function index(props: any) {
                 }
                 .icon{
                     background: #ff7070;
-                    height: 30px;
-                    width: 30px;
+                    min-height: 30px;
+                    min-width: 30px;
                     border-radius: 30px;
                     display: flex;
                     justify-content: center;
@@ -269,7 +269,6 @@ export default function index(props: any) {
                     justify-content: center;
                 }
                 .quantity-box{
-                   
                     display: flex;
                     justify-content: space-around;
                     width: 140px;
@@ -309,6 +308,79 @@ export default function index(props: any) {
                 .total-price{
                     margin-left: 5px;
                     font-family: 'PoppinsSemiBold', serif;
+                }
+                @media (max-width: 1200px) {
+                    .table{
+                        margin-left: 60px;
+                        margin-right: 60px;
+                    }
+                    .header{
+                        margin-left: 60px;
+                        margin-right: 60px;
+                    }
+                }
+                @media (max-width: 1000px) {
+                    .table{
+                        margin-left: 30px;
+                        margin-right: 30px;
+                        font-size: 14px
+                    }
+                    .header{
+                        margin-left: 30px;
+                        margin-right: 30px;
+                    }
+                    .quantity-box{
+                        width: 120px;
+                        height: 50px;
+                    }
+                }
+                @media (max-width: 700px) {
+                    .table{
+                        margin-left: 15px;
+                        margin-right: 15px;
+                        font-size: 12px
+                    }
+                    .header{
+                        margin-left: 15px;
+                        margin-right: 15px;
+                    }
+                    .name{
+                        width: 200px;
+                    }
+                    .title-product{
+                        min-width: 70px
+                    }
+                    .quantity-box{
+                        margin-right: 5px
+                    }
+                }
+                @media (max-width: 450px) {
+                    .header{
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .title {
+                        margin-bottom: 10px
+                    }
+                    .actions{
+                        display: flex;
+                        flex-direction: column-reverse;
+                        align-items: flex-start
+                    }
+                    .total-checkout{
+                        width: 100%;
+                    }
+                }
+                @media (max-width: 370px) {
+                    .table{
+                        margin-left: 5px;
+                        margin-right: 5px;
+                        font-size: 11px
+                    }
+                    .header{
+                        margin-left: 5px;
+                        margin-right: 5px;
+                    }
                 }
             `}</style>
         </div>

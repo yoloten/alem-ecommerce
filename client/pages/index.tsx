@@ -13,7 +13,7 @@ import Button from "../components/UI/Button"
 
 function index() {
     const btnClick = (): void => {
-        console.log("cliks")
+        console.log("click")
     }
 
     return (
@@ -61,6 +61,67 @@ function index() {
                     margin-left: 170px;
                     margin-right: 170px;
                 }
+
+                @media (max-width: 1200px) { 
+                    .main{
+                        margin-left: 60px;
+                        margin-right: 60px; 
+                    }
+                    .header-main{
+                        margin-left: 110px;
+                        margin-top: 80px
+                    }
+                }
+
+                @media (max-width: 1000px) { 
+                    .main{
+                        margin-left: 30px;
+                        margin-right: 30px; 
+                    }
+                    .header-main{
+                        margin-left: 55px;
+                        margin-top: 80px
+                    }
+                    .header{
+                        background: grey;
+                        height: 650px
+                    }
+                }
+
+                @media (max-width: 700px) { 
+                    .main{
+                        margin-left: 15px;
+                        margin-right: 15px;    
+                    }
+                    .header-main{
+                        margin-left: 25px;
+                        margin-top: 80px
+                    }
+                    .header{
+                        background: grey;
+                        height: 550px
+                    }
+                }
+
+                @media (max-width: 370px) { 
+                    .main{
+                        margin-left: 5px;
+                        margin-right: 5px; 
+                    }
+                    .header-main{
+                        margin-left: 10px;
+                        margin-top: 80px
+                    }
+                    .header{
+                        background: grey;
+                        height: 450px
+                    }
+                    .title{
+                        font-size: 30px;
+                        width: 300px
+                    }
+                }
+               
             `
             }</style>
         </>

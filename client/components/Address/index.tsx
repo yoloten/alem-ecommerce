@@ -17,6 +17,21 @@ function index(props: any) {
     const [addressFromServer, setAddressFromServer] = useState()
     const [delivery, setDelivery] = useState()
     const [deliveryFocus, setDeliveryFocus] = useState(false)
+    const [windowWidth, setWindowWidth] = useState()
+
+    useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     useEffect(() => {
         const dataFetching = async () => {
@@ -104,7 +119,7 @@ function index(props: any) {
         sessionStorage.setItem("deliveryPrimaryKey", e.target.id)
         setDeliveryFocus(true)
     }
-
+ 
     return (
         <>
             <div className="main">
@@ -140,7 +155,7 @@ function index(props: any) {
                                 <Dropdown
                                     id="country"
                                     value={country ? country : "Afghanistan"}
-                                    width={332}
+                                    width={windowWidth < 371 ? 306 : 332}
                                     height="45px"
                                     onChange={countryChange}
                                     options={countriesList
@@ -250,7 +265,7 @@ function index(props: any) {
             }
 
             .input{
-                width: 300px;
+                width: ${windowWidth < 371 ? "274px" : "300px"};
                 height: 45px;
                 border-radius: 30px;
                 border: 1px solid #d9d9d9;
@@ -298,6 +313,7 @@ function index(props: any) {
                 color: grey;
                 font-size: 20px;
                 text-align: center;
+                font-family: 'PoppinsSemiBold', serif; 
                 z-index: -1
             }
             .price{
@@ -321,6 +337,70 @@ function index(props: any) {
             .back{
                 text-decoration: none;
                 color: #000
+            } 
+            @media (max-width: 1200px) {
+                .main{
+                    margin-left: 60px;
+                    margin-right: 60px;
+                }
+            }
+            @media (max-width: 1000px) {
+                .main{
+                    margin-left: 30px;
+                    margin-right: 30px;
+                }
+            }
+            @media (max-width: 900px) {
+                .main{
+                    margin-left: 30px;
+                    margin-right: 30px;
+                }
+                .content{
+                    display: flex;
+                    flex-direction: column
+                }
+                .inputs{
+                    display: flex;
+                    flex-wrap: wrap;
+                    height: auto;
+                  
+                }
+                .delivery{
+                    margin-top: 58px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                }
+                .delivery-method{
+                    width: 150px;
+                    height: 200px;
+                }
+                .label{
+                    font-size: 16px;
+                }
+            }
+            @media (max-width: 700px) {
+                .main{
+                    margin-left: 15px;
+                    margin-right: 15px;
+                }
+                .header{
+                    display: flex;
+                    flex-direction: column;
+                }
+                .title{
+                    margin-bottom: 10px;
+                }
+            }
+            @media (max-width: 370px) {
+                .main{
+                    margin-left: 5px;
+                    margin-right: 5px;
+                }
+                .delivery-method{
+                    width: 140px;
+                    height: 200px;
+                }
             }
         `}</style>
         </>
