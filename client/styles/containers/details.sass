@@ -1,0 +1,343 @@
+.details-main
+    border-top: 1px solid $base-grey
+.details-maininfo
+    display: flex
+    justify-content: space-between
+    margin-right: 170px
+    margin-left: 170px
+    margin-top: 40px
+.details-photos
+    margin-top: 80px
+    display: flex
+
+.details-info
+    margin-left: 30px
+.details-delivery
+    display: flex
+    width: 450px
+    justify-content: space-between
+
+.details-shipping-title
+    font-family: 'PoppinsSemiBold', serif
+
+.details-shipping-info
+    margin-left: 20px
+
+.details-product
+    width: 680px
+
+.details-sale-id
+    margin-top: 40px
+    display: flex
+    justify-content: space-between
+    font-size: 13px
+.details-sale
+    background: red
+    color: #fff
+    padding: 6px 12px 6px 12px
+    border-radius: 30px
+    font-family: 'PoppinsSemiBold', serif
+
+.details-id
+    color: #c4c4c4
+    font-size: 13px
+
+.details-product-name
+    margin-top: 20px
+    font-size: 29px
+
+.details-price-brand
+    display: flex
+    justify-content: space-between
+
+.details-prices
+    display: flex
+    width: 275px
+    justify-content: space-between
+
+.details-price
+    color: red
+    font-size: 29px
+
+.details-old-price
+    font-size: 29px
+    color: grey
+
+.details-colors
+    margin-top: 40px
+
+.details-color-list
+    display: flex
+    align-items: center
+    margin-top: 20px
+
+.details-name
+    display: flex
+    cursor: pointer
+    align-items: center
+    margin-right: 3px
+
+.details-actions
+    margin-top: 40px
+    display: flex
+    align-items: flex-end
+    justify-content: space-between
+    width: 320px
+
+.details-quantity-box
+    display: flex
+    justify-content: space-around
+    width: 120px
+    height: 50px
+    border: 1px solid #d9d9d9
+    border-radius: 30px
+    align-items: center
+    font-size: 20px
+    font-family: 'PoppinsSemiBold', serif
+    margin-top: 20px
+
+.details-additional-main
+    margin-right: 170px
+    margin-left: 170px
+    margin-top: 64px
+    display: flex
+    flex-direction: column
+    align-items: center
+
+.details-additional-title
+    display: flex
+    justify-content: center
+    width: 180px
+    height: 50px
+    border: 1px solid #ff7070
+    border-radius: 30px
+    align-items: center
+    font-family: 'PoppinsSemiBold', serif
+    font-size: 14px
+
+.details-additional
+    width: 70%
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-top: 40px
+
+.details-description
+    display: flex
+    flex-direction: column
+    align-items: center
+    height: 200px
+
+    &-title
+        font-family: 'PoppinsSemiBold', serif
+        margin-top: 25px
+
+    &-text
+        margin-top: 15px
+        width: 400px
+
+.details-material-care
+    padding-top: 20px
+
+.details-materials
+    display: flex
+.details-material
+    margin-right: 7px
+.details-carousel
+    margin-right: 170px
+    margin-left: 170px
+.details-remove
+    cursor: pointer
+    user-select: none
+.details-first-photo
+    background-position: center center
+    background-repeat: no-repeat
+    background-size: cover
+    width: 500px
+    height: 500px
+    margin-left: 50px
+
+@media (max-width: 1700px)
+    .details-product
+        width: 500px
+
+    .details-first-photo
+        width: 450px
+        height: 450px
+
+@media (max-width: 1470px)
+    .details-product
+        width: 450px
+
+    .details-first-photo
+        width: 385px
+        height: 385px
+        margin-left: 0px
+        margin-bottom: 20px
+
+    .details-photos
+        display: flex
+        flex-direction: column-reverse
+
+    .details-photo-list
+        display: flex
+        margin-bottom: 40px
+
+@media (max-width: 1200px)
+    .details-maininfo
+        margin-right: 60px
+        margin-left: 60px
+
+    .details-description-text
+        width: 300px
+
+    .details-additional
+        width: 100%
+
+@media (max-width: 1000px)
+    .details-maininfo
+        margin-right: 30px
+        margin-left: 30px
+
+    .details-first-photo
+        width: 300px
+        height: 300px
+        margin-left: 0px
+        margin-bottom: 20px
+
+    .details-photo-list
+        margin-bottom: 130px
+
+    .details-product
+        width: 400px
+
+        &-name
+            font-size: 22px
+
+    .details-prices
+        display: flex
+        width: 275px
+        justify-content: space-between
+
+    .details-price
+        font-size: 22px
+
+    .details-old-price
+        font-size: 22px
+
+    .details-delivery
+        width: 400px
+
+    .details-additional-main
+        margin-right: 60px
+        margin-left: 60px
+        margin-top: 64px
+
+    .details-carousel
+        margin-right: 60px
+        margin-left: 60px
+
+@media (max-width: 800px)
+    .details-checkboxes
+        display: flex
+
+    .details-color-list
+        margin-right: 30px
+        flex-wrap: wrap
+
+    .details-maininfo
+        display: flex
+        justify-content: center
+        align-items: center
+        flex-direction: column
+
+    .details-photos
+        margin-top: 0px
+
+    .details-info
+        margin-top: -80px
+        margin-left: 0px
+
+    .details-additional
+        display: flex
+        flex-direction: column
+        margin-top: 20px
+
+    .details-description-text
+        text-align: center
+
+    .details-additional-main
+        margin-top: 20px
+
+    .details-carousel
+        margin-right: 30px
+        margin-left: 30px
+
+@media (max-width: 430px)
+    .details-info
+        width: 280px
+
+    .details-checkboxes
+        display: inline-block
+
+    .details-color-list
+        flex-wrap: wrap
+        margin: auto
+
+    .details-delivery
+        width: 250px
+        flex-direction: column
+        margin: auto
+        margin-top: -50px
+
+    .details-standard
+        margin-top: 20px
+
+    .details-product-name
+        font-size: 18px
+
+    .details-prices
+        width: 205px
+
+    .details-price
+        font-size: 18px
+
+    .details-old-price
+        font-size: 18px
+
+    .details-product
+        width: 280px
+
+    .details-sale-id
+        margin-top: 20px
+
+    .details-colors
+        margin-top: 20px
+
+    .details-actions
+        margin-top: 20px
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: column
+        width: 280px
+
+    .details-quantity-box
+        margin-top: 0px
+        margin-bottom: 20px
+
+    .details-checkboxes
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+
+    .details-quantity-title
+        text-align: center
+
+    .details-colors-title
+        text-align: center
+
+    .details-carousel
+        margin-right: 15px
+        margin-left: 15px

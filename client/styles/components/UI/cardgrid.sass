@@ -1,0 +1,39 @@
+.grid
+    display: flex
+    flex-wrap: wrap
+    width: 100%
+    margin-top: 40px
+
+    &-card
+        margin-bottom: 60px
+        margin-left: 2.84vw
+        cursor: pointer
+
+    &-name
+        font-size: 14px
+        margin-top: 20px
+
+    &-prices
+        display: flex
+        width: 200px
+        font-size: 16px
+        justify-content: space-between
+        font-family: 'Poppins', serif
+
+    &-price
+        color: red
+
+    &-oldprice
+        color: grey
+
+@media (max-width: 1560px)
+    .grid-card
+        margin-bottom: 60px
+        margin-left: 20px
+        cursor: pointer
+
+@media (max-width: 780px)
+    .grid-card
+        margin-bottom: 60px
+        margin-left: 2.84vw
+        cursor: pointer

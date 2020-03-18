@@ -24,110 +24,32 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
         <>
             <div>
                 <Navbar />
-                <div className="main">
-                    <div className="routes">
+                <div className="category">
+                    <div className="category-routes">
                         <Link href="/p/[category]" as={`/p/${query.category}`}>
-                            <a className="navigation">{query.category + "/"}</a>
+                            <a className="category-navigation">{query.category + "/"}</a>
                         </Link>  
                     </div>
-                    <div className="content">
-                        <div className="filters">
-                            <div className="categories">
+                    <div className="category-content">
+                        <div className="category-filters">
+                            <div className="category-categories">
                                 {dataFromCategory.children.map((sub: any, i: number) => (
                                     <div className={`parent ${sub.name}`} onClick={onShowSub} key={i}>
                                         {<Link href="/p/[category]/[filters]" as={`/p/${query.category}/${sub.name}`}>
-                                            <a className="name">{sub.name}</a>
+                                            <a className="category-name">{sub.name}</a>
                                         </Link>}
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <div className="grid">
-                            <div className="title">All</div>
+                        <div className="category-grid">
+                            <div className="category-title">All</div>
                             <Pagination fromFilters={false} items={dataFromProduct} itemsPerPage={6}/>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <style jsx>{`
-            .main{
-                border-top: 1px solid #d9d9d9;
-                padding-left: 170px;
-                padding-right: 170px;
-            }
-            .content{
-                display: flex;
-                margin-top: 40px;
-            }
-            .filters{
-                min-width: 310px;
-            }
-            .parent{
-                cursor: pointer;
-                margin-bottom: 10px
-            }
-            .name{
-                text-decoration: none;
-                color: #000;
-                margin-right: 10px
-            }
-            .grid{
-                dispaly: flex;
-                flex-direction: column;
-                align-self: flex-start
-            }
-            .title{
-                font-size: 29px;
-                margin-left: 2.85vw;
-                font-family: 'PoppinsSemiBold', serif;
-            }
-            .navigation{
-                text-decoration: none;
-                color: #000
-            }
-            .routes{
-                margin-top: 10px
-            }
-            @media (max-width: 1700px) { 
-                .filters{
-                    min-width: 180px;
-                }
-            }
-           
-            @media (max-width: 1200px) { 
-                .main{
-                    border-top: 1px solid #d9d9d9;
-                    padding-left: 60px;
-                    padding-right: 60px;
-                }
-               
-            }
-            @media (max-width: 1000px) { 
-                .main{
-                    border-top: 1px solid #d9d9d9;
-                    padding-left: 30px;
-                    padding-right: 30px;
-                }
-               
-            }
-            @media (max-width: 700px) { 
-                .main{
-                    border-top: 1px solid #d9d9d9;
-                    padding-left: 15px;
-                    padding-right: 15px;
-                }
-                .content{
-                    display: flex;
-                    flex-direction: column;
-                    margin-top: 40px;
-                }
-                .categories{
-                    display: flex;
-                    flex-wrap: wrap
-                }
-            }
-        `}</style>
         </>
     )
 }

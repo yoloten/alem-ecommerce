@@ -1,4 +1,3 @@
-import * as Icons from "../../public/icons/_compiled"
 import React, { useState, useEffect } from "react"
 import jwtDecode from "jwt-decode"
 import Router from "next/router"
@@ -84,7 +83,6 @@ export default function index(props: any) {
         const parsed = JSON.parse(item)
 
         if (parsed.quantity > 1) {
-            // parsed.price = parsed.price / parsed.quantity
             parsed.quantity = parsed.quantity - 1
 
             sessionStorage.setItem(e.target.id, JSON.stringify(parsed))
@@ -96,7 +94,6 @@ export default function index(props: any) {
         const item: any = sessionStorage.getItem(e.target.id)
         const parsed = JSON.parse(item)
         parsed.quantity = parsed.quantity + 1
-        // parsed.price = parsed.price * parsed.quantity
 
         sessionStorage.setItem(e.target.id, JSON.stringify(parsed))
         setAmount(amount + 1)
@@ -113,29 +110,29 @@ export default function index(props: any) {
     return (
         <div>
             <Navbar removeData={forNavbar}/>
-            <div className="main">
-                <div className="header">
-                    <div className="title">Shopping Cart</div>
+            <div className="cart-main">
+                <div className="cart-header">
+                    <div className="cart-title">Shopping Cart</div>
                     <Progress status="cart" />
                 </div>
-                <div className="table">
-                    <div className="table-titles">
-                        <div className="table-title title-product">Product</div>
-                        <div className="table-title title-color">Color</div>
-                        <div className="table-title title-color">Size</div>
-                        <div className="table-title title-color">Amount</div>
-                        <div className="table-title title-color">Price</div>
-                        <div className="table-title title-remove"></div>
+                <div className="cart-table">
+                    <div className="cart-table-titles">
+                        <div className="cart-table-title cart-title-product">Product</div>
+                        <div className="cart-table-title cart-title-color">Color</div>
+                        <div className="cart-table-title cart-title-color">Size</div>
+                        <div className="cart-table-title cart-title-color">Amount</div>
+                        <div className="cart-table-title cart-title-color">Price</div>
+                        <div className="cart-table-title cart-title-remove"></div>
                     </div>
-                    <div className="table-content">
+                    <div className="cart-table-content">
                         {sessionData.map((product: any, i: number) => {
                             if (product) {
                                 const price = parseFloat(product.price)
                                 const discount = parseFloat(product.discount)
                                 const quantity = parseFloat(product.quantity)
 
-                                return <div key={i} className="product">
-                                    <div className="name">
+                                return <div key={i} className="cart-product">
+                                    <div className="cart-name">
                                         <div
                                             style={{
                                                 backgroundImage: "url(" +
@@ -152,31 +149,31 @@ export default function index(props: any) {
                                         />
                                         {product.name}
                                     </div>
-                                    <div className="color">{product.color}</div>
-                                    <div className="color">{product.size.toUpperCase()}</div>
-                                    <div className="quantity-box">
-                                        <div className="remove" id={product.key} onClick={decrementAmount}>-</div>
-                                        <div className="number">{product.quantity}</div>
-                                        <div className="remove" onClick={incrementAmount} id={product.key}>+</div>
+                                    <div className="cart-color">{product.color}</div>
+                                    <div className="cart-color">{product.size.toUpperCase()}</div>
+                                    <div className="cart-quantity-box">
+                                        <div className="cart-remove" id={product.key} onClick={decrementAmount}>-</div>
+                                        <div className="cart-number">{product.quantity}</div>
+                                        <div className="cart-remove" onClick={incrementAmount} id={product.key}>+</div>
                                     </div>
-                                    <div className="color price">
+                                    <div className="cart-color cart-price">
                                         {discount
                                             ? ((price - price * discount) * quantity).toFixed(2)
                                             : (price * quantity).toFixed(2)
                                         }
                                         {product.currency}
                                     </div>
-                                    <div onClick={removeItem} id={product.key} className="color-remove">x</div>
+                                    <div onClick={removeItem} id={product.key} className="cart-color-remove">x</div>
                                 </div>
                             }
                         })}
                     </div>
-                    <div className="actions">
-                        <div className="continue" onClick={() => Router.back()}>Continue Shopping</div>
-                        <div className="total-checkout">
-                            <div className="total">
+                    <div className="cart-actions">
+                        <div className="cart-continue" onClick={() => Router.back()}>Continue Shopping</div>
+                        <div className="cart-total-checkout">
+                            <div className="cart-total">
                                 <div>Total:</div>
-                                <div className="total-price">{total.toFixed(2) + totalCurrency}</div>
+                                <div className="cart-total-price">{total.toFixed(2) + totalCurrency}</div>
                             </div>
                             {sessionData.filter((i) => i !== undefined).length > 0
                                 ? <Button
@@ -195,194 +192,6 @@ export default function index(props: any) {
                     </div>
                 </div>
             </div>
-            <style jsx>{`
-                .main{
-                    border-top: 1px solid #d9d9d9;
-                }
-                .table{
-                    margin-left: 170px;
-                    margin-right: 170px;
-                }
-                .header{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 40px;
-                    margin-left: 170px;
-                    margin-right: 170px;
-                }
-                .title{
-                    font-family: 'PoppinsSemiBold', serif;
-                    font-size: 20px;
-                }
-                .icon{
-                    background: #ff7070;
-                    min-height: 30px;
-                    min-width: 30px;
-                    border-radius: 30px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center
-                }
-                .table-titles{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 40px;
-                    color: gray
-                }
-                .product{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 20px;
-                }
-                .name{
-                    display: flex;
-                    align-items: center;
-                    width: 300px;
-                    font-family: 'PoppinsSemiBold', serif;
-                }
-                .title-product{
-                    width: 300px
-                }
-                .title-color{
-                    width: 140px;
-                    display: flex;
-                    justify-content: center;
-                }
-                .title-remove{
-                    width: 40px;
-                    display: flex;
-                    justify-content: center;
-                }
-                .color-remove{
-                    width: 40px; 
-                    display: flex;
-                    align-items: center;
-                    height: 50px;
-                    justify-content: center;
-                    cursor: pointer;
-                }
-                .color{
-                    width: 140px; 
-                    display: flex;
-                    align-items: center;
-                    height: 50px;
-                    justify-content: center;
-                }
-                .quantity-box{
-                    display: flex;
-                    justify-content: space-around;
-                    width: 140px;
-                    height: 50px;
-                    border: 1px solid #d9d9d9;
-                    border-radius: 30px;
-                    align-items: center;
-                    font-family: 'PoppinsSemiBold', serif;
-                }
-                .remove{
-                    cursor: pointer;
-                    user-select: none;
-                }
-                .price{
-                    font-family: 'PoppinsSemiBold', serif;
-                }
-                .actions{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-top: 60px;
-                }
-                .continue{
-                    text-decoration: none;
-                    color: #000;
-                    cursor: pointer
-                }
-                .total-checkout{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 350px;
-                }
-                .total{
-                    display: flex
-                }
-                .total-price{
-                    margin-left: 5px;
-                    font-family: 'PoppinsSemiBold', serif;
-                }
-                @media (max-width: 1200px) {
-                    .table{
-                        margin-left: 60px;
-                        margin-right: 60px;
-                    }
-                    .header{
-                        margin-left: 60px;
-                        margin-right: 60px;
-                    }
-                }
-                @media (max-width: 1000px) {
-                    .table{
-                        margin-left: 30px;
-                        margin-right: 30px;
-                        font-size: 14px
-                    }
-                    .header{
-                        margin-left: 30px;
-                        margin-right: 30px;
-                    }
-                    .quantity-box{
-                        width: 120px;
-                        height: 50px;
-                    }
-                }
-                @media (max-width: 700px) {
-                    .table{
-                        margin-left: 15px;
-                        margin-right: 15px;
-                        font-size: 12px
-                    }
-                    .header{
-                        margin-left: 15px;
-                        margin-right: 15px;
-                    }
-                    .name{
-                        width: 200px;
-                    }
-                    .title-product{
-                        min-width: 70px
-                    }
-                    .quantity-box{
-                        margin-right: 5px
-                    }
-                }
-                @media (max-width: 450px) {
-                    .header{
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .title {
-                        margin-bottom: 10px
-                    }
-                    .actions{
-                        display: flex;
-                        flex-direction: column-reverse;
-                        align-items: flex-start
-                    }
-                    .total-checkout{
-                        width: 100%;
-                    }
-                }
-                @media (max-width: 370px) {
-                    .table{
-                        margin-left: 5px;
-                        margin-right: 5px;
-                        font-size: 11px
-                    }
-                    .header{
-                        margin-left: 5px;
-                        margin-right: 5px;
-                    }
-                }
-            `}</style>
         </div>
     )
 }

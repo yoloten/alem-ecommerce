@@ -137,22 +137,6 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
                 </div>
                 <div className="prev" onClick={next}>{isNextActive ? "Next" : ""}</div>
             </div>
-            <style jsx>{`
-                .page-numbers{
-                    display: flex;
-                    margin-bottom: 80px;
-                    margin-left: 2.85vw;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-                .numbers{
-                    display: flex;
-                    cursor: pointer;
-                }
-                .prev{
-                    cursor: pointer
-                }
-            `}</style>
         </div>
     )
 }

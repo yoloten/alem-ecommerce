@@ -19,7 +19,7 @@ namespace Grid {
 export default function CardGrid(props: Grid.Props) {
     const router = useRouter()
 
-    const [windowWidth, setWindowWidth] = useState()
+    const [windowWidth, setWindowWidth] = useState(0)
 
     useEffect(() => {
         setWindowWidth(window.innerWidth)
@@ -36,7 +36,6 @@ export default function CardGrid(props: Grid.Props) {
     const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     return (
-        <>
             <div className="grid">
                 {props.content !== " " ? props.content.map((product: any, index: number) => {
                     let discount: number
@@ -58,7 +57,7 @@ export default function CardGrid(props: Grid.Props) {
 
                     return (
                         <Link href={`/product?primarykey=${primaryKey}`} key={index}>
-                            <div className="card">
+                            <div className="grid-card">
                                 <Card
                                     bgImage={"http://localhost:8000/" + (props.fromFilters
                                         ? product.path
@@ -69,21 +68,21 @@ export default function CardGrid(props: Grid.Props) {
                                     key={product.primaryKey}
                                     borderRadius="0px"
                                 />
-                                <div className="name">{product.name}</div>
+                                <div className="grid-name">{product.name}</div>
                                 <div >
-                                    <div className="prices">
+                                    <div className="grid-prices">
                                         {discount
                                             ? <>
-                                                <div className="price">
+                                                <div className="grid-price">
                                                     {
                                                         Math.round(
                                                             (price - price * discount)
                                                             * 100) / 100 + " " + currency
                                                     }
                                                 </div>
-                                                <div className="old-price">{price + " " + currency}</div>
+                                                <div className="grid-oldprice">{price + " " + currency}</div>
                                             </>
-                                            : <div className="old-price">{price + " " + currency}</div>
+                                            : <div className="grid-oldprice">{price + " " + currency}</div>
                                         }
                                     </div>
                                 </div>
@@ -92,50 +91,5 @@ export default function CardGrid(props: Grid.Props) {
                     )
                 }) : ""}
             </div>
-            <style jsx>{`
-                .grid{
-                    display: flex;
-                    flex-wrap: wrap;
-                    width: 100%;
-                    margin-top: 40px
-                }
-                .card{
-                    margin-bottom: 60px;
-                    margin-left: 2.84vw;
-                    cursor: pointer
-                }
-                .name{
-                    font-size: 14px;
-                    margin-top: 20px
-                }
-                .prices{
-                    display: flex;
-                    width: 200px;
-                    font-size: 16px;
-                    justify-content: space-between;
-                    font-family: 'Poppins', serif;
-                }
-                .price{
-                    color: red
-                }
-                .old-price{
-                    color: grey;
-                }
-                @media (max-width: 1560px) { 
-                    .card{
-                        margin-bottom: 60px;
-                        margin-left: 20px;
-                        cursor: pointer
-                    }
-                }
-                @media (max-width: 780px) { 
-                    .card{
-                        margin-bottom: 60px;
-                        margin-left: 2.84vw;
-                        cursor: pointer
-                    }
-                }
-            `}</style>
-        </>
     )
 }

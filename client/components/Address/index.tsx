@@ -17,7 +17,7 @@ function index(props: any) {
     const [addressFromServer, setAddressFromServer] = useState()
     const [delivery, setDelivery] = useState()
     const [deliveryFocus, setDeliveryFocus] = useState(false)
-    const [windowWidth, setWindowWidth] = useState()
+    const [windowWidth, setWindowWidth] = useState(0)
 
     useEffect(() => {
         setWindowWidth(window.innerWidth)
@@ -122,35 +122,35 @@ function index(props: any) {
  
     return (
         <>
-            <div className="main">
-                <div className="header">
-                    <div className="title">Address data</div>
+            <div className="address-main">
+                <div className="address-header">
+                    <div className="address-title">Address data</div>
                     <Progress status="address" />
                 </div>
-                <div className="content">
-                    <form className="inputs">
-                        <div className="column-one">
-                            <div className="with-label">
+                <div className="address-content">
+                    <form className="address-inputs">
+                        <div className="address-column-one">
+                            <div className="address-with-label">
                                 <label htmlFor="address">Address</label>
                                 <input
                                     id="address"
-                                    className="input"
+                                    className="address-input"
                                     type="text"
                                     onChange={addressChange}
                                     value={address}
                                 />
                             </div>
-                            <div className="with-label">
+                            <div className="address-with-label">
                                 <label htmlFor="zip">Postal Code / ZIP</label>
                                 <input
                                     id="zip"
-                                    className="input"
+                                    className="address-input"
                                     type="text"
                                     onChange={postalChange}
                                     value={postalcode}
                                 />
                             </div>
-                            <div className="with-label">
+                            <div className="address-with-label">
                                 <label className="country-label" htmlFor="country">Country</label>
                                 <Dropdown
                                     id="country"
@@ -165,22 +165,22 @@ function index(props: any) {
                                 />
                             </div>
                         </div>
-                        <div className="column-two">
-                            <div className="with-label">
+                        <div className="address-column-two">
+                            <div className="address-with-label">
                                 <label htmlFor="city">City</label>
                                 <input
                                     id="city"
-                                    className="input"
+                                    className="address-input"
                                     type="text"
                                     onChange={cityChange}
                                     value={city}
                                 />
                             </div>
-                            <div className="with-label">
+                            <div className="address-with-label">
                                 <label htmlFor="phone">Phone Number</label>
                                 <input
                                     id="phone"
-                                    className="input"
+                                    className="address-input"
                                     type="tel"
                                     onChange={phoneChange}
                                     value={phone}
@@ -188,27 +188,29 @@ function index(props: any) {
                             </div>
                         </div>
                     </form>
-                    <div className="delivery">
+                    <div className="address-delivery">
                         {delivery ? delivery.map((item: any, i: number) => (
                             <div
                                 id={item.primaryKey}
                                 onClick={onDelivery}
-                                className="delivery-method"
+                                className="address-delivery-method"
                                 key={i}
                                 tabIndex={i}
                             >
-                                <div className="label" id={item.primaryKey}>{item.label}</div>
-                                <div className="price" id={item.primaryKey}>{item.price + " " + item.currency}</div>
+                                <div className="address-label" id={item.primaryKey}>{item.label}</div>
+                                <div className="address-price" id={item.primaryKey}>
+                                    {item.price + " " + item.currency}
+                                </div>
                             </div>
                         )) : ""}
                     </div>
                 </div>
 
-                <div className="actions">
+                <div className="address-actions">
                     <Link href="/cart">
-                        <a className="back">Back</a>
+                        <a className="address-back">Back</a>
                     </Link>
-                    <div className="buttons">
+                    <div className="address-buttons">
                         <Button
                             content="CONTINUE SHOPPING"
                             color="#000"
@@ -234,175 +236,6 @@ function index(props: any) {
                     </div>
                 </div>
             </div>
-            <style jsx>{`
-            .main{
-                margin-left: 170px;
-                margin-right: 170px;
-                display: flex;
-                flex-direction: column;
-            }
-            .header{
-                display: flex;
-                justify-content: space-between
-            }
-            .title{
-                font-family: 'PoppinsSemiBold', serif;
-                font-size: 20px
-            }
-            .content{
-                display: flex;
-                justify-content: space-between;
-                margin-top: 35px;
-            }
-            .inputs{
-                display: flex;
-                flex-wrap: wrap;
-                height: 400px;
-              
-            }
-            label{
-                font-family: 'PoppinsSemiBold', serif; 
-            }
-
-            .input{
-                width: ${windowWidth < 371 ? "274px" : "300px"};
-                height: 45px;
-                border-radius: 30px;
-                border: 1px solid #d9d9d9;
-                padding-left: 32px;
-                margin-top: 10px;
-                margin-right: 25px;
-            }
-            .with-label{
-                margin-top: 25px;
-                display: flex;
-                flex-direction: column;
-            }
-            .country-label{
-                margin-bottom: 10px
-            }
-            .delivery{
-                margin-top: 58px;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-                min-width: 450px;
-                max-width: 640px
-            }
-            .delivery-method{
-                width: 200px;
-                height: 250px;
-                border-radius: 15px;
-                border: 1px solid #d9d9d9;
-                margin-left: 10px;
-                margin-bottom: 10px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer
-            }
-            .delivery-method:hover{
-                border: 1px solid #ff7070;
-            }
-            .delivery-method:focus{
-                border: 1px solid #ff7070;
-                outline: none
-            }
-            .label{
-                color: grey;
-                font-size: 20px;
-                text-align: center;
-                font-family: 'PoppinsSemiBold', serif; 
-                z-index: -1
-            }
-            .price{
-                font-size: 20px;
-                font-family: 'PoppinsSemiBold', serif; 
-                margin-top: 20px;
-                z-index: -1;
-                text-align: center
-            }
-            .actions{
-                margin-top: 40px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            .buttons{
-                display: flex;
-                width: 320px;
-                justify-content: space-between;
-            }
-            .back{
-                text-decoration: none;
-                color: #000
-            } 
-            @media (max-width: 1200px) {
-                .main{
-                    margin-left: 60px;
-                    margin-right: 60px;
-                }
-            }
-            @media (max-width: 1000px) {
-                .main{
-                    margin-left: 30px;
-                    margin-right: 30px;
-                }
-            }
-            @media (max-width: 900px) {
-                .main{
-                    margin-left: 30px;
-                    margin-right: 30px;
-                }
-                .content{
-                    display: flex;
-                    flex-direction: column
-                }
-                .inputs{
-                    display: flex;
-                    flex-wrap: wrap;
-                    height: auto;
-                  
-                }
-                .delivery{
-                    margin-top: 58px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: flex-start;
-                }
-                .delivery-method{
-                    width: 150px;
-                    height: 200px;
-                }
-                .label{
-                    font-size: 16px;
-                }
-            }
-            @media (max-width: 700px) {
-                .main{
-                    margin-left: 15px;
-                    margin-right: 15px;
-                }
-                .header{
-                    display: flex;
-                    flex-direction: column;
-                }
-                .title{
-                    margin-bottom: 10px;
-                }
-            }
-            @media (max-width: 370px) {
-                .main{
-                    margin-left: 5px;
-                    margin-right: 5px;
-                }
-                .delivery-method{
-                    width: 140px;
-                    height: 200px;
-                }
-            }
-        `}</style>
         </>
     )
 }

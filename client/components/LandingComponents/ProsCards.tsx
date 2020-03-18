@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import Card from "../UI/Card"
 
 export default function ProsCards() {
-    const [windowWidth, setWindowWidth] = useState()
+    const [windowWidth, setWindowWidth] = useState(0)
 
     useEffect(() => {
         setWindowWidth(window.innerWidth)
@@ -18,56 +18,30 @@ export default function ProsCards() {
     }, [])
 
     const updateDimensions = () => setWindowWidth(window.innerWidth)
-    
+
     return (
-        <>
-            <div className="pros-cards">
-                <div className="pros-header">Why you should choose us?</div>
-                <div className="pros-list">
-                    {prosCards.map((element, i) => (
-                        <Card
-                            key={i}
-                            header={<div className="pros-card-icon">{element.iconSmall}</div>}
-                            width="450px"
-                            title={element.title}
-                            subTitle={element.subTitle}
-                            color="#000"
-                            textPosition={windowWidth < 600 ? "center" : "left"}
-                            border={true}
-                            fontSize={windowWidth < 600 ? "12px" : ""}
-                            customStyleObject={i !== 2 ? {marginRight: "15px"} : {}}
-                        />
-                    ))}
-                </div>
+        <div className="pros-cards">
+            <div className="pros-header">Why you should choose us?</div>
+            <div className="pros-list">
+                {prosCards.map((element, i) => (
+                    <Card
+                        key={i}
+                        header={<div className="pros-card-icon">{element.iconSmall}</div>}
+                        width={windowWidth < 500 ? "300px" : "450px"}
+                        title={element.title}
+                        subTitle={element.subTitle}
+                        color="#000"
+                        textPosition="left"
+                        border={true}
+                        fontSize={windowWidth < 1000 ? "13px" : ""}
+                        customStyleObject={i !== 2
+                            ? { marginRight: windowWidth < 1000 ? "0px" : "15px", marginTop: "20px" }
+                            : { marginTop: "20px" }
+                        }
+                    />
+                ))}
             </div>
-            <style jsx>{`
-                .pros-cards{
-                    margin-top: 80px;
-                }
-                .pros-header{
-                    text-align: center;
-                    font-size: 29px;
-                    margin-bottom: 60px;
-                }
-                .pros-list{
-                    display: flex;
-                    justify-content: space-between;
-                    font-family: 'PoppinsSemiBold', serif;
-                }
-                .pros-card-icon{
-                    height: 70px;
-                    width: 70px;
-                    border-radius: 6px;
-                    background: #d9d9d9;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center
-                }
-                .pros-card-subtitle{
-                    font-family: 'SegoeUI', serif;
-                }
-            `}</style>
-        </>
+        </div>
     )
 }
 

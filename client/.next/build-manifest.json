@@ -4,8 +4,14 @@
     "static/development/dll/dll_d6a88dbe3071bd165157.js.map"
   ],
   "pages": {
+    "/": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
     "/_app": [
       "static/runtime/webpack.js",
+      "static/chunks/styles.chunk.css",
+      "static/chunks/styles.js",
       "static/runtime/main.js"
     ],
     "/_error": [
@@ -20,7 +26,19 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
+    "/auth": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
     "/cart": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/index": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/order": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

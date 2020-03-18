@@ -1,0 +1,120 @@
+.filters-main
+    border-top: 1px solid $base-grey
+    padding-left: 170px
+    padding-right: 170px
+
+.content
+    display: flex
+    margin-top: 40px
+
+.items
+    width: 100%
+    padding-left: 40px
+
+.header
+    display: flex
+    justify-content: space-between
+
+.title
+    font-size: 29px
+    margin-left: 2.8vw
+    font-family: 'PoppinsSemiBold', serif
+
+.navigation
+    text-decoration: none
+    color: #000
+
+.routes
+    margin-top: 10px
+
+.sort
+    display: flex
+    justify-content: space-between
+    flex-direction: row
+    max-width: 520px
+
+    &-item
+        margin-left: 20px
+        display: flex
+        align-items: center
+
+    &-header
+        margin-right: 5px
+        font-family: 'PoppinsSemiBold', serif
+
+.filters
+    min-width: 310px
+
+    &-categories
+        border: 1px solid $base-grey
+
+        &-header
+            margin-left: 20px
+            margin-top: 20px
+            margin-bottom: 20px
+            font-family: 'PoppinsSemiBold', serif
+    &-name
+        display: flex
+        cursor: pointer
+        align-items: center
+        margin-right: 3px
+        margin-bottom: 20px
+    &-childname
+        margin-left: 20px
+    &-sizes
+        border: 1px solid $base-grey
+        margin-top: 40px
+
+        &-items
+            display: flex
+            align-items: center
+            flex-wrap: wrap
+            margin-left: 20px
+
+@media (max-width: 1371px)
+    .filters
+        min-width: 220px
+    .filters-sizes-items
+        width: 200px
+
+@media (max-width: 1200px)
+    .filters-main
+        border-top: 1px solid $base-grey
+        padding-left: 60px
+        padding-right: 60px
+
+@media (max-width: 1000px)
+    .filters-main
+        border-top: 1px solid $base-grey
+        padding-left: 30px
+        padding-right: 30px
+
+@media (max-width: 880px)
+    .header
+        display: flex
+        justify-content: space-between
+    .sort
+        flex-direction: column
+        align-items: flex-end
+        &-item
+            margin-bottom: 10px
+
+@media (max-width: 700px)
+    .filters-main
+        border-top: 1px solid $base-grey
+        padding-left: 15px
+        padding-right: 15px
+
+@media (max-width: 570px)
+    .content
+        display: flex
+        flex-direction: column
+        margin-top: 40px
+    .sort
+        margin-left: -20px
+        padding-bottom: 40px
+
+    .filters-main
+        border-top: 1px solid $base-grey
+        padding-left: 5px
+        padding-right: 5px

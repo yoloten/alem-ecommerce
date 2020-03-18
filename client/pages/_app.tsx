@@ -1,3 +1,5 @@
+import "../styles/global.sass"
+
 function MyApp({ Component, pageProps }: any) {
     return (
         <>

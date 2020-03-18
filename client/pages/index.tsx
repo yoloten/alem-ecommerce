@@ -1,6 +1,3 @@
-import { useDispatch, useSelector } from "react-redux"
-import { getAllProducts } from "../actions/product"
-import { withRedux } from "../withRedux"
 import Link from "next/link"
 import axios from "axios"
 
@@ -15,14 +12,14 @@ function index() {
     const btnClick = (): void => {
         console.log("click")
     }
-
+ 
     return (
         <>
             <div>
-                <div className="header">
+                <div className="landing-header">
                     <Navbar landing={true} />
-                    <div className="header-main">
-                        <div className="title">Brand new January Collection</div>
+                    <div className="landing-header-main">
+                        <div className="landing-title">Brand new January Collection</div>
                         <Button
                             customStyleObject={{ marginTop: "40px" }}
                             backgroundColor="#ff7070"
@@ -36,94 +33,14 @@ function index() {
                         />
                     </div>
                 </div>
-                <div className="main">
+                <div className="landing-main">
                     <PromoCards />
-                    <WithCarousel header="popular-header" />
+                    <WithCarousel header="withcarousel-popular-header" />
                     <ProsCards />
-                    <WithCarousel header="prod-header" />
+                    <WithCarousel header="withcarousel-prod-header" />
                 </div>
             </div>
             <Footer />
-            <style jsx>{`          
-                .header{
-                    background: grey;
-                    height: 750px
-                }
-                .header-main{
-                    margin-left: 210px;
-                    margin-top: 80px
-                }
-                .title{
-                    font-size: 50px;
-                    width: 300px
-                }
-                .main{
-                    margin-left: 170px;
-                    margin-right: 170px;
-                }
-
-                @media (max-width: 1200px) { 
-                    .main{
-                        margin-left: 60px;
-                        margin-right: 60px; 
-                    }
-                    .header-main{
-                        margin-left: 110px;
-                        margin-top: 80px
-                    }
-                }
-
-                @media (max-width: 1000px) { 
-                    .main{
-                        margin-left: 30px;
-                        margin-right: 30px; 
-                    }
-                    .header-main{
-                        margin-left: 55px;
-                        margin-top: 80px
-                    }
-                    .header{
-                        background: grey;
-                        height: 650px
-                    }
-                }
-
-                @media (max-width: 700px) { 
-                    .main{
-                        margin-left: 15px;
-                        margin-right: 15px;    
-                    }
-                    .header-main{
-                        margin-left: 25px;
-                        margin-top: 80px
-                    }
-                    .header{
-                        background: grey;
-                        height: 550px
-                    }
-                }
-
-                @media (max-width: 370px) { 
-                    .main{
-                        margin-left: 5px;
-                        margin-right: 5px; 
-                    }
-                    .header-main{
-                        margin-left: 10px;
-                        margin-top: 80px
-                    }
-                    .header{
-                        background: grey;
-                        height: 450px
-                    }
-                    .title{
-                        font-size: 30px;
-                        width: 300px
-                    }
-                }
-               
-            `
-            }</style>
         </>
     )
 }
@@ -133,4 +50,4 @@ function index() {
 //     return {}
 // }
 
-export default withRedux(index)
+export default index
