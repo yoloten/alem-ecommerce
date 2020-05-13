@@ -1502,22 +1502,30 @@ class MyDocument extends next_document__WEBPACK_IMPORTED_MODULE_8___default.a {
         lineNumber: 13
       },
       __self: this
-    })), __jsx("body", {
+    }), __jsx("link", {
+      href: "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
+      rel: "stylesheet",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 15
+        lineNumber: 14
       },
       __self: this
-    }, __jsx(next_document__WEBPACK_IMPORTED_MODULE_8__["Main"], {
+    })), __jsx("body", {
       __source: {
         fileName: _jsxFileName,
         lineNumber: 16
       },
       __self: this
-    }), __jsx(next_document__WEBPACK_IMPORTED_MODULE_8__["NextScript"], {
+    }, __jsx(next_document__WEBPACK_IMPORTED_MODULE_8__["Main"], {
       __source: {
         fileName: _jsxFileName,
         lineNumber: 17
+      },
+      __self: this
+    }), __jsx(next_document__WEBPACK_IMPORTED_MODULE_8__["NextScript"], {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 18
       },
       __self: this
     })));

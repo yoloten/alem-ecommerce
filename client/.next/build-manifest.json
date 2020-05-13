@@ -4,10 +4,6 @@
     "static/development/dll/dll_d6a88dbe3071bd165157.js.map"
   ],
   "pages": {
-    "/": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
     "/_app": [
       "static/runtime/webpack.js",
       "static/chunks/styles.chunk.css",
@@ -22,23 +18,15 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/address": [
+    "/admin/attributes": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/auth": [
+    "/admin/createproduct": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/cart": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
-    "/index": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
-    "/order": [
+    "/next/dist/pages/_error": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

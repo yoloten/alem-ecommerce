@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Delete, Middleware } from "@overnightjs/core"
 import { findDuplicates } from "../utils/findDuplicates"
-import { getConnection, Between, In } from "typeorm"
+import { getConnection, TableColumn, TableForeignKey } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { filterMany } from "../utils/filterMany"
 import { Request, Response } from "express"
@@ -11,12 +11,27 @@ import { v4 } from "uuid"
 import { Material } from "../entity/Material"
 import { Category } from "../entity/Category"
 import { Product } from "../entity/Product"
+import { Options } from "../entity/Options"
+import { Schema } from "../entity/Schema"
 import { Brand } from "../entity/Brand"
 import { Color } from "../entity/Color"
 import { Price } from "../entity/Price"
 import { Photo } from "../entity/Photo"
+import { Macro } from "../entity/Macro"
 import { Size } from "../entity/Size"
 import { Care } from "../entity/Care"
+
+const selectType = (type: string) => {
+    if (type === "enum") {
+        return "ENUM"
+    }
+    if (type === "number") {
+        return "INT"
+    }
+    if (type === "string") {
+        return "VARCHAR"
+    }
+}
 
 const storage = multer.memoryStorage()
 
@@ -33,74 +48,140 @@ const upload = multer({ storage, fileFilter: multerFilter })
 @Controller("api/product")
 export class ProductController {
 
-    @Get("all/")
-    public async getAll(req: Request, res: Response): Promise<void> {
+    @Get("schema/")
+    public async getSchema(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const table: any = req.query.table
 
         try {
-            const products = await connection.getRepository(Product).find({ relations: ["price"] })
+            const schema = await connection.getRepository(Schema).findOne({ table })
 
-            res.json(products)
+            res.json(schema)
         } catch (error) {
             res.status(400).json(error)
         }
     }
 
-    @Get("onebyprimarykey/")
-    public async getOneByPrimaryKey(req: Request, res: Response): Promise<void> {
+    @Get("macro/")
+    public async getMacro(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-      
-        try {
-            const product = await connection
-                .getRepository(Product)
-                .findOne({
-                    join: {
-                        alias: "product",
-                        leftJoinAndSelect: {
-                            price: "product.price",
-                            photos: "product.photos",
-                            colors: "product.colors",
-                            brand: "product.brand",
-                            sizes: "product.sizes",
-                            materials: "product.materials",
-                            care: "product.care",
-                            categories: "product.categories",
-                        },
-                    },
-                    where: { primaryKey: req.query.primarykey },
-                })
+        const name: any = req.query.name
 
-            res.json(product)
+        try {
+            const macro = await connection.getRepository(Macro).findOne({ name }, { relations: ["options"] })
+
+            res.json(macro)
         } catch (error) {
             res.status(400).json(error)
         }
     }
 
-    @Get("productbygender/")
-    public async productByGender(req: Request, res: Response): Promise<void> {
+    @Get("allfilters/")
+    public async getAllFilters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const gender = [req.query.gender]
+        const { table }: any = req.query
 
         try {
-            const resultFromCategory: number[] = await filterMany(gender, Category, connection, Product, "category")
+            const schema: any = await connection.getRepository(Schema).findOne({ table })
+            const parsedSchemaFields = JSON.parse(schema.schema)
+            const allowedToFilter = []
 
-            if (resultFromCategory.length > 0) {
-                const product = await connection
-                    .createQueryBuilder(Product, "product")
-                    .select("product")
-                    .leftJoinAndSelect("product.photos", "photos")
-                    .leftJoinAndSelect("product.categories", "categories")
-                    .leftJoinAndSelect("product.sizes", "sizes")
-                    .leftJoinAndSelect("product.colors", "colors")
-                    .leftJoinAndSelect("product.price", "price")
-                    .where(resultFromCategory.map((id) => ({ primaryKey: id })))
-                    .orderBy("product.createdAt", "DESC")
-                    .getMany()
-                
-                res.json(product)
-            } else {
-                res.send(" ")
+            for (let i = 0; i < parsedSchemaFields.length; i++) {
+                if (parsedSchemaFields[i].allowFilter) {
+                    const fromQuery = await connection
+                        .getRepository(Macro)
+                        .find({
+                            relations: ["options"],
+                            where: { name: parsedSchemaFields[i].type },
+                        })
+
+                    allowedToFilter.push(fromQuery[0])
+                }
             }
+
+            res.json(allowedToFilter)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Get("allmacros/")
+    public async getMacros(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const name: any = req.query.name
+
+        try {
+            const macro = await connection.getRepository(Macro).find()
+
+            res.json(macro)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Post("createmacro/")
+    public async createMacro(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+
+        try {
+            const { label, name, type, options, optionType, validators } = req.body
+            const sameType = await connection.getRepository(Macro).findOne({ name })
+
+            if (!sameType) {
+                const macroProps = {
+                    label,
+                    name,
+                    type,
+                    validators,
+                }
+
+                const macro = new Macro()
+                Object.assign(macro, macroProps)
+
+                await connection.manager.save(macro)
+
+                if (options && options.length > 0) {
+                    options.map(async (option: any) => {
+                        const optionsProps = {
+                            label: option.label,
+                            value: option.value,
+                            meta: option.meta,
+                            macro,
+                        }
+
+                        const newOption = new Options()
+                        Object.assign(newOption, optionsProps)
+
+                        await connection.manager.save(newOption)
+                    })
+                }
+            }
+
+            res.json({ success: true })
+
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Post("createschema/")
+    public async createAttribute(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+
+        try {
+            const schemaProps = {
+                table: req.body.table,
+                schema: JSON.stringify(req.body.attributes),
+            }
+
+            const schema = new Schema()
+            Object.assign(schema, schemaProps)
+
+            await connection.manager.save(schema)
+
+            res.status(200).json(req.body)
         } catch (error) {
             res.status(400).json(error)
         }
@@ -111,131 +192,213 @@ export class ProductController {
         const connection = getConnection()
 
         try {
-            const { categories, colors, min, max, sizes, materials, offset, limit, order } = req.body
-            // console.log(categories)
-            const products = await connection
-                .getRepository(Product)
-                .query(`
-                    select *
-                    from product 
-                        left join price on product."pricePrimaryKey" = price."primaryKey"
-                        inner join photo on photo."productPrimaryKey" = product."primaryKey",
-                        product_categories_category as category,
-                        product_colors_color as color,
-                        product_sizes_size as size 
-                    where 
-                        (product."primaryKey" = category."productPrimaryKey"
-                        and category."categoryId" = any ($1))
-                        and(product."primaryKey" = color."productPrimaryKey"
-                        and color."colorId" = any ($2))
-                        and(product."primaryKey" = size."productPrimaryKey"
-                        and size."sizeId" = any ($3))
-                        and (price between $4 and $5)
-                    order by
-                        ${order}
-                `, [categories, colors, sizes, min, max])
+            const { fields, limit, table } = req.body
+            const joins: any[] = []
+            const wheres: any[] = []
 
-            const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
+            if (fields && fields.length > 0) {
+                for (let i = 0; i < fields.length; i++) {
+                    const keyAndVal: any = Object.entries(fields[i]).flat()
+                    const key = Object.keys(fields[i])[0]
+                   
+                    if (key) {
+                        joins.push(`LEFT JOIN ${key}_product_jacket ON ${key}_product_jacket.id = ${table}.${key}_${table}_id`)
+
+                        if (keyAndVal[1]) {
+                            if (keyAndVal[0] === "price") {
+                                wheres.push(`(${keyAndVal[0]}_name BETWEEN ${keyAndVal[1]} AND 20)`)
+                            } else {
+                                wheres.push(`${keyAndVal[0]}_name = '${keyAndVal[1]}'`)
+                            }
+                        }
+                    }
+                }
+            }
             
-            res.status(200).json(unique.slice(offset, limit))
+            const products = await connection.query(`
+                SELECT * FROM ${table}
+                ${joins.join(" ")}
+                ${wheres.length > 0 ? "WHERE" : ""} ${wheres.join(" AND ")}
+                LIMIT ${limit}
+                ;
+            `)
+            res.json(products)
+
+            // const { categories, colors, min, max, sizes, materials, offset, limit, order } = req.body
+            // // console.log(categories)
+            // const products = await connection
+            //     .getRepository(Product)
+            //     .query(`
+            //         select *
+            //         from product 
+            //             left join price on product."pricePrimaryKey" = price."primaryKey"
+            //             inner join photo on photo."productPrimaryKey" = product."primaryKey",
+            //             product_categories_category as category,
+            //             product_colors_color as color,
+            //             product_sizes_size as size 
+            //         where 
+            //             (product."primaryKey" = category."productPrimaryKey"
+            //             and category."categoryId" = any ($1))
+            //             and(product."primaryKey" = color."productPrimaryKey"
+            //             and color."colorId" = any ($2))
+            //             and(product."primaryKey" = size."productPrimaryKey"
+            //             and size."sizeId" = any ($3))
+            //             and (price between $4 and $5)
+            //         order by
+            //             ${order}
+            //     `, [categories, colors, sizes, min, max])
+
+            // const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
+
+            // res.status(200).json(unique.slice(offset, limit))
         } catch (error) {
             res.status(400).json(error)
         }
     }
 
     @Post("create/")
-    @Middleware(upload.array("photos", 6))
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
-            const { colors, materials, sizes, cares, brand, categories } = req.body
+            const { table } = req.body
+            const schema: any = await connection.getRepository(Schema).findOne({ table })
+            const parsedSchemaFields = JSON.parse(schema.schema)
 
-            const productBrand = await connection
-                .getRepository(Brand)
-                .findOne({ name: brand })
+            // CREATE TABLES, ADD COLUMNS
+            // TODO: VALIDATIONS(but I'll do it in the main project)
 
-            const productCategory = await connection
-                .getRepository(Category)
-                .find({ where: categories.map((category: string) => ({ name: category })) })
+            // Create main product table with just an idd because everything else will be generated
+            await queryRunner.manager
+                .query(`
+                    CREATE TABLE IF NOT EXISTS ${table} (
+                        id SERIAL PRIMARY KEY
+                    );
+                `)
 
-            const colorList = await connection
-                .getRepository(Color)
-                .find({ where: colors.map((color: string) => ({ name: color })) })
+            for (let i = 0; i < parsedSchemaFields.length; i++) {
+                const macro = await connection.getRepository(Macro).findOne({ name: parsedSchemaFields[i].type })
+                const options = await connection.getRepository(Options).find({ macro })
+                const optionValues: any[] = options ? options.map((option: any) => `'${option.value}'`) : []
 
-            const materialList = await connection
-                .getRepository(Material)
-                .find({ where: materials.map((material: string) => ({ name: material })) })
+                if (macro) {
+                    const type: any = selectType(macro.type)
+                    const macroTableName = macro.name.toLowerCase() + "_" + table
 
-            const sizeList = await connection
-                .getRepository(Size)
-                .find({ where: sizes.map((size: string) => ({ name: size })) })
+                    if (type === "ENUM") {
+                        await queryRunner.manager
+                            .query(`
+                                DO $$ BEGIN
+                                    CREATE TYPE ${macro.name.toLowerCase() + "_enum"} AS ENUM ${"(" + optionValues.join(', ') + ")"};
+                                EXCEPTION
+                                    WHEN duplicate_object THEN null;
+                                END $$;
+                            `)
+                    }
 
-            const careList = await connection
-                .getRepository(Care)
-                .find({ where: cares.map((care: string) => ({ name: care })) })
+                    await queryRunner.manager
+                        .query(`
+                            CREATE TABLE IF NOT EXISTS ${macroTableName} (
+                                id SERIAL PRIMARY KEY,
+                                ${macro.name.toLowerCase() + "_name"} ${type === "ENUM" ? macro.name.toLowerCase() + "_enum" : type} NOT NULL,
+                                type VARCHAR NOT NULL
+                            );
+                        `)
 
-            if (brand && categories) {
-                const priceProps = {
-                    price: req.body.price,
-                    currency: req.body.currency,
-                    discount: req.body.discount,
+                    const hasColumn = await queryRunner.hasColumn(table, macro.name + "_" + table + "_id")
+
+                    if (!hasColumn) {
+                        await queryRunner.addColumn(table, new TableColumn({
+                            name: macro.name + "_" + table + "_id",
+                            type: "int",
+                        }))
+
+                        await queryRunner.createForeignKey(table, new TableForeignKey({
+                            columnNames: [macro.name + "_" + table + "_id"],
+                            referencedColumnNames: ["id"],
+                            referencedTableName: macro.name + "_" + table,
+                        }))
+                    }
+                } else {
+                    // Just add column to main table if it's not a macro
+                    const columnType: any = selectType(parsedSchemaFields[i].type.toLowerCase())
+
+                    await queryRunner.manager
+                        .query(`
+                            ALTER TABLE ${table}
+                                ADD COLUMN IF NOT EXISTS ${parsedSchemaFields[i].name} ${columnType};
+                            `)
                 }
 
-                const price = new Price()
-                Object.assign(price, priceProps)
-
-                await connection.manager.save(price)
-
-                const productProps = {
-                    description: req.body.description,
-                    quantity: req.body.quantity,
-                    name: req.body.name,
-                    categories: productCategory,
-                    materials: materialList,
-                    brand: productBrand,
-                    colors: colorList,
-                    care: careList,
-                    sizes: sizeList,
-                    price,
-                }
-
-                const product = new Product()
-                Object.assign(product, productProps)
-
-                await connection.manager.save(product)
-
-                const photos = Object.values(req.files)
-
-                await Promise.all(
-                    photos.map(async (file) => {
-                        const extension = file.mimetype.split("/")
-                        const generated = v4() + "." + extension[1]
-
-                        await sharp(file.buffer)
-                            .resize(1024, 640)
-                            .toFormat("jpeg")
-                            .jpeg({ quality: 100 })
-                            .toFile(`public/${generated}`)
-
-                        const photoProps = {
-                            filename: generated,
-                            extension: extension[1],
-                            path: `public/${generated}`,
-                            size: file.size,
-                            product,
-                        }
-                        const photo = new Photo()
-                        Object.assign(photo, photoProps)
-
-                        await connection.manager.save(photo)
-                    }),
-                )
-
-                res.status(200).json({ success: true })
-            } else {
-                res.status(400).json({ msg: "You forgot to add some of the properties" })
             }
+
+            res.json({ success: true })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+    @Post("insert/")
+    public async insert(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+
+        try {
+            const { table, fields } = req.body
+            const names: any = []
+            const values: any = []
+
+            // const fks = await queryRunner.manager
+            //     .query(`
+            //         SELECT r.conname
+            //         ,ct.table_name
+            //         ,pg_catalog.pg_get_constraintdef(r.oid, true) as condef
+            //         FROM pg_catalog.pg_constraint r, information_schema.constraint_table_usage ct
+            //         WHERE r.contype = 'f' 
+            //         AND r.conname = ct.constraint_name
+            //         AND ct.table_name != 'macro'
+            //         ORDER BY 1
+            //     `)
+
+            for (let i = 0; i < fields.length; i++) {
+                const existedMacroTable = await connection.getRepository(Macro).findOne({ name: fields[i].type })
+                const key = fields[i][Object.keys(fields[i])[0]]
+
+                if (!existedMacroTable) {
+                    // Push data if it is not a macro 
+                    names.push(Object.keys(fields[i])[0])
+
+                    if (fields[i].type === "string" || fields[i].type === "String") {
+                        values.push(`'${key}'`)
+                    } else {
+                        values.push(key)
+                    }
+                } else {
+                    // First insert data to macro table and return id(needs for relation)
+                    const id = await queryRunner.manager
+                        .query(`
+                            INSERT INTO ${fields[i].type + "_" + table} (${fields[i].type + "_name"}, type)
+                            VALUES
+                                ($1, $2)
+                            Returning id;
+                        `, [Array.isArray(key) ? key[0] : key, fields[i].type])
+
+                    // Then push that id into arrays with values and names to insert into main table
+                    names.push(fields[i].type + "_" + table + "_id")
+                    values.push(id[0].id)
+
+                }
+            }
+
+            // Insert into main table
+            await queryRunner.manager
+                .query(`
+                    INSERT INTO ${table}(${names.join(",")})
+                    VALUES
+                        (${values.join(', ')});
+                `)
+
+            res.json({ success: true })
         } catch (error) {
             res.status(400).json(error)
         }
