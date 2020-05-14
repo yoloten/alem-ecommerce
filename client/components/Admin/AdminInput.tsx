@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
-export default function Input({ attribute, onChangeInputField, id }: any) {
+export default function AdminInput({ attribute, onChangeInputField, id }: any) {
     const [macro, setState]: any = useState({})
 
     useEffect(() => {

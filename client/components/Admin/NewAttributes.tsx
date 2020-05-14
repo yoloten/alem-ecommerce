@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
-export default function AdminNewAttributes({ macroConfig }: any) {
+import Dropdown from "../UI/Dropdown"
+import Button from "../UI/Button"
+import Input from "../UI/Input"
+
+export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
     const [attributes, setAttributes]: any = useState([])
-    const [name, setName]: any = useState("")
     const [macros, setMacros]: any = useState([])
+    const [dropdownValue, setValue]: any = useState("")
 
     useEffect(() => {
         const getMacros = async () => {
@@ -16,8 +20,6 @@ export default function AdminNewAttributes({ macroConfig }: any) {
 
         getMacros()
     }, [macroConfig])
-    console.log(macroConfig)
-    const changeName = (e: any) => setName(e.target.value)
 
     const changeAttributes = (e: any) => {
         const newAttributes = [...attributes]
@@ -35,6 +37,7 @@ export default function AdminNewAttributes({ macroConfig }: any) {
 
             newAttributes[parseInt(e.target.id, 10)].type = value.name
             setAttributes([...newAttributes])
+            setValue(value.name)
         }
         if (e.target.name === "allowFilter") {
             newAttributes[parseInt(e.target.id, 10)].allowFilter = e.target.checked
@@ -46,7 +49,7 @@ export default function AdminNewAttributes({ macroConfig }: any) {
 
     const submit = async () => {
         const obj = {
-            table: "product_" + name.toLowerCase(),
+            table: "product",
             attributes,
         }
 
@@ -57,60 +60,102 @@ export default function AdminNewAttributes({ macroConfig }: any) {
         }
     }
 
+    const setInputWidth = () => {
+        if (windowWidth > 1800) {
+            return "180"
+        }
+        if (windowWidth > 1700) {
+            return "170"
+        }
+        if (windowWidth < 1500) {
+            return "100"
+        }
+
+        if (windowWidth < 1650) {
+            return "140"
+        }
+    }
+
     return (
-        <div className="adminpanel">
-            <input type="text" placeholder="Product Name" onChange={changeName} />
-            <h3>New attribute</h3>
-            <button className="validator-btn" onClick={addAttribute}>+Add attribute</button>
-            {
-                attributes.map((val: any, index: number) => {
-                    return (
-                        <div key={`attribute-${index}`} className="attribute">
-                            <h3>Attribute {index + 1}</h3>
-                            <input
-                                id={index.toString()}
-                                type="text"
-                                name="label"
-                                placeholder="Label"
-                                onChange={changeAttributes}
-                            />
-                            <input
-                                type="text"
-                                name="name"
-                                id={index.toString()}
-                                placeholder="Name"
-                                onChange={changeAttributes}
-                            />
-                            <select
-                                name="type"
-                                id={index.toString()}
-                                onChange={changeAttributes}
-                            >
-                                <option value="" disabled selected>Type</option>
-                                {macros.length > 0
-                                    ? macros.map((value: any, i: number) => {
-                                        return (
-                                            <option value={JSON.stringify(value)}>{value.name}</option>
-                                        )
-                                    })
-                                    : ""
-                                }
-                                <option value={JSON.stringify({ name: "String" })}>String</option>
-                            </select>
-                            <div className="checkbox">
-                                <div>Allow Filter:</div>
-                                <input
-                                    type="checkbox"
-                                    name="allowFilter"
-                                    id={index.toString()}
+        <div className="attributes-new">
+            <div className="attributes-new-title">Product Attributes</div>
+            <div className="attributes-new-subtitle">
+                On this page you can create new properties of your product and edit existed ones
+            </div>
+            <div className="admin-attribute-list">
+                {
+                    attributes.map((val: any, index: number) => {
+                        return (
+                            <div key={`attribute-${index}`} className="attribute-item">
+                                <Dropdown
+                                    extraTypes={["String", "Number"]}
                                     onChange={changeAttributes}
+                                    className="attribute-input"
+                                    windowWidth={windowWidth}
+                                    id={index.toString()}
+                                    value={dropdownValue}
+                                    borderRadius="6px"
+                                    bgColor="#f3f3f3"
+                                    macros={macros}
+                                    border={false}
+                                    width={setInputWidth()}
+                                    height="40"
+                                    name="type"
+                                    placeholder={true}
                                 />
+                                <Input
+                                    className="attribute-input"
+                                    onChange={changeAttributes}
+                                    windowWidth={windowWidth}
+                                    id={index.toString()}
+                                    placeholder="Name"
+                                    borderRadius="6px"
+                                    bgColor="#f3f3f3"
+                                    border={false}
+                                    width={setInputWidth()}
+                                    height="31"
+                                    type="text"
+                                    name="name"
+                                />
+                                <Input
+                                    className="attribute-input"
+                                    onChange={changeAttributes}
+                                    windowWidth={windowWidth}
+                                    id={index.toString()}
+                                    placeholder="Label"
+                                    borderRadius="6px"
+                                    bgColor="#f3f3f3"
+                                    border={false}
+                                    width={setInputWidth()}
+                                    height="31"
+                                    name="label"
+                                    type="text"
+                                />
+                                <div className="checkbox attribute-input-checkbox">
+                                    <div >Allow Filter:</div>
+                                    <input
+                                        type="checkbox"
+                                        name="allowFilter"
+                                        id={index.toString()}
+                                        onChange={changeAttributes}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                })
-            }
-            <button onClick={submit}>Submit</button>
+                        )
+                    })
+                }
+                <Button
+                    borderColor="#eee"
+                    border={true}
+                    backgroundColor="transparent"
+                    onClick={addAttribute}
+                    content="ADD ATTRIBUTE"
+                    width="140px"
+                    fontSize="13px"
+                    customStyleObject={{marginTop: "60px", marginBottom: "10px"}}
+                />
+            </div>
+            {/* <button onClick={submit}>Submit</button> */}
         </div>
     )
 }

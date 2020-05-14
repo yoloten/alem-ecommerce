@@ -8,23 +8,45 @@ export default function Dropdown(props: any) {
 
     return (
         <>
-            <div className="main">
-                <select onClick={onOpen} onChange={props.onChange} >
-                    {props.options.map((opt: any, index: number) => (
-                        <option key={index} value={opt.val}>{opt.val}</option>
+            <div className={props.className}>
+                <select id={props.id} name={props.name} onClick={onOpen} onChange={props.onChange} >
+                    <option value="" selected disabled></option>
+                    {props[props.macros ? "macros" : "options"].map((opt: any, index: number) => (
+                        <option
+                            key={index}
+                            value={props.macros ?  JSON.stringify(opt) : opt.value}
+                        >
+                            {props.macros ? opt.name : opt.value}
+                        </option>
                     ))}
+                    {props.extraTypes && props.extraTypes.length > 0
+                        ? props.extraTypes.map((type: any, index: number) => (
+                            <option key={index} value={JSON.stringify({ name: type })}>{type}</option>
+                        ))
+                        : ""
+                    }
                 </select>
                 <div className="arrow">
-                    <div className="val">{props.value}</div>
+                    <div className="dropdown-text">
+                        <div className="placeholder">{props.placeholder ? "Type" : ""}</div>
+                        <div className="val">{props.value}</div>
+                    </div>
                     <div className="icon">{open ? <Icons.ArrowUp /> : <Icons.ArrowDown />}</div>
                 </div>
             </div>
             <style jsx>{`
-                
+                .dropdown-text {
+                    height: 100%;  
+                }
+                .placeholder {
+                    font-size: 11px;
+                    color: rgba(0, 0, 0, 0.6);
+                    margin-top: 3px
+                }
                 select{
                     width: ${props.width}px;
-                    height: ${props.height ? props.height : "40px"};
-                    border-radius: 50px;
+                    height: ${props.height ? props.height + "px" : "40px"};
+                    border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     cursor: pointer;
                     opacity: 0;
                     appearance: none;
@@ -34,11 +56,11 @@ export default function Dropdown(props: any) {
                 }
                 .arrow{
                     width: ${props.width - 40}px;
-                    height: ${props.height ? props.height : "40px"};
-                    border: 1px solid #d9d9d9;
-                    border-radius: 50px;
+                    height: ${props.height ? props.height + "px" : "40px"};
+                    border: ${props.border ? "1px solid #d9d9d9" : "none"};
+                    border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     cursor: pointer;
-                    background: #fff;
+                    background: ${props.bgColor ? props.bgColor : "#fff"};
                     padding-left: 20px;
                     padding-right: 20px;
                     z-index: -1;
@@ -46,7 +68,6 @@ export default function Dropdown(props: any) {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    position: 
                 }
                 .icon{
                     margin-top: -2px

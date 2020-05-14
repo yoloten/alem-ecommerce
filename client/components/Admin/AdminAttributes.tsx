@@ -8,9 +8,11 @@ import AdminNav from "./AdminNav"
 export default function Admin() {
     const [macroConfig, setMacroConfig]: any = useState([])
     const [windowHeight, setWindowHeight] = useState(0)
+    const [windowWidth, setWindowWidth] = useState(0)
 
     useEffect(() => {
         setWindowHeight(window.innerHeight)
+        setWindowWidth(window.innerWidth)
     }, [])
 
     useEffect(() => {
@@ -21,18 +23,21 @@ export default function Admin() {
         }
     }, [])
 
-    const updateDimensions = () => setWindowHeight(window.innerHeight)
+    const updateDimensions = () => {
+        setWindowHeight(window.innerHeight)
+        setWindowWidth(window.innerWidth)
+    } 
 
     const changeMacro = (macroState: any) => setMacroConfig([...macroConfig, macroState])
 
     return (
         <div className="admin-attriubtes">
             <AdminNav />
-            <div className="admin-attributes-main" style={{ height: (windowHeight - 60) + "px"}}>
+            <div className="admin-attributes-main" style={{ minHeight: (windowHeight - 60) + "px"}}>
                 <AdminSidebar />
                 <div className="admin-attributes-content">
-                    <AdminNewAttributes macroConfig={macroConfig} />
-                    <AdminMacro onMacroSubmit={changeMacro} />
+                    <AdminNewAttributes windowWidth={windowWidth} macroConfig={macroConfig} />
+                    <AdminMacro windowWidth={windowWidth} onMacroSubmit={changeMacro} />
                 </div>
             </div>
         </div>

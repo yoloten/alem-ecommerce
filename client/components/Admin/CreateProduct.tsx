@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 
-import Input from "./AdminInput"
+import AdminInput from "./AdminInput"
 
 export default function CreateProduct() {
     const [attributes, setAttributes]: any = useState([])
@@ -99,7 +99,7 @@ export default function CreateProduct() {
                 {attributes.length > 0
                     ? attributes.map((attribute: any, i: number) => (
                         <>
-                            <Input
+                            <AdminInput
                                 key={i}
                                 id={i}
                                 attribute={attribute}
