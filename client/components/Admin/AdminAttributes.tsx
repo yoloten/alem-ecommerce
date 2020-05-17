@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 
 import AdminNewAttributes from "./NewAttributes"
-import AdminSidebar from "./AdminSidebar"
+import AdminSidebar from "./AdminUI/AdminSidebar"
 import AdminMacro from "./NewMacro"
-import AdminNav from "./AdminNav"
+import AdminNav from "./AdminUI/AdminNav"
 
 export default function Admin() {
     const [macroConfig, setMacroConfig]: any = useState([])
@@ -31,7 +31,7 @@ export default function Admin() {
     const changeMacro = (macroState: any) => setMacroConfig([...macroConfig, macroState])
 
     return (
-        <div className="admin-attriubtes">
+        <div>
             <AdminNav />
             <div className="admin-attributes-main" style={{ minHeight: (windowHeight - 60) + "px"}}>
                 <AdminSidebar />

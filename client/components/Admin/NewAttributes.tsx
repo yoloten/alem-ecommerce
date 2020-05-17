@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
+import { v4 } from "uuid"
 import axios from "axios"
 
+import { setInputWidth } from "../../utils/setInputWidth"
 import Dropdown from "../UI/Dropdown"
 import Button from "../UI/Button"
 import Input from "../UI/Input"
@@ -8,18 +10,36 @@ import Input from "../UI/Input"
 export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
     const [attributes, setAttributes]: any = useState([])
     const [macros, setMacros]: any = useState([])
-    const [dropdownValue, setValue]: any = useState("")
+    const [err, setErr] = useState("")
+    const [successMsg, setSuccessMsg] = useState("")
+
+    useEffect(() => {
+        const getSchema = async () => {
+            const atributesFromServer = await axios.get("http://localhost:8000/api/product/schema", { params: { table: "product" } })
+
+            if (atributesFromServer.data) {
+                setAttributes(JSON.parse(atributesFromServer.data.attributes))
+            }
+        }
+
+        getSchema()
+    }, [])
 
     useEffect(() => {
         const getMacros = async () => {
             const macrosFromServer = await axios.get("http://localhost:8000/api/product/allmacros")
 
             setMacros(macrosFromServer.data)
-
         }
 
         getMacros()
     }, [macroConfig])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setSuccessMsg("")
+        }, 3000)
+    }, [successMsg])
 
     const changeAttributes = (e: any) => {
         const newAttributes = [...attributes]
@@ -37,7 +57,6 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
 
             newAttributes[parseInt(e.target.id, 10)].type = value.name
             setAttributes([...newAttributes])
-            setValue(value.name)
         }
         if (e.target.name === "allowFilter") {
             newAttributes[parseInt(e.target.id, 10)].allowFilter = e.target.checked
@@ -45,45 +64,36 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
         }
     }
 
-    const addAttribute = () => setAttributes([...attributes, { label: "", name: "", type: "", allowFilter: false }])
+    const addAttribute = (e: any) => {
+        e.preventDefault()
 
-    const submit = async () => {
-        const obj = {
-            table: "product",
-            attributes,
-        }
+        setAttributes([...attributes, { label: "", name: "", type: "", allowFilter: false }])
+    }
+
+    const submit = async (e: any) => {
+        e.preventDefault()
+        const obj = { table: "product", attributes }
 
         if (attributes.length > 0) {
-            await axios.post("http://localhost:8000/api/product/createschema", obj)
+            const res = await axios.post("http://localhost:8000/api/product/createschema", obj)
 
-            localStorage.setItem(obj.table, JSON.stringify(obj))
+            if (res.data.success) {
+                setSuccessMsg("Success!")
+            }
+        } else {
+            setErr("Please, add at least one attribute")
         }
     }
 
-    const setInputWidth = () => {
-        if (windowWidth > 1800) {
-            return "180"
-        }
-        if (windowWidth > 1700) {
-            return "170"
-        }
-        if (windowWidth < 1500) {
-            return "100"
-        }
-
-        if (windowWidth < 1650) {
-            return "140"
-        }
-    }
-
+    console.log(attributes)
     return (
         <div className="attributes-new">
             <div className="attributes-new-title">Product Attributes</div>
             <div className="attributes-new-subtitle">
                 On this page you can create new properties of your product and edit existed ones
             </div>
-            <div className="admin-attribute-list">
-                {
+            <form action="submit" onSubmit={submit} className="admin-attribute-list">
+                {attributes && attributes.length > 0 ?
                     attributes.map((val: any, index: number) => {
                         return (
                             <div key={`attribute-${index}`} className="attribute-item">
@@ -93,15 +103,16 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                     className="attribute-input"
                                     windowWidth={windowWidth}
                                     id={index.toString()}
-                                    value={dropdownValue}
+                                    value={val.type}
                                     borderRadius="6px"
                                     bgColor="#f3f3f3"
                                     macros={macros}
                                     border={false}
-                                    width={setInputWidth()}
+                                    width={setInputWidth(windowWidth)}
                                     height="40"
                                     name="type"
-                                    placeholder={true}
+                                    placeholder="Type"
+                                    required={true}
                                 />
                                 <Input
                                     className="attribute-input"
@@ -112,10 +123,12 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                     borderRadius="6px"
                                     bgColor="#f3f3f3"
                                     border={false}
-                                    width={setInputWidth()}
+                                    width={setInputWidth(windowWidth)}
                                     height="31"
                                     type="text"
                                     name="name"
+                                    value={val.name}
+                                    required={true}
                                 />
                                 <Input
                                     className="attribute-input"
@@ -126,10 +139,12 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                     borderRadius="6px"
                                     bgColor="#f3f3f3"
                                     border={false}
-                                    width={setInputWidth()}
+                                    width={setInputWidth(windowWidth)}
                                     height="31"
                                     name="label"
                                     type="text"
+                                    value={val.label}
+                                    required={true}
                                 />
                                 <div className="checkbox attribute-input-checkbox">
                                     <div >Allow Filter:</div>
@@ -138,11 +153,25 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                         name="allowFilter"
                                         id={index.toString()}
                                         onChange={changeAttributes}
+                                        checked={val.allowFilter}
                                     />
                                 </div>
                             </div>
                         )
                     })
+                    : ""
+                }
+                {attributes && attributes.length > 0
+                    ? <Button
+                        borderColor="#eee"
+                        border={true}
+                        backgroundColor="transparent"
+                        content="SAVE CHANGES"
+                        width="140px"
+                        fontSize="13px"
+                        customStyleObject={{ marginTop: "20px" }}
+                    />
+                    : ""
                 }
                 <Button
                     borderColor="#eee"
@@ -152,10 +181,21 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                     content="ADD ATTRIBUTE"
                     width="140px"
                     fontSize="13px"
-                    customStyleObject={{marginTop: "60px", marginBottom: "10px"}}
+                    customStyleObject={{ marginTop: "60px", marginBottom: "10px" }}
                 />
+            </form>
+            <div
+                className="success-message"
+                style={{
+                    textAlign: "center",
+                    marginTop: "10px",
+                    color: "red",
+                }}
+            >
+                {err}
             </div>
-            {/* <button onClick={submit}>Submit</button> */}
+            <div className="success-message" style={{ color: "red" }}>{err}</div>
+            <div className="success-message" style={{ color: "#5beb78" }}>{successMsg}</div>
         </div>
     )
 }

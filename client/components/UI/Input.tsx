@@ -1,30 +1,28 @@
 import * as Icons from "../../public/icons/_compiled"
-import React, { useRef } from "react"
+import React from "react"
 
 export default function Input(props: any) {
-    const inputEl: any = useRef(null)
-
-    const countUp = () => inputEl.current.stepUp()
-
-    const countDown = () => inputEl.current.stepDown()
-
+    
     return (
         <>
             <div className={props.className}>
                 <input
+                    required={props.required ? true : false}
                     className={props.className}
                     id={props.id}
                     name={props.name}
-                    ref={inputEl}
-                    type={props.type}
+                    type={props.name === "minLength" || props.name === "maxLength" ? "number" : props.type}
                     onChange={props.onChange}
+                    min={props.min ? props.min : undefined}
+                    max={props.max ? props.max : undefined}
+                    step={props.step ? props.step : undefined}
+                    value={props.value}
                 />
                 <div className="arrow">
                     <div className="dropdown-text">
-                        <div className="placeholder">{props.placeholder}</div>
-                        <div className="val">{props.value}</div>
+                        <div className="placeholder">{props.placeholder + `${props.required ? "*" : ""}`}</div>
                     </div>
-                    {props.type === "number"
+                    {/* {props.type === "number"
                         ? <div className="buttons">
                             <div className="btn" onClick={countUp}>
                                 <Icons.ArrowUp />
@@ -34,7 +32,7 @@ export default function Input(props: any) {
                             </div>
                         </div>
                         : ""
-                    }
+                    } */}
                 </div>
             </div>
             <style jsx>{`
@@ -47,7 +45,6 @@ export default function Input(props: any) {
                     margin-top: 3px;
                     margin-bottom: 5px
                 }
-                
                 .buttons{
                     display: flex;
                     flex-direction: column;
@@ -55,8 +52,12 @@ export default function Input(props: any) {
                     cursor: pointer;
                     justify-content: space-between;
                 }
+                input:required {
+                    box-shadow:none;
+                }
+                
                 input{
-                    width: ${props.type === "number" ? parseInt(props.width, 10) - 20 : props.width}px;
+                    width: ${props.width}px;
                     height: ${props.height ? props.height + "px" : "45px"};
                     border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     background: transparent;
@@ -68,15 +69,7 @@ export default function Input(props: any) {
                     padding-left: 20px;
                     padding-top: 8px
                 }
-                input[type="number"] {
-                    -webkit-appearance: textfield;
-                       -moz-appearance: textfield;
-                            appearance: textfield;
-                }
-                input[type=number]::-webkit-inner-spin-button, 
-                input[type=number]::-webkit-outer-spin-button { 
-                    -webkit-appearance: none;
-                }
+               
                 .arrow{
                     width: ${props.type === "number" ? props.width : parseInt(props.width, 10) - 10}px;
                     height: ${props.height ? parseInt(props.height, 10) + 9 + "px" : "45px"};

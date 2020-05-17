@@ -55,7 +55,7 @@ export class ProductController {
 
         try {
             const schema = await connection.getRepository(Schema).findOne({ table })
-
+            
             res.json(schema)
         } catch (error) {
             res.status(400).json(error)
@@ -111,9 +111,13 @@ export class ProductController {
         const name: any = req.query.name
 
         try {
-            const macro = await connection.getRepository(Macro).find()
-
-            res.json(macro)
+            const macros = await connection.getRepository(Macro).find({ relations: ["options"] })
+            const editedMacros = macros.map((macro: any) => {
+                macro.validatorsList = macro.validatorsList.split(", ")
+                return macro
+            })
+            
+            res.json(editedMacros)
         } catch (error) {
             res.status(400).json(error)
         }
@@ -125,41 +129,98 @@ export class ProductController {
         const queryRunner = connection.createQueryRunner()
 
         try {
-            const { label, name, type, options, optionType, validators } = req.body
-            const sameType = await connection.getRepository(Macro).findOne({ name })
-
-            if (!sameType) {
-                const macroProps = {
-                    label,
-                    name,
-                    type,
-                    validators,
-                }
-
-                const macro = new Macro()
-                Object.assign(macro, macroProps)
-
-                await connection.manager.save(macro)
-
-                if (options && options.length > 0) {
-                    options.map(async (option: any) => {
-                        const optionsProps = {
-                            label: option.label,
-                            value: option.value,
-                            meta: option.meta,
-                            macro,
+            for (let i = 0; i < req.body.length; i++) {
+                if (!req.body[i].name && !req.body[i].label && !req.body[i].type) {
+                    res.json({ msg: "Fill all fields" })
+                } else {
+                    const existedMacro = await connection.getRepository(Macro).findOne({ uuid: req.body[i].uuid })
+                    
+                    if (!existedMacro) {
+                        const macroProps = {
+                            label: req.body[i].label,
+                            name: req.body[i].name,
+                            type: req.body[i].type,
+                            uuid: req.body[i].uuid,
+                            validatorsList: req.body[i].validatorsList.join(", "),
+                            validators: req.body[i].validators,
                         }
 
-                        const newOption = new Options()
-                        Object.assign(newOption, optionsProps)
+                        const macro = new Macro()
+                        Object.assign(macro, macroProps)
 
-                        await connection.manager.save(newOption)
-                    })
+                        await connection.manager.save(macro)
+
+                        if (req.body[i].options && req.body[i].options.length > 0) {
+                            req.body[i].options.map(async (option: any) => {
+
+                                const optionsProps = {
+                                    label: option.label,
+                                    value: option.value,
+                                    name: option.name,
+                                    meta: option.meta,
+                                    uuid: option.uuid,
+                                    macro,
+                                }
+
+                                const newOption = new Options()
+                                Object.assign(newOption, optionsProps)
+
+                                await connection.manager.save(newOption)
+                            })
+                        }
+                    } else {
+                        await getConnection()
+                            .createQueryBuilder()
+                            .update(Macro)
+                            .set({
+                                label: req.body[i].label,
+                                name: req.body[i].name,
+                                type: req.body[i].type,
+                                validators: req.body[i].validators,
+                            })
+                            .where("uuid = :uuid", { uuid: req.body[i].uuid })
+                            .execute()
+
+                        if (req.body[i].options && req.body[i].options.length > 0) {
+                            req.body[i].options.map(async (option: any) => {
+                                const existedOption = await connection
+                                    .getRepository(Options)
+                                    .findOne({ uuid: option.uuid })
+
+                                if (!existedOption) {
+                                    const optionsProps = {
+                                        label: option.label,
+                                        value: option.value,
+                                        name: option.name,
+                                        meta: option.meta,
+                                        uuid: option.uuid,
+                                        macro: existedMacro,
+                                    }
+
+                                    const newOption = new Options()
+                                    Object.assign(newOption, optionsProps)
+
+                                    await connection.manager.save(newOption)
+                                } else {
+                                    await getConnection()
+                                        .createQueryBuilder()
+                                        .update(Options)
+                                        .set({
+                                            label: option.label,
+                                            value: option.value,
+                                            name: option.name,
+                                            meta: option.meta,
+                                        })
+                                        .where("uuid = :uuid", { uuid: option.uuid })
+                                        .execute()
+                                }
+                            })
+                        }
+                    }
                 }
             }
 
             res.json({ success: true })
-
         } catch (error) {
             res.status(400).json(error)
         }
@@ -171,17 +232,29 @@ export class ProductController {
         const queryRunner = connection.createQueryRunner()
 
         try {
-            const schemaProps = {
-                table: req.body.table,
-                schema: JSON.stringify(req.body.attributes),
+            const { table, attributes } = req.body
+            const existedSchema = await connection.getRepository(Schema).findOne({ table })
+
+            if (!existedSchema) {
+                const schemaProps = {
+                    table,
+                    attributes: JSON.stringify(attributes),
+                }
+
+                const schema = new Schema()
+                Object.assign(schema, schemaProps)
+
+                await connection.manager.save(schema)
+            } else {
+                await getConnection()
+                    .createQueryBuilder()
+                    .update(Schema)
+                    .set({ attributes })
+                    .where("table = :table", { table })
+                    .execute()
             }
 
-            const schema = new Schema()
-            Object.assign(schema, schemaProps)
-
-            await connection.manager.save(schema)
-
-            res.status(200).json(req.body)
+            res.status(200).json({ success: true })
         } catch (error) {
             res.status(400).json(error)
         }
@@ -200,7 +273,7 @@ export class ProductController {
                 for (let i = 0; i < fields.length; i++) {
                     const keyAndVal: any = Object.entries(fields[i]).flat()
                     const key = Object.keys(fields[i])[0]
-                   
+
                     if (key) {
                         joins.push(`LEFT JOIN ${key}_product_jacket ON ${key}_product_jacket.id = ${table}.${key}_${table}_id`)
 
@@ -214,7 +287,7 @@ export class ProductController {
                     }
                 }
             }
-            
+
             const products = await connection.query(`
                 SELECT * FROM ${table}
                 ${joins.join(" ")}
@@ -222,41 +295,15 @@ export class ProductController {
                 LIMIT ${limit}
                 ;
             `)
+
             res.json(products)
-
-            // const { categories, colors, min, max, sizes, materials, offset, limit, order } = req.body
-            // // console.log(categories)
-            // const products = await connection
-            //     .getRepository(Product)
-            //     .query(`
-            //         select *
-            //         from product 
-            //             left join price on product."pricePrimaryKey" = price."primaryKey"
-            //             inner join photo on photo."productPrimaryKey" = product."primaryKey",
-            //             product_categories_category as category,
-            //             product_colors_color as color,
-            //             product_sizes_size as size 
-            //         where 
-            //             (product."primaryKey" = category."productPrimaryKey"
-            //             and category."categoryId" = any ($1))
-            //             and(product."primaryKey" = color."productPrimaryKey"
-            //             and color."colorId" = any ($2))
-            //             and(product."primaryKey" = size."productPrimaryKey"
-            //             and size."sizeId" = any ($3))
-            //             and (price between $4 and $5)
-            //         order by
-            //             ${order}
-            //     `, [categories, colors, sizes, min, max])
-
-            // const unique = products.filter(((set) => (f: any) => !set.has(f.name) && set.add(f.name))(new Set()))
-
-            // res.status(200).json(unique.slice(offset, limit))
         } catch (error) {
             res.status(400).json(error)
         }
     }
 
     @Post("create/")
+    @Middleware(upload.array("photos", 6))
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
         const queryRunner = connection.createQueryRunner()

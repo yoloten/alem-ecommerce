@@ -5,9 +5,9 @@ export class Schema {
     @PrimaryGeneratedColumn()
     public id: number
 
-    @Column({ nullable: true })
+    @Column()
     public table: string
 
     @Column("json")
-    public schema: JSON
+    public attributes: JSON
 }

@@ -12,7 +12,13 @@ export class Options {
     public label: string
 
     @Column()
+    public uuid: string
+
+    @Column()
     public value: string
+
+    @Column()
+    public name: string
 
     @Column("json", { nullable: true })
     public meta: JSON

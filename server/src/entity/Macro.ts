@@ -12,8 +12,14 @@ export class Macro {
     public label: string
 
     @Column()
+    public uuid: string
+
+    @Column()
     public name: string
 
+    @Column()
+    public validatorsList: string
+    
     @Column()
     public type: string
 

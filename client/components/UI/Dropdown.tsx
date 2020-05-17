@@ -9,12 +9,18 @@ export default function Dropdown(props: any) {
     return (
         <>
             <div className={props.className}>
-                <select id={props.id} name={props.name} onClick={onOpen} onChange={props.onChange} >
+                <select
+                    required={props.required ? true : false}
+                    id={props.id} name={props.name}
+                    onClick={onOpen}
+                    onChange={props.onChange}
+                    value={props.value}
+                >
                     <option value="" selected disabled></option>
                     {props[props.macros ? "macros" : "options"].map((opt: any, index: number) => (
                         <option
                             key={index}
-                            value={props.macros ?  JSON.stringify(opt) : opt.value}
+                            value={props.macros ? JSON.stringify(opt) : opt.value}
                         >
                             {props.macros ? opt.name : opt.value}
                         </option>
@@ -28,7 +34,7 @@ export default function Dropdown(props: any) {
                 </select>
                 <div className="arrow">
                     <div className="dropdown-text">
-                        <div className="placeholder">{props.placeholder ? "Type" : ""}</div>
+                        <div className="placeholder">{props.placeholder ? props.placeholder + "*" : ""}</div>
                         <div className="val">{props.value}</div>
                     </div>
                     <div className="icon">{open ? <Icons.ArrowUp /> : <Icons.ArrowDown />}</div>

@@ -17,7 +17,7 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
             getMacro()
         }
     }, [attribute])
-
+    
     const changeInput = (e: any) => {
         const { value, id, name, type } = e.target
         const { validators }: any = macro
@@ -31,7 +31,7 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
                 else if (parseInt(value, 10) > parseInt(validators.max, 10)) {
                     error = `Value must be less than ${validators.max}`
                 }
-                if (validators.required && !value) {
+                if (validators.required && !value || e.target.required) {
                     error = "This field is required"
                 }
             }
@@ -60,13 +60,16 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
     }
 
     const inputTypes = () => {
-        if (attribute.type === "String" || attribute.type === "string") {
+        attribute.type = attribute.type.toLowerCase()
+
+        if (attribute.type === "string") {
             return (
                 <input
                     name={attribute.name}
                     type="text"
                     onChange={changeInput}
                     placeholder={attribute.label}
+                    required={true}
                     id={id}
                 />
             )
@@ -78,6 +81,7 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
                     name={attribute.name}
                     onChange={changeInput}
                     placeholder={attribute.label}
+                    required={true}
                     id={id}
                 />
             )

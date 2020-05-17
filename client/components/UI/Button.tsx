@@ -21,6 +21,7 @@ namespace Btn {
         width?: string
         border?: boolean
         id?: string
+        type?: string
     }
 }
 
@@ -50,6 +51,7 @@ export default function Button(props: Btn.Props) {
             onMouseLeave={props.onMouseLeave}
             style={style}
             id={props.id}
+            type={props.type ? "button" : undefined}
         >
             {props.content}
         </button>

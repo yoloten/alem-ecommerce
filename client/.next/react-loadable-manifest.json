@@ -1,50 +1,26 @@
 {
-  "../../components/Admin/AdminAttributes": [
+  "../../components/Admin/CreateProduct": [
     {
-      "id": "./components/Admin/AdminAttributes.tsx",
-      "name": "./components/Admin/AdminAttributes.tsx",
+      "id": "./components/Admin/AdminInput.tsx",
+      "name": "./components/Admin/AdminInput.tsx",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },
     {
-      "id": "./components/Admin/AdminNav.tsx",
-      "name": "./components/Admin/AdminNav.tsx",
+      "id": "./components/Admin/AdminUI/AdminNav.tsx",
+      "name": "./components/Admin/AdminUI/AdminNav.tsx",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },
     {
-      "id": "./components/Admin/AdminSidebar.tsx",
-      "name": "./components/Admin/AdminSidebar.tsx",
+      "id": "./components/Admin/AdminUI/AdminSidebar.tsx",
+      "name": "./components/Admin/AdminUI/AdminSidebar.tsx",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },
     {
-      "id": "./components/Admin/NewAttributes.tsx",
-      "name": "./components/Admin/NewAttributes.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./components/Admin/NewMacro.tsx",
-      "name": "./components/Admin/NewMacro.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./components/UI/Button.tsx",
-      "name": "./components/UI/Button.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./components/UI/Dropdown.tsx",
-      "name": "./components/UI/Dropdown.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./components/UI/Input.tsx",
-      "name": "./components/UI/Input.tsx",
+      "id": "./components/Admin/CreateProduct.tsx",
+      "name": "./components/Admin/CreateProduct.tsx",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },
@@ -267,6 +243,12 @@
     {
       "id": "./node_modules/@babel/runtime-corejs2/helpers/typeof.js",
       "name": "./node_modules/@babel/runtime-corejs2/helpers/typeof.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/attr-accept/dist/index.js",
+      "name": "./node_modules/attr-accept/dist/index.js",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     },
@@ -763,6 +745,24 @@
       "publicPath": "static/chunks/1.js"
     },
     {
+      "id": "./node_modules/file-selector/dist/es5/file-selector.js",
+      "name": "./node_modules/file-selector/dist/es5/file-selector.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/file-selector/dist/es5/file.js",
+      "name": "./node_modules/file-selector/dist/es5/file.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/file-selector/dist/es5/index.js",
+      "name": "./node_modules/file-selector/dist/es5/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
       "id": "./node_modules/function-bind/implementation.js",
       "name": "./node_modules/function-bind/implementation.js",
       "file": "static/chunks/1.js",
@@ -925,6 +925,18 @@
       "publicPath": "static/chunks/1.js"
     },
     {
+      "id": "./node_modules/react-dropzone/dist/es/index.js",
+      "name": "./node_modules/react-dropzone/dist/es/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/react-dropzone/dist/es/utils/index.js",
+      "name": "./node_modules/react-dropzone/dist/es/utils/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    },
+    {
       "id": "./node_modules/react-is/cjs/react-is.development.js",
       "name": "./node_modules/react-is/cjs/react-is.development.js",
       "file": "static/chunks/1.js",
@@ -937,164 +949,8 @@
       "publicPath": "static/chunks/1.js"
     },
     {
-      "id": "./node_modules/string-hash/index.js",
-      "name": "./node_modules/string-hash/index.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./node_modules/styled-jsx/dist/lib/stylesheet.js",
-      "name": "./node_modules/styled-jsx/dist/lib/stylesheet.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./node_modules/styled-jsx/dist/style.js",
-      "name": "./node_modules/styled-jsx/dist/style.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./node_modules/styled-jsx/dist/stylesheet-registry.js",
-      "name": "./node_modules/styled-jsx/dist/stylesheet-registry.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./node_modules/styled-jsx/style.js",
-      "name": "./node_modules/styled-jsx/style.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/ArrowDown.tsx",
-      "name": "./public/icons/_compiled/ArrowDown.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/ArrowLeft.tsx",
-      "name": "./public/icons/_compiled/ArrowLeft.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/ArrowRight.tsx",
-      "name": "./public/icons/_compiled/ArrowRight.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/ArrowUp.tsx",
-      "name": "./public/icons/_compiled/ArrowUp.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Avatar.tsx",
-      "name": "./public/icons/_compiled/Avatar.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Cart.tsx",
-      "name": "./public/icons/_compiled/Cart.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/CheckMark.tsx",
-      "name": "./public/icons/_compiled/CheckMark.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/CreditCard.tsx",
-      "name": "./public/icons/_compiled/CreditCard.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Filter.tsx",
-      "name": "./public/icons/_compiled/Filter.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/FreeShipping.tsx",
-      "name": "./public/icons/_compiled/FreeShipping.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/FreeShippingSmall.tsx",
-      "name": "./public/icons/_compiled/FreeShippingSmall.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Guarantee.tsx",
-      "name": "./public/icons/_compiled/Guarantee.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/GuaranteeBig.tsx",
-      "name": "./public/icons/_compiled/GuaranteeBig.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Paper.tsx",
-      "name": "./public/icons/_compiled/Paper.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Search.tsx",
-      "name": "./public/icons/_compiled/Search.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Tools.tsx",
-      "name": "./public/icons/_compiled/Tools.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Truck.tsx",
-      "name": "./public/icons/_compiled/Truck.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/TruckEmpty.tsx",
-      "name": "./public/icons/_compiled/TruckEmpty.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/TruckFull.tsx",
-      "name": "./public/icons/_compiled/TruckFull.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/Wallet.tsx",
-      "name": "./public/icons/_compiled/Wallet.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/WalletBig.tsx",
-      "name": "./public/icons/_compiled/WalletBig.tsx",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    },
-    {
-      "id": "./public/icons/_compiled/index.ts",
-      "name": "./public/icons/_compiled/index.ts",
+      "id": "./node_modules/tslib/tslib.es6.js",
+      "name": "./node_modules/tslib/tslib.es6.js",
       "file": "static/chunks/1.js",
       "publicPath": "static/chunks/1.js"
     }
