@@ -1,8 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { v4 } from "uuid"
 
-import { Product } from "./Product"
-
 @Entity()
 export class Photo {
     @PrimaryGeneratedColumn()
@@ -22,7 +20,4 @@ export class Photo {
 
     @Column()
     public size: number
-
-    @ManyToOne((type) => Product, (product) => product.photos, { nullable: true })
-    public product: Product
 }

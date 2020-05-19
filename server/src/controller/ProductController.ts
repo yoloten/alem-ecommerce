@@ -8,18 +8,11 @@ import * as multer from "multer"
 import * as sharp from "sharp"
 import { v4 } from "uuid"
 
-import { Material } from "../entity/Material"
-import { Category } from "../entity/Category"
-import { Product } from "../entity/Product"
 import { Options } from "../entity/Options"
 import { Schema } from "../entity/Schema"
-import { Brand } from "../entity/Brand"
-import { Color } from "../entity/Color"
 import { Price } from "../entity/Price"
 import { Photo } from "../entity/Photo"
 import { Macro } from "../entity/Macro"
-import { Size } from "../entity/Size"
-import { Care } from "../entity/Care"
 
 const selectType = (type: string) => {
     if (type === "enum") {
@@ -451,56 +444,56 @@ export class ProductController {
         }
     }
 
-    @Post("setnewprice/:id")
-    public async setNewPrice(req: Request, res: Response): Promise<void> {
-        const connection = getConnection()
+    // @Post("setnewprice/:id")
+    // public async setNewPrice(req: Request, res: Response): Promise<void> {
+    //     const connection = getConnection()
 
-        try {
-            const product = await connection
-                .getRepository(Product)
-                .find({
-                    join: {
-                        alias: "product",
-                        leftJoinAndSelect: {
-                            price: "product.price",
-                        },
-                    },
-                    where: { id: req.params.id },
-                })
+    //     try {
+    //         const product = await connection
+    //             .getRepository(Product)
+    //             .find({
+    //                 join: {
+    //                     alias: "product",
+    //                     leftJoinAndSelect: {
+    //                         price: "product.price",
+    //                     },
+    //                 },
+    //                 where: { id: req.params.id },
+    //             })
 
-            const priceProps = {
-                price: req.body.price,
-                currency: req.body.currency,
-                discount: req.body.discount,
-                product: product[0],
-            }
-            const price = new Price()
-            Object.assign(price, priceProps)
+    //         const priceProps = {
+    //             price: req.body.price,
+    //             currency: req.body.currency,
+    //             discount: req.body.discount,
+    //             product: product[0],
+    //         }
+    //         const price = new Price()
+    //         Object.assign(price, priceProps)
 
-            await connection.manager.save(price)
+    //         await connection.manager.save(price)
 
-            res.status(200).json({ success: true })
-        } catch (error) {
-            res.status(400).json(error)
-        }
-    }
+    //         res.status(200).json({ success: true })
+    //     } catch (error) {
+    //         res.status(400).json(error)
+    //     }
+    // }
 
-    @Delete("deleteone/:id")
-    public async deleteOne(req: Request, res: Response): Promise<void> {
-        const connection = getConnection()
+    // @Delete("deleteone/:id")
+    // public async deleteOne(req: Request, res: Response): Promise<void> {
+    //     const connection = getConnection()
 
-        try {
-            await connection
-                .createQueryBuilder()
-                .delete()
-                .from(Product)
-                .where("id = :id", { id: req.params.id })
-                .execute()
+    //     try {
+    //         await connection
+    //             .createQueryBuilder()
+    //             .delete()
+    //             .from(Product)
+    //             .where("id = :id", { id: req.params.id })
+    //             .execute()
 
-            res.status(200).json({ succuss: true })
+    //         res.status(200).json({ succuss: true })
 
-        } catch (error) {
-            res.status(400).json(error)
-        }
-    }
+    //     } catch (error) {
+    //         res.status(400).json(error)
+    //     }
+    // }
 }

@@ -12,11 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/lodash": "^4.14.151",
     "@types/react-input-mask": "^2.0.5",
     "@webdeb/next-styles": "^1.0.7",
     "axios": "^0.19.1",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
     "next": "^9.1.7",
     "next-cookies": "^2.0.3",
     "next-redux-wrapper": "^4.0.1",

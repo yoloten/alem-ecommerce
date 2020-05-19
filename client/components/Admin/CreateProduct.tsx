@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone"
 import axios from "axios"
 
 import { setInputWidth } from "../../utils/setInputWidth"
+import AdminMainContent from "./AdminUI/AdminMainContent"
 import AdminSidebar from "./AdminUI/AdminSidebar"
 import AdminNav from "./AdminUI/AdminNav"
 import AdminInput from "./AdminInput"
@@ -15,8 +16,6 @@ export default function CreateProduct() {
     const [fields, setFields]: any = useState([])
     const [errors, setErrors]: any = useState([])
     const [disabledBtn, setDisabledBtn]: any = useState(true)
-    const [windowHeight, setWindowHeight] = useState(0)
-    const [windowWidth, setWindowWidth] = useState(0)
     const [photos, setPhotos]: any = useState([])
     const [mainProperties, setMainProperites] = useState({
         name: "",
@@ -39,18 +38,6 @@ export default function CreateProduct() {
             setPhotos([...photos, acceptedFiles])
         }
     })
-
-    useEffect(() => {
-        setWindowHeight(window.innerHeight)
-    }, [])
-
-    useEffect(() => {
-        window.addEventListener("resize", updateDimensions)
-
-        return () => {
-            window.removeEventListener("resize", updateDimensions)
-        }
-    }, [])
 
     // console.log(photos.flat().map((file: any) => file.path))
     // useEffect(() => {
@@ -80,11 +67,6 @@ export default function CreateProduct() {
 
         getSchema()
     }, [])
-
-    const updateDimensions = () => {
-        setWindowHeight(window.innerHeight)
-        setWindowWidth(window.innerWidth)
-    }
 
     const deletePhoto = (index: number) => {
         const newPhotos = [...photos]
@@ -149,12 +131,8 @@ export default function CreateProduct() {
     }
 
     return (
-        <div className="admin-createproduct">
-            <AdminNav />
-            <div className="createproduct-main" style={{ minHeight: (windowHeight - 60) + "px" }}>
-                <AdminSidebar />
-                <div className="createproduct-content">
-                    <div className="createproduct-title">Create Product</div>
+        <AdminMainContent>
+            <div className="createproduct-title">Create Product</div>
                     <div className="createproduct-subtitle">
                         On this page you can create a product from properties you defined
                     </div>
@@ -272,8 +250,6 @@ export default function CreateProduct() {
                         }
                         <button disabled={disabledBtn}>Create</button>
                     </form>
-                </div>
-            </div>
-        </div>
+        </AdminMainContent>
     )
 }
