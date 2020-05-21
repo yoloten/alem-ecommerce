@@ -14,7 +14,6 @@ import { Delivery } from "../entity/Delivery"
 import { Address } from "../entity/Address"
 import { Status } from "../entity/Status"
 import { Order } from "../entity/Order"
-import { Photo } from "../entity/Photo"
 import { User } from "../entity/User"
 
 const storage = multer.memoryStorage()

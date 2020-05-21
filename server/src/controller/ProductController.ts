@@ -10,8 +10,6 @@ import { v4 } from "uuid"
 
 import { Options } from "../entity/Options"
 import { Schema } from "../entity/Schema"
-import { Price } from "../entity/Price"
-import { Photo } from "../entity/Photo"
 import { Macro } from "../entity/Macro"
 
 const selectType = (type: string) => {
@@ -48,7 +46,7 @@ export class ProductController {
 
         try {
             const schema = await connection.getRepository(Schema).findOne({ table })
-            
+
             res.json(schema)
         } catch (error) {
             res.status(400).json(error)
@@ -109,7 +107,7 @@ export class ProductController {
                 macro.validatorsList = macro.validatorsList.split(", ")
                 return macro
             })
-            
+
             res.json(editedMacros)
         } catch (error) {
             res.status(400).json(error)
@@ -127,7 +125,7 @@ export class ProductController {
                     res.json({ msg: "Fill all fields" })
                 } else {
                     const existedMacro = await connection.getRepository(Macro).findOne({ uuid: req.body[i].uuid })
-                    
+
                     if (!existedMacro) {
                         const macroProps = {
                             label: req.body[i].label,
@@ -162,6 +160,22 @@ export class ProductController {
                             })
                         }
                     } else {
+                        const getSchema: any = await connection.getRepository(Schema).findOne({ table: "product" })
+
+                        getSchema.attributes.map((attribute: any) => {
+                            if (attribute.type === existedMacro.name) {
+                                attribute.type = req.body[i].name
+                            }
+                        })
+
+
+                        const updated = await getConnection()
+                            .createQueryBuilder()
+                            .update(Schema)
+                            .set({ attributes: getSchema.attributes })
+                            .where("table = :table", { table: "product" })
+                            .execute()
+
                         await getConnection()
                             .createQueryBuilder()
                             .update(Macro)
@@ -296,7 +310,6 @@ export class ProductController {
     }
 
     @Post("create/")
-    @Middleware(upload.array("photos", 6))
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
         const queryRunner = connection.createQueryRunner()
@@ -304,21 +317,86 @@ export class ProductController {
         try {
             const { table } = req.body
             const schema: any = await connection.getRepository(Schema).findOne({ table })
-            const parsedSchemaFields = JSON.parse(schema.schema)
 
             // CREATE TABLES, ADD COLUMNS
-            // TODO: VALIDATIONS(but I'll do it in the main project)
-
-            // Create main product table with just an idd because everything else will be generated
+            // TODO: VALIDATIONS(but I'll do it in the main project) 
             await queryRunner.manager
                 .query(`
-                    CREATE TABLE IF NOT EXISTS ${table} (
-                        id SERIAL PRIMARY KEY
+                    CREATE TABLE IF NOT EXISTS product (
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR NOT NULL,
+                        count INT NOT NULL,
+                        description VARCHAR NOT NULL,
+                        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                        sold INT DEFAULT 0
                     );
                 `)
 
-            for (let i = 0; i < parsedSchemaFields.length; i++) {
-                const macro = await connection.getRepository(Macro).findOne({ name: parsedSchemaFields[i].type })
+            // PRICE
+            const hasPriceColumn = await queryRunner.hasColumn(table, "price_id")
+
+            if (!hasPriceColumn) {
+                await queryRunner.manager
+                    .query(`
+                    CREATE TABLE IF NOT EXISTS pricing (
+                        id SERIAL PRIMARY KEY,
+                        price NUMERIC NOT NULL,
+                        discount NUMERIC NOT NULL,
+                        currency VARCHAR NOT NULL,
+                        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                    );
+                `)
+
+                await queryRunner.addColumn(table, new TableColumn({
+                    name: "price_id",
+                    type: "int",
+                }))
+
+                await queryRunner.createForeignKey(table, new TableForeignKey({
+                    columnNames: ["price_id"],
+                    referencedColumnNames: ["id"],
+                    referencedTableName: "pricing",
+                }))
+
+            }
+
+            // PHOTO
+            const hasPhotoColumn = await queryRunner.hasColumn(table, "photo_id")
+
+            if (!hasPhotoColumn) {
+                await queryRunner.manager
+                    .query(`
+                    CREATE TABLE IF NOT EXISTS photo (
+                        id SERIAL PRIMARY KEY,
+                        filename VARCHAR NOT NULL,
+                        extension VARCHAR NOT NULL,
+                        path VARCHAR NOT NULL,
+                        product_id INT NOT NULL,
+                        FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+                    );
+                `)
+            }
+
+            // CATEGORY
+            const hasCategoryColumn = await queryRunner.hasColumn(table, "category_id")
+
+            if (!hasCategoryColumn) {
+                await queryRunner.addColumn(table, new TableColumn({
+                    name: "category_id",
+                    type: "int",
+                }))
+
+                await queryRunner.createForeignKey(table, new TableForeignKey({
+                    columnNames: ["category_id"],
+                    referencedColumnNames: ["id"],
+                    referencedTableName: "category",
+                }))
+            }
+
+            // CUSTOM FIELDS
+            for (let i = 0; i < schema.attributes.length; i++) {
+                const macro = await connection.getRepository(Macro).findOne({ name: schema.attributes[i].type })
                 const options = await connection.getRepository(Options).find({ macro })
                 const optionValues: any[] = options ? options.map((option: any) => `'${option.value}'`) : []
 
@@ -362,12 +440,12 @@ export class ProductController {
                     }
                 } else {
                     // Just add column to main table if it's not a macro
-                    const columnType: any = selectType(parsedSchemaFields[i].type.toLowerCase())
+                    const columnType: any = selectType(schema.attributes[i].type.toLowerCase())
 
                     await queryRunner.manager
                         .query(`
                             ALTER TABLE ${table}
-                                ADD COLUMN IF NOT EXISTS ${parsedSchemaFields[i].name} ${columnType};
+                                ADD COLUMN IF NOT EXISTS ${schema.attributes[i].name} ${columnType};
                             `)
                 }
 
@@ -378,37 +456,50 @@ export class ProductController {
             res.status(400).json(error)
         }
     }
+
     @Post("insert/")
+    @Middleware(upload.array("photos[]", 8))
     public async insert(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
         const queryRunner = connection.createQueryRunner()
 
         try {
-            const { table, fields } = req.body
+            const { table, fields, mainProperties } = req.body
+            const primaryProperties = JSON.parse(mainProperties)
+            const parsedFields = JSON.parse(fields)
+            const photos: any = req.files
             const names: any = []
             const values: any = []
 
-            // const fks = await queryRunner.manager
-            //     .query(`
-            //         SELECT r.conname
-            //         ,ct.table_name
-            //         ,pg_catalog.pg_get_constraintdef(r.oid, true) as condef
-            //         FROM pg_catalog.pg_constraint r, information_schema.constraint_table_usage ct
-            //         WHERE r.contype = 'f' 
-            //         AND r.conname = ct.constraint_name
-            //         AND ct.table_name != 'macro'
-            //         ORDER BY 1
-            //     `)
+            // CATEGORY
+            const getCategory = await connection.query(`
+                SELECT id FROM category WHERE category.uuid = $1
+                `, [primaryProperties.category])
 
-            for (let i = 0; i < fields.length; i++) {
-                const existedMacroTable = await connection.getRepository(Macro).findOne({ name: fields[i].type })
-                const key = fields[i][Object.keys(fields[i])[0]]
+            names.push("category_id")
+            values.push(getCategory[0].id)
+
+            // PRICE
+            const priceID = await connection.query(`
+                    INSERT INTO pricing(price, discount, currency)
+                    VALUES 
+                        ($1, $2, $3)
+                    Returning id;
+                `, [primaryProperties.price, primaryProperties.discount, primaryProperties.currency])
+
+            names.push("price_id")
+            values.push(priceID[0].id)
+
+            // SECONDARY PROPERTIES
+            for (let i = 0; i < parsedFields.length; i++) {
+                const existedMacroTable = await connection.getRepository(Macro).findOne({ name: parsedFields[i].type })
+                const key = parsedFields[i][Object.keys(parsedFields[i])[0]]
 
                 if (!existedMacroTable) {
                     // Push data if it is not a macro 
-                    names.push(Object.keys(fields[i])[0])
+                    names.push(Object.keys(parsedFields[i])[0])
 
-                    if (fields[i].type === "string" || fields[i].type === "String") {
+                    if (parsedFields[i].type === "string" || parsedFields[i].type === "String") {
                         values.push(`'${key}'`)
                     } else {
                         values.push(key)
@@ -417,26 +508,46 @@ export class ProductController {
                     // First insert data to macro table and return id(needs for relation)
                     const id = await queryRunner.manager
                         .query(`
-                            INSERT INTO ${fields[i].type + "_" + table} (${fields[i].type + "_name"}, type)
+                            INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type)
                             VALUES
                                 ($1, $2)
                             Returning id;
-                        `, [Array.isArray(key) ? key[0] : key, fields[i].type])
+                        `, [Array.isArray(key) ? key[0] : key, parsedFields[i].type])
 
                     // Then push that id into arrays with values and names to insert into main table
-                    names.push(fields[i].type + "_" + table + "_id")
+                    names.push(parsedFields[i].type + "_product_id")
                     values.push(id[0].id)
 
                 }
             }
 
+            names.push("name", "description", "count")
+            values.push(`'${primaryProperties.name}'`, `'${primaryProperties.description}'`, primaryProperties.count)
+
             // Insert into main table
-            await queryRunner.manager
+            const productID = await queryRunner.manager
                 .query(`
-                    INSERT INTO ${table}(${names.join(",")})
+                    INSERT INTO product(${names.join(",")})
                     VALUES
-                        (${values.join(', ')});
+                        (${values.join(', ')})
+                    Returning id;
                 `)
+            // PHOTOS
+            for (let i = 0; i < req.files.length; i++) {
+                const generated = "product_image_" + v4() + ".jpeg"
+
+                await sharp(photos[i].buffer)
+                    .resize(1500)
+                    .toFormat("jpeg")
+                    .jpeg({ quality: 75 })
+                    .toFile(`public/${generated}`)
+
+                await connection.query(`
+                    INSERT INTO photo(filename, extension, path, product_id)
+                    VALUES 
+                        ($1, $2, $3, $4);
+                `, [generated, "jpeg", `public/${generated}`, productID[0].id])
+            }
 
             res.json({ success: true })
         } catch (error) {

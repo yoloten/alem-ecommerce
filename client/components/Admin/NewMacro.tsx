@@ -23,7 +23,7 @@ export default function AdminMacro(props: any) {
 
         getAllMacros()
     }, [])
-    console.log(macros)
+   
     useEffect(() => {
         setTimeout(() => {
             setSuccessMsg("")

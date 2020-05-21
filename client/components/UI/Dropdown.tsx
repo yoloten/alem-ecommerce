@@ -5,7 +5,7 @@ export default function Dropdown(props: any) {
     const [open, setOpen] = useState(false)
 
     const onOpen = () => setOpen(!open)
-
+    
     return (
         <>
             <div className={props.className}>
@@ -14,9 +14,15 @@ export default function Dropdown(props: any) {
                     id={props.id} name={props.name}
                     onClick={onOpen}
                     onChange={props.onChange}
-                    value={props.value}
+                    defaultValue={props.value}
                 >
-                    <option value="" selected disabled></option>
+                    <option value="">Select option</option>
+                    {props.extraTypes && props.extraTypes.length > 0
+                        ? props.extraTypes.map((type: any, index: number) => (
+                            <option key={index} value={JSON.stringify({ name: type })}>{type}</option>
+                        ))
+                        : ""
+                    }
                     {props[props.macros ? "macros" : "options"].map((opt: any, index: number) => (
                         <option
                             key={index}
@@ -25,12 +31,6 @@ export default function Dropdown(props: any) {
                             {props.macros ? opt.name : opt.value}
                         </option>
                     ))}
-                    {props.extraTypes && props.extraTypes.length > 0
-                        ? props.extraTypes.map((type: any, index: number) => (
-                            <option key={index} value={JSON.stringify({ name: type })}>{type}</option>
-                        ))
-                        : ""
-                    }
                 </select>
                 <div className="arrow">
                     <div className="dropdown-text">

@@ -6,13 +6,39 @@ import AdminMainContent from "./AdminUI/AdminMainContent"
 import Button from "../UI/Button"
 
 export default function CreateCategory() {
-    const [counter, setCounter] = useState(0)
-    const [tree, setTree]: any = useState([{
-        value: "",
-        name: "",
-        uuid: v4(),
-        createdIndex: 0,
-    }])
+    const [tree, setTree]: any = useState([])
+
+    useEffect(() => {
+        const getAllCategories = async () => {
+            try {
+                const allCategories = await axios.get("http://localhost:8000/api/category/all")
+
+                if (allCategories.data && allCategories.data.length > 0) {
+                    setTree(allCategories.data)
+                } else {
+                    setTree([{
+                        value: "",
+                        name: "",
+                        uuid: v4(),
+                        created_index: 0,
+                        index: 0,
+                        children: [],
+                    }])
+                }
+            } catch (error) {
+                setTree([{
+                    value: "",
+                    name: "",
+                    uuid: v4(),
+                    created_index: 0,
+                    index: 0,
+                    children: [],
+                }])
+            }
+        }
+
+        getAllCategories()
+    }, [])
 
     const changeTree = (e: any) => {
         const { name, value, id } = e.target
@@ -31,29 +57,54 @@ export default function CreateCategory() {
             name: "",
             parent: "",
             uuid: v4(),
-            createdIndex: 0,
+            created_index: 0,
+            index: 0,
+            children: [],
         }
 
         if (id) {
             newTree.map((item: any, i: number) => {
                 if (item.uuid === id) {
-                    const parentIndex = newTree.indexOf(item)
-
                     child.parent = item.uuid
                     newTree.splice(i + 1, 0, child)
-                    child.createdIndex = newTree[parentIndex].createdIndex + 1
+                    child.created_index = newTree[i].created_index + 1
+                    item.children.push(child.uuid)
                 }
             })
         }
 
         setTree(newTree)
-        setCounter(counter + 1)
     }
-    console.log(tree)
+
+    const deleteNode = async (e: any) => {
+        e.preventDefault()
+        const { id } = e.target
+        const newTree = [...tree]
+        const node = newTree[parseInt(id, 10)]
+
+        newTree.map((item: any, i: number) => {
+            if (item.uuid === node.parent) {
+                item.children.map((child: any, index: number) => {
+                    if (child === node.uuid) {
+                        item.children.splice(index, 1)
+                    }
+                })
+            }
+        })
+
+        newTree.splice(parseInt(id, 10), 1)
+        setTree(newTree)
+
+        await axios.delete("http://localhost:8000/api/category/delete", { data: { uuid: node.uuid } })
+    }
+    
     const submit = async (e: any) => {
         e.preventDefault()
+        const treeForServer = [...tree]
 
-        // await axios.post("http://localhost:8000/api/category/create", { tree })
+        treeForServer.map((item: any, index: number) => item.index = index)
+
+        await axios.post("http://localhost:8000/api/category/create", { tree: treeForServer })
     }
 
     return (
@@ -64,7 +115,7 @@ export default function CreateCategory() {
                     return <div
                         key={index}
                         className="input-item"
-                        style={{ marginLeft: (node.createdIndex * 20) + "px" }}
+                        style={{ marginLeft: (node.created_index * 20) + "px" }}
                     >
                         <input
                             id={index.toString()}
@@ -80,13 +131,18 @@ export default function CreateCategory() {
                             onClick={addChild}
                             content="Add Child"
                         />
+                        {node.parent && node.children.length < 1
+                            ? <Button
+                                id={index.toString()}
+                                onClick={deleteNode}
+                                content="Delete"
+                            />
+                            : ""
+                        }
                     </div>
                 })}
                 <Button content="Save" />
             </form>
-            {tree.map((item: any, i: number) => {
-                return <div style={{marginLeft: (item.createdIndex * 10) + "px"}}>{item.name}</div>
-            })}
         </AdminMainContent>
     )
 }

@@ -21,6 +21,10 @@
     "/admin/createcategory": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
+    ],
+    "/admin/createproduct": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
     ]
   }
 }

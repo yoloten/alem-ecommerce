@@ -12,6 +12,7 @@ import Button from "../UI/Button"
 import Input from "../UI/Input"
 
 export default function CreateProduct() {
+    const [categories, setCategries]: any = useState([])
     const [attributes, setAttributes]: any = useState([])
     const [fields, setFields]: any = useState([])
     const [errors, setErrors]: any = useState([])
@@ -26,36 +27,27 @@ export default function CreateProduct() {
         currency: "",
         category: "",
     })
-    const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject,
-    } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: "image/jpeg, image/png",
         onDrop: (acceptedFiles: any) => {
             setPhotos([...photos, acceptedFiles])
-        }
+        },
     })
 
-    // console.log(photos.flat().map((file: any) => file.path))
-    // useEffect(() => {
-    // }, [])
-
     useEffect(() => {
-        const getSchema = async () => {
+        const getDataFromServer = async () => {
             const newSchema = await axios.get("http://localhost:8000/api/product/schema", {
                 params: { table: "product" },
             })
+            const getCategory = await axios.get("http://localhost:8000/api/category/last")
 
-            if (newSchema.data) {
-                setAttributes(JSON.parse(newSchema.data.attributes))
+            if (newSchema.data && newSchema.data.attributes.length > 0) {
+                setAttributes(newSchema.data.attributes)
 
                 const arr = []
                 const errArr = []
 
-                for (let i = 0; i < JSON.parse(newSchema.data.attributes).length; i++) {
+                for (let i = 0; i < newSchema.data.attributes.length; i++) {
                     arr.push({})
                     errArr.push("")
                 }
@@ -63,9 +55,12 @@ export default function CreateProduct() {
                 setFields(arr)
                 setErrors(errArr)
             }
+            if (getCategory.data && getCategory.data.length > 0) {
+                setCategries(getCategory.data)
+            }
         }
 
-        getSchema()
+        getDataFromServer()
     }, [])
 
     const deletePhoto = (index: number) => {
@@ -78,8 +73,7 @@ export default function CreateProduct() {
         e.persist()
         setMainProperites((state: any) => ({ ...state, [e.target.name]: e.target.value }))
     }
-    // console.log(mainProperties)
-    // console.log(attributes)
+
     const onChangeInputField = (field: any, err: any, type: any) => {
         const newFields = [...fields]
         const newErrors = [...errors]
@@ -115,31 +109,34 @@ export default function CreateProduct() {
         e.preventDefault()
 
         const formData = new FormData()
+        const flatPhotoArr = [...photos.flat()]
 
         for (let i = 0; i < photos.length; i++) {
-            formData.append("photos", photos[0][i])
+            formData.append("photos[]", flatPhotoArr[i])
         }
 
         formData.append("fields", JSON.stringify(fields))
         formData.append("mainProperties", JSON.stringify(mainProperties))
 
-        const created = await axios.post("http://localhost:8000/api/product/create", {table: "product"})
+        const created = await axios.post("http://localhost:8000/api/product/create", { table: "product" })
 
-        // if (created.data.success) {
-        //     await axios.post("http://localhost:8000/api/product/insert", obj)
-        // }
+        if (created.data.success) {
+            await axios.post("http://localhost:8000/api/product/insert", formData)
+        }
     }
 
     return (
         <AdminMainContent>
-            <div className="createproduct-title">Create Product</div>
-                    <div className="createproduct-subtitle">
-                        On this page you can create a product from properties you defined
+            <div className="admin-title">Create Product</div>
+            <div className="admin-subtitle">
+                On this page you can create a product from properties you defined
                     </div>
 
-                    <form className="createproduct-form" action="submit" onSubmit={submit}>
+            <form className="admin-form createproduct-flex" action="submit" onSubmit={submit}>
+                <div className="createproduct-attributes">
+                    <div className="main-attributes">
                         <div className="createproduct-secondtitle">Main Attributes</div>
-                        {/* <Input
+                        <Input
                             className="createproduct-input"
                             onChange={changeMainProperties}
                             placeholder="Name"
@@ -151,6 +148,21 @@ export default function CreateProduct() {
                             type="text"
                             name="name"
                             value={mainProperties.name}
+                            required={true}
+                        />
+                        <Input
+                            className="createproduct-input"
+                            onChange={changeMainProperties}
+                            placeholder="Count"
+                            borderRadius="6px"
+                            bgColor="#f3f3f3"
+                            border={false}
+                            width={190}
+                            height="31"
+                            type="number"
+                            name="count"
+                            min="0"
+                            value={mainProperties.count}
                             required={true}
                         />
                         <div className="createproduct-price" style={{ width: 100 * 3.5 }}>
@@ -216,12 +228,18 @@ export default function CreateProduct() {
                             name="description"
                             value={mainProperties.description}
                             required={true}
-                        /> */}
+                        />
+                        <select required name="category" onChange={changeMainProperties} id="">
+                            <option selected disabled>Choose Category</option>
+                            {categories.map((item: any) => {
+                                return <option value={item.uuid}>{item.name}</option>
+                            })}
+                        </select>
                         <div {...getRootProps({ className: "dropzone" })}>
                             <input {...getInputProps()} />
                             {isDragAccept && (<p>All photos will be accepted</p>)}
                             {isDragReject && (<p>Some photos will be rejected</p>)}
-                            {!isDragActive && (<p>Drop some photos here ...</p>)}
+                            {!isDragActive && (<p>Drop some photos here(maximum 8) ...</p>)}
                         </div>
                         {photos.flat().map((file: any, index: number) => {
                             return <div className="craeteproduct-photos">
@@ -231,6 +249,8 @@ export default function CreateProduct() {
                                 </div>
                             </div>
                         })}
+                    </div>
+                    <div className="secondary-attributes">
                         <div className="createproduct-secondtitle">Secondary Attributes</div>
                         {attributes && attributes.length > 0
                             ? attributes.map((attribute: any, i: number) => (
@@ -248,8 +268,10 @@ export default function CreateProduct() {
                             ))
                             : ""
                         }
-                        <button disabled={disabledBtn}>Create</button>
-                    </form>
+                    </div>
+                </div>
+                <button disabled={disabledBtn} style={{ alignSelf: "center", marginTop: "40px" }} >Create</button>
+            </form>
         </AdminMainContent>
     )
 }

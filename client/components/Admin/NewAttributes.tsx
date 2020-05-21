@@ -14,21 +14,13 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
     const [successMsg, setSuccessMsg] = useState("")
 
     useEffect(() => {
-        const getSchema = async () => {
-            const atributesFromServer = await axios.get("http://localhost:8000/api/product/schema", { params: { table: "product" } })
-
-            if (atributesFromServer.data) {
-                setAttributes(JSON.parse(atributesFromServer.data.attributes))
-            }
-        }
-
-        getSchema()
-    }, [])
-
-    useEffect(() => {
         const getMacros = async () => {
             const macrosFromServer = await axios.get("http://localhost:8000/api/product/allmacros")
+            const atributesFromServer = await axios.get("http://localhost:8000/api/product/schema", { params: { table: "product" } })
 
+            if (atributesFromServer.data && atributesFromServer.data.attributes.length > 0) {
+                setAttributes(atributesFromServer.data.attributes)
+            }
             setMacros(macrosFromServer.data)
         }
 
@@ -85,7 +77,6 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
         }
     }
 
-    console.log(attributes)
     return (
         <div className="attributes-new">
             <div className="attributes-new-title">Product Attributes</div>
