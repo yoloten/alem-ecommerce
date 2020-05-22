@@ -29,7 +29,7 @@ export class CategoryController {
                     FROM category 
                     WHERE ${!uuid ? "category.index = 0" : `category.uuid = '${uuid}'`}
                 `)
-                
+
             if (uuid) {
                 category[0].children = category[0].children.split(", ")
 
@@ -53,6 +53,26 @@ export class CategoryController {
         }
     }
 
+    @Get("fornavbar/")
+    public async getForNav(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+
+            const category = await connection
+                .query(`
+                    SELECT name, id 
+                    FROM category 
+                    WHERE category.chosen_for_nav = true
+                `)
+
+            res.json(category)
+
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Get("last/")
     public async getLast(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
@@ -64,7 +84,7 @@ export class CategoryController {
                     FROM category 
                     WHERE category.children = ''
                 `)
-                
+
             res.json(category)
 
         } catch (error) {
@@ -93,12 +113,96 @@ export class CategoryController {
         }
     }
 
-    @Get("bygender/")
+    @Get("subcategories/")
     public async oneByGender(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
 
         try {
-            res.json()
+            const { parent } = req.query
+
+            const category = await connection
+                .query(`
+                    SELECT children 
+                    FROM category 
+                    WHERE category.id = $1;
+                    `, [parseInt(parent, 10)])
+
+            const childrenUuids = category[0].children.split(", ")
+            const children: any = []
+            const products: any = []
+
+            for (let i = 0; i < childrenUuids.length; i++) {
+                const child = await connection
+                    .query(`
+                        SELECT * 
+                        FROM category 
+                        WHERE category.uuid = $1;
+                        `, [childrenUuids[i]])
+
+                const sub = await connection
+                    .query(`
+                        SELECT * 
+                        FROM category 
+                        WHERE category.uuid IN (${child[0].children.split(", ").map((item: any) => `'${item}'`).join(", ")});
+                    `)
+
+                if (sub.length > 0) {
+                    const productWithCategory = await connection
+                        .query(`
+                        SELECT 
+                            product.name, 
+                            product.id,
+                            pricing.price,
+                            pricing.discount,
+                            pricing.currency
+                        FROM product 
+                        LEFT JOIN pricing ON product.price_id = pricing.id
+                        WHERE product.category_id IN (${sub.map((subCategory: any) => subCategory.id).join(", ")});
+                    `)
+
+                    if (productWithCategory.length > 0) {
+                        for (let j = 0; j < productWithCategory.length; j++) {
+                            const photos = await connection
+                                .query(`
+                                SELECT *
+                                FROM photo
+                                WHERE photo.product_id = (${productWithCategory[j].id})
+                            `)
+
+                            productWithCategory[j].photos = photos
+                        }
+                    }
+
+                    products.push(productWithCategory)
+                }
+
+                child[0].children = sub
+                children.push(child[0])
+            }
+
+            res.json({ children, products: products.flat() })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
+    @Post("choosefornav/")
+    public async chooseForNav(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const { categories } = req.body
+
+            for (let i = 0; i < categories.length; i++) {
+                await connection
+                    .query(`
+                        UPDATE category
+                        SET chosen_for_nav = true
+                        WHERE uuid = $1
+                    `, [categories[i]])
+            }
+
+            res.json({ success: true })
         } catch (error) {
             res.status(400).json(error)
         }
@@ -122,6 +226,7 @@ export class CategoryController {
                             uuid VARCHAR NOT NULL,
                             created_index INT NOT NULL, 
                             index INT NOT NULL,
+                            chosen_for_nav BOOLEAN DEFAULT FALSE,
                             children VARCHAR
                         );
                     `)
@@ -170,28 +275,6 @@ export class CategoryController {
                 }
 
             }
-            // if (req.body.name) {
-            //     const category = await manager
-            //         .createQueryBuilder(Category, "category")
-            //         .where("category.name = :name", { name: req.body.name })
-            //         .getOne()
-
-            //     if (category) {
-            //         res.status(400).json({ msg: "This category is already exists" })
-            //     } else {
-            //         if (req.body.parent) {
-            //             const parent: any = await manager.getRepository(Category).findOne(parseInt(req.body.parent, 10))
-            //             const child = new Category()
-            //             child.name = req.body.name
-            //             child.parent = parent
-
-            //             await manager.save(child)
-            //         } else {
-            //             const parentNode = new Category()
-            //             parentNode.name = req.body.name
-
-            //             await manager.save(parentNode)
-            //         }
 
             res.status(200).json({ success: true })
             //     }
@@ -211,22 +294,4 @@ export class CategoryController {
             res.status(400).json(error)
         }
     }
-
-    // @Put("update/")
-    // public async update(req: Request, res: Response): Promise<void> {
-    //     const connection = getConnection()
-
-    //     try {
-    //         await getConnection()
-    //             .createQueryBuilder()
-    //             .update(Category)
-    //             .set({ name: req.body.name })
-    //             .where("id = :id", { id: parseInt(req.body.id, 10) })
-    //             .execute()
-
-    //         res.status(200).json({ success: true })
-    //     } catch (error) {
-    //         res.status(400).json(error)
-    //     }
-    // }
 }

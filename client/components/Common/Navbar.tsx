@@ -1,6 +1,8 @@
-import * as Icons from "../../public/icons/_compiled"
-import Link from "next/link"
 import React, { useState, useEffect } from "react"
+import Link from "next/link"
+import axios from "axios"
+
+import * as Icons from "../../public/icons/_compiled"
 
 namespace Nav {
     export interface Props {
@@ -12,7 +14,18 @@ namespace Nav {
 
 export default function Navbar(props: Nav.Props) {
     const [count, setCount]: any = useState(0)
+    const [categories, setCategories] = useState([])
+
     useEffect(() => {
+        const getCategories = async () => {
+            const categoriesFromServer = await axios.get("http://localhost:8000/api/category/fornavbar")
+            
+            if (categoriesFromServer.data && categoriesFromServer.data.length > 0) {
+                setCategories(categoriesFromServer.data)
+            }
+        }
+
+        getCategories()
         setCount(
             Object.keys(sessionStorage).map((key: string) => {
                 if (key !== "id" && key !== "deliveryPrimaryKey") {
@@ -39,15 +52,24 @@ export default function Navbar(props: Nav.Props) {
         <>
             <div className="navbar">
                 <Link href="/">
-                    <a className="logo">älem</a>
+                    <a className="logo-nav">älem</a>
                 </Link>
                 <div className="categories">
-                    <Link href="/p/[category]" as={`/p/men`}>
-                        <a className="men">Men</a>
-                    </Link>
-                    <Link href="/p/[category]" as={`/p/women`}>
-                        <a className="men">Women</a>
-                    </Link>
+                    {categories.map((category: any) => {
+                        return (
+                            <Link
+                                key={category.name}
+                                href={{
+                                    pathname: `/[categories]?id=${category.id}`,
+                                }}
+                                as={`/${category.name}?id=${category.id}`}
+                            >
+                                <a className="men">
+                                    {category.name.slice(0, 1).toUpperCase() + category.name.slice(1).toLowerCase()}
+                                </a>
+                            </Link>
+                        )
+                    })}
                 </div>
                 <div className="actions">
                     <div className="search">
@@ -94,7 +116,7 @@ export default function Navbar(props: Nav.Props) {
                     text-decoration: none;
                     color: #000
                 }
-                .logo{
+                .logo-nav{
                     text-decoration: none;
                     color: #000;
                     font-size: 40px;

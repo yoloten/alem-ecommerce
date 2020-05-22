@@ -36,60 +36,53 @@ export default function CardGrid(props: Grid.Props) {
     const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     return (
-            <div className="grid">
-                {props.content !== " " ? props.content.map((product: any, index: number) => {
-                    let discount: number
-                    let price: number
-                    let currency: string
-                    let primaryKey: number | string
+        <div className="grid">
+            {props.content !== " " ? props.content.map((product: any, index: number) => {
+                let discount: number
+                let price: number
+                let currency: string
+                let id: number | string
 
-                    if (props.fromFilters) {
-                        discount = parseInt(product.discount, 10)
-                        price = parseInt(product.price, 10)
-                        currency = product.currency
-                        primaryKey = product.productPrimaryKey
-                    } else {
-                        discount = parseInt(product.price.discount, 10)
-                        price = parseInt(product.price.price, 10)
-                        currency = product.price.currency
-                        primaryKey = product.primaryKey
-                    }
+                discount = parseFloat(product.discount)
+                price = parseFloat(product.price)
+                currency = product.currency
+                id = product.id
 
-                    return (
-                        <Link href={`/product?primarykey=${primaryKey}`} key={index}>
-                            <div className="grid-card">
-                                <Card
-                                    bgImage={"http://localhost:8000/" + (props.fromFilters
-                                        ? product.path
-                                        : product.photos[0].path)
+                return (
+                    <Link href={`/product?id=${id}`} key={index}>
+                        <div className="grid-card">
+                            <Card
+                                bgImage={"http://localhost:8000/" + (props.fromFilters
+                                    ? product.path
+                                    : product.photos[0].path)
+                                }
+                                height={windowWidth < 1560 ? "220px" : "300px"}
+                                width={windowWidth < 1560 ? "220px" : "300px"}
+                                key={id}
+                                borderRadius="0px"
+                            />
+                            <div className="grid-name">{product.name}</div>
+                            <div >
+                                <div className="grid-prices">
+                                    {discount
+                                        ? <>
+                                            <div className="grid-price">
+                                                {
+                                                    Math.round(
+                                                        (price - price * discount)
+                                                        * 100) / 100 + " " + currency
+                                                }
+                                            </div>
+                                            <div className="grid-oldprice">{price + " " + currency}</div>
+                                        </>
+                                        : <div className="grid-oldprice">{price + " " + currency}</div>
                                     }
-                                    height={windowWidth < 1560 ? "220px" : "300px"}
-                                    width={windowWidth < 1560 ? "220px" : "300px"}
-                                    key={product.primaryKey}
-                                    borderRadius="0px"
-                                />
-                                <div className="grid-name">{product.name}</div>
-                                <div >
-                                    <div className="grid-prices">
-                                        {discount
-                                            ? <>
-                                                <div className="grid-price">
-                                                    {
-                                                        Math.round(
-                                                            (price - price * discount)
-                                                            * 100) / 100 + " " + currency
-                                                    }
-                                                </div>
-                                                <div className="grid-oldprice">{price + " " + currency}</div>
-                                            </>
-                                            : <div className="grid-oldprice">{price + " " + currency}</div>
-                                        }
-                                    </div>
                                 </div>
                             </div>
-                        </Link>
-                    )
-                }) : ""}
-            </div>
+                        </div>
+                    </Link>
+                )
+            }) : ""}
+        </div>
     )
 }

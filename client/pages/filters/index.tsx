@@ -1,14 +1,14 @@
-import * as Icons from "../../../../public/icons/_compiled"
+import * as Icons from "../../public/icons/_compiled"
 import { slide as Menu } from "react-burger-menu"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
-import RangeSlider from "../../../../components/UI/RangeSlider"
-import Pagination from "../../../../components/UI/Pagination"
-import Navbar from "../../../../components/Common/Navbar"
-import CheckBox from "../../../../components/UI/CheckBox"
-import Dropdown from "../../../../components/UI/Dropdown"
+import RangeSlider from "../../components/UI/RangeSlider"
+import Pagination from "../../components/UI/Pagination"
+import Navbar from "../../components/Common/Navbar"
+import CheckBox from "../../components/UI/CheckBox"
+import Dropdown from "../../components/UI/Dropdown"
 
 function index({ dataFromCategory, dataFromProduct, allSizes, allColors, query }: any) {
     const [showSub, setShowSub] = useState("")
