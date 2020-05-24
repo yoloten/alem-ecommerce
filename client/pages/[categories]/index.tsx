@@ -48,7 +48,6 @@ function index({ dataFromCategory, dataFromProduct, query }: any) {
                                                                 id: child.id,
                                                             }
                                                         }}
-                                                        as={`/filters`}
                                                     >
                                                         <a className="category-name">
                                                             {child.name.slice(0, 1).toUpperCase() + child.name.slice(1)}

@@ -52,9 +52,8 @@ export default function CardGrid(props: Grid.Props) {
                     <Link href={`/product?id=${id}`} key={index}>
                         <div className="grid-card">
                             <Card
-                                bgImage={"http://localhost:8000/" + (props.fromFilters
-                                    ? product.path
-                                    : product.photos[0].path)
+                                bgImage={"http://localhost:8000/" + (product.photos && product.photos.length > 0
+                                    && product.photos[0].path)
                                 }
                                 height={windowWidth < 1560 ? "220px" : "300px"}
                                 width={windowWidth < 1560 ? "220px" : "300px"}

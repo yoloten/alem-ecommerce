@@ -19,7 +19,7 @@ function index({ dataFromProduct, query }: any) {
     const [alert, setAlert]: any = useState("")
     const [addedItem, setAddedItem]: any = useState(1)
     const [forNavbar, setForNavbar] = useState("")
-
+    console.log(dataFromProduct)
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
@@ -138,29 +138,49 @@ function index({ dataFromProduct, query }: any) {
                                 {dataFromProduct.name}
                             </div>
                             <div className="details-price-brand">
-                                {parseFloat(dataFromProduct.price.discount)
-                                    && parseFloat(dataFromProduct.price.discount) !== 0
+                                {parseFloat(dataFromProduct.discount)
+                                    && parseFloat(dataFromProduct.discount) !== 0
                                     ? <div className="details-prices">
                                         <div className="details-price">
                                             {
-                                                (parseFloat(dataFromProduct.price.price) - parseFloat(dataFromProduct.price.price) * parseFloat(dataFromProduct.price.discount)).toFixed(2)
+                                                (parseFloat(dataFromProduct.price) - parseFloat(dataFromProduct.price) * parseFloat(dataFromProduct.discount)).toFixed(2)
                                             }
-                                            {dataFromProduct.price.currency}
+                                            {dataFromProduct.currency}
                                         </div>
                                         <div className="details-oldprice">
-                                            {parseFloat(dataFromProduct.price.price).toFixed(2) + " " + dataFromProduct.price.currency}
+                                            {parseFloat(dataFromProduct.price).toFixed(2) + " " + dataFromProduct.currency}
                                         </div>
                                     </div>
                                     : <div className="details-oldprice">
                                         {parseFloat(dataFromProduct.price.price) + " " + dataFromProduct.price.currency}
                                     </div>
                                 }
-                                <div className="details-brand">{dataFromProduct.brand.name}</div>
+                                {/* <div className="details-brand">{dataFromProduct.brand.name}</div> */}
                             </div>
                         </div>
 
                         <div className="details-checkboxes">
-                            <div className="details-colors">
+                            {Object.keys(dataFromProduct).filter((i: any) => i.includes("_name"))
+                                .map((item: any, i: any) => {
+                                    return (
+                                        <div key={i} className="details-colors">
+                                            <div className="details-colors-title">
+                                                {item.slice(0, 1).toUpperCase() + item.slice(1, -5)}
+                                            </div>
+                                            <div className="details-name">
+                                                <div>{dataFromProduct[item]}</div>
+                                                {/* <CheckBox
+                                                    id={i.toString()}
+                                                    name={dataFromProduct[item]}
+                                                   
+                                                    onChange={changeCheckedColor}
+                                                    dataType="color"
+                                                /> */}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            {/* <div className="details-colors">
                                 <div className="details-colors-title">Color:</div>
                                 <div className="details-color-list">
                                     {dataFromProduct.colors.map((child: any, i: number) => (
@@ -191,7 +211,7 @@ function index({ dataFromProduct, query }: any) {
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="details-actions">
                             <div className="details-quantity">
@@ -227,7 +247,7 @@ function index({ dataFromProduct, query }: any) {
                             <div className="details-description-icon"><Icons.Tools /></div>
                             <div className="details-description-title">Material(s) and care</div>
                             <div className="details-material-care">
-                                <div className="details-materials">
+                                {/* <div className="details-materials">
                                     {dataFromProduct.materials.map((item: any) => (
                                         <div key={item.id} className="details-material">{item.name}</div>
                                     ))}
@@ -236,7 +256,7 @@ function index({ dataFromProduct, query }: any) {
                                     {dataFromProduct.care.map((item: any) => (
                                         <div key={item.id} className="details-material">{item.name}</div>
                                     ))}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -251,15 +271,15 @@ function index({ dataFromProduct, query }: any) {
     )
 }
 
-index.getInitialProps = async (ctx: any) => {
+index.getInitialProps = async ({ query }: any) => {
 
-    const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyprimarykey", {
-        params: { primarykey: ctx.query.primarykey },
+    const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyid", {
+        params: { id: query.id },
     })
 
     return {
         dataFromProduct: resFromProduct.data,
-        query: ctx.query,
+        query,
     }
 }
 

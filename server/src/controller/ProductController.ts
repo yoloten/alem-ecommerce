@@ -39,6 +39,53 @@ const upload = multer({ storage, fileFilter: multerFilter })
 @Controller("api/product")
 export class ProductController {
 
+    @Get("onebyid/")
+    public async getOneById(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+
+        try {
+            const { id } = req.query
+            const joins: any = []
+
+            const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
+
+            for (let i = 0; i < schema.attributes.length; i++) {
+                const attribute = schema.attributes[i]
+                
+                const hasColumn = await queryRunner.hasColumn("product",
+                    attribute.type === "Number" || attribute.type === "String" ? attribute.name : attribute.name + "_product_id")
+            
+                if (hasColumn) {
+                    if (attribute.type !== "Number" && attribute.type !== "String") {
+                        joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
+                    }
+                }
+
+            }
+            
+            const product: any = await connection.query(`
+                SELECT * 
+                FROM product
+                LEFT JOIN pricing ON pricing.id = product.price_id
+                ${joins.join(" ")}
+                WHERE product.id = ${id}
+            `)
+            
+            const photos = await connection.query(`
+                    SELECT *
+                    FROM photo
+                    WHERE photo.product_id = ${id}
+                `)
+
+            product[0].photos = photos
+            
+            res.json(product[0])
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Get("schema/")
     public async getSchema(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
@@ -70,23 +117,25 @@ export class ProductController {
     @Get("allfilters/")
     public async getAllFilters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const { table }: any = req.query
 
         try {
-            const schema: any = await connection.getRepository(Schema).findOne({ table })
-            const parsedSchemaFields = JSON.parse(schema.schema)
+            const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
             const allowedToFilter = []
 
-            for (let i = 0; i < parsedSchemaFields.length; i++) {
-                if (parsedSchemaFields[i].allowFilter) {
-                    const fromQuery = await connection
-                        .getRepository(Macro)
-                        .find({
-                            relations: ["options"],
-                            where: { name: parsedSchemaFields[i].type },
-                        })
+            for (let i = 0; i < schema.attributes.length; i++) {
+                if (schema.attributes[i].allowFilter) {
+                    if (schema.attributes[i].type === "Number" || schema.attributes[i].type === "String") {
+                        allowedToFilter.push(schema.attributes[i])
+                    } else {
+                        const fromQuery = await connection
+                            .getRepository(Macro)
+                            .find({
+                                relations: ["options"],
+                                where: { name: schema.attributes[i].type },
+                            })
 
-                    allowedToFilter.push(fromQuery[0])
+                        allowedToFilter.push(fromQuery[0])
+                    }
                 }
             }
 
@@ -129,7 +178,7 @@ export class ProductController {
                     if (!existedMacro) {
                         const macroProps = {
                             label: req.body[i].label,
-                            name: req.body[i].name,
+                            name: req.body[i].name.toLowerCase().split(" ").join("_"),
                             type: req.body[i].type,
                             uuid: req.body[i].uuid,
                             validatorsList: req.body[i].validatorsList.join(", "),
@@ -147,7 +196,7 @@ export class ProductController {
                                 const optionsProps = {
                                     label: option.label,
                                     value: option.value,
-                                    name: option.name,
+                                    name: option.name.toLowerCase().split(" ").join("_"),
                                     meta: option.meta,
                                     uuid: option.uuid,
                                     macro,
@@ -168,7 +217,6 @@ export class ProductController {
                             }
                         })
 
-
                         const updated = await getConnection()
                             .createQueryBuilder()
                             .update(Schema)
@@ -181,7 +229,7 @@ export class ProductController {
                             .update(Macro)
                             .set({
                                 label: req.body[i].label,
-                                name: req.body[i].name,
+                                name: req.body[i].name.toLowerCase().split(" ").join("_"),
                                 type: req.body[i].type,
                                 validators: req.body[i].validators,
                             })
@@ -198,7 +246,7 @@ export class ProductController {
                                     const optionsProps = {
                                         label: option.label,
                                         value: option.value,
-                                        name: option.name,
+                                        name: option.name.split(" ").join("_"),
                                         meta: option.meta,
                                         uuid: option.uuid,
                                         macro: existedMacro,
@@ -215,7 +263,7 @@ export class ProductController {
                                         .set({
                                             label: option.label,
                                             value: option.value,
-                                            name: option.name,
+                                            name: option.name.toLowerCase().split(" ").join("_"),
                                             meta: option.meta,
                                         })
                                         .where("uuid = :uuid", { uuid: option.uuid })
@@ -270,11 +318,20 @@ export class ProductController {
     @Post("filters/")
     public async filters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
-            const { fields, limit, table } = req.body
+            const { fields, limit, category, price, sort } = req.body
             const joins: any[] = []
             const wheres: any[] = []
+            const filteredCategory = category.filter((i: any) => i !== "")
+
+            if (filteredCategory.length > 0) {
+                wheres.push(`product.category_id IN (${filteredCategory.map((item: any) => item).join(", ")})`)
+            }
+
+            joins.push(`LEFT JOIN pricing ON product.price_id = pricing.id`)
+            wheres.push(`(price BETWEEN ${price[0]} AND ${price[1]})`)
 
             if (fields && fields.length > 0) {
                 for (let i = 0; i < fields.length; i++) {
@@ -282,12 +339,12 @@ export class ProductController {
                     const key = Object.keys(fields[i])[0]
 
                     if (key) {
-                        joins.push(`LEFT JOIN ${key}_product_jacket ON ${key}_product_jacket.id = ${table}.${key}_${table}_id`)
+                        const hasColumn = await queryRunner.hasColumn("product", `${key}_product_id`)
 
-                        if (keyAndVal[1]) {
-                            if (keyAndVal[0] === "price") {
-                                wheres.push(`(${keyAndVal[0]}_name BETWEEN ${keyAndVal[1]} AND 20)`)
-                            } else {
+                        if (hasColumn) {
+                            joins.push(`LEFT JOIN ${key}_product ON ${key}_product.id = product.${key}_product_id`)
+
+                            if (keyAndVal[1]) {
                                 wheres.push(`${keyAndVal[0]}_name = '${keyAndVal[1]}'`)
                             }
                         }
@@ -296,12 +353,23 @@ export class ProductController {
             }
 
             const products = await connection.query(`
-                SELECT * FROM ${table}
+                SELECT * FROM product
                 ${joins.join(" ")}
                 ${wheres.length > 0 ? "WHERE" : ""} ${wheres.join(" AND ")}
-                LIMIT ${limit}
-                ;
+                ORDER BY ${sort}
+                LIMIT ${limit};
             `)
+
+            for (let i = 0; i < products.length; i++) {
+                const photos = await connection.query(`
+                    SELECT *
+                    FROM photo
+                    WHERE photo.product_id = ${products[i].id}
+                    limit 1;
+                `)
+
+                products[i].photos = photos
+            }
 
             res.json(products)
         } catch (error) {

@@ -41,7 +41,7 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
             setAttributes([...newAttributes])
         }
         if (e.target.name === "name") {
-            newAttributes[parseInt(e.target.id, 10)].name = e.target.value
+            newAttributes[parseInt(e.target.id, 10)].name = e.target.value.toLowerCase().split(" ").join("_")
             setAttributes([...newAttributes])
         }
         if (e.target.name === "type") {

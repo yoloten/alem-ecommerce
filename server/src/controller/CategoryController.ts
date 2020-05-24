@@ -6,6 +6,60 @@ import { getConnection, getManager } from "typeorm"
 @Controller("api/category")
 export class CategoryController {
 
+    @Get("forfilter/")
+    public async forFilter(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const { id } = req.query
+            let productCount = [{ count: "0"}]
+            let children: any = []
+
+            const category = await connection
+                .query(`
+                    SELECT * 
+                    FROM category 
+                    WHERE category.id = $1;
+                `, [parseInt(id, 10)])
+            
+            if (!category[0].children) {
+                productCount = await connection
+                    .query(`
+                        SELECT 
+                        COUNT(*) 
+                        FROM product 
+                        WHERE product.category_id = $1;
+                    `, [parseInt(id, 10)])
+            } else {
+                const childrenArray = category[0].children.split(", ")
+               
+                children = await connection
+                    .query(`
+                        SELECT * 
+                        FROM category 
+                        WHERE category.uuid IN (${childrenArray.map((item: any) => `'${item}'`).join(", ")});
+                    `)
+                
+                for (let i = 0; i < children.length; i++) {
+                    const childrenProductCount = await connection
+                        .query(`
+                            SELECT 
+                            COUNT(*) 
+                            FROM product 
+                            WHERE product.category_id = $1;
+                        `, [children[i].id])
+                    
+                    productCount.push(childrenProductCount[0])
+                    children[i].count = childrenProductCount[0].count
+                }
+            }
+
+            res.json({ category, productCount, children })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Get("one/")
     public async getOne(req: Request, res: Response): Promise<void> {
         const connection = getConnection()

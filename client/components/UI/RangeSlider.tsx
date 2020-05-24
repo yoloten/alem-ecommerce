@@ -5,22 +5,7 @@ const STEP = 1
 const MIN = 0
 const MAX = 500
 
-function TwoThumbs({price, onChange}: any) {
-    const [windowWidth, setWindowWidth] = useState()
-
-    useEffect(() => {
-        setWindowWidth(window.innerWidth)
-    }, [])
-
-    useEffect(() => {
-        window.addEventListener("resize", updateDimensions)
-
-        return () => {
-            window.removeEventListener("resize", updateDimensions)
-        }
-    }, [])
-
-    const updateDimensions = () => setWindowWidth(window.innerWidth)
+function TwoThumbs({values, onChange, windowWidth, currency, min, max}: any) {
 
     return (
         <div
@@ -54,7 +39,7 @@ function TwoThumbs({price, onChange}: any) {
                         justifyContent: "center",
                     }}
                 >
-                    {price[0] + " USD"}
+                    {currency ? values[0] + " " + currency : values[0]}
                 </div>
                 <div
                     style={{
@@ -68,14 +53,14 @@ function TwoThumbs({price, onChange}: any) {
                         justifyContent: "center",
                     }}
                 >
-                    {price[1] + " USD"}
+                    {currency ? values[1] + " " + currency : values[1]}
                 </div>
             </output>
             <Range
-                values={price}
+                values={values}
                 step={STEP}
-                min={MIN}
-                max={MAX}
+                min={min ? min : MIN}
+                max={max ? max : MAX}
                 onChange={onChange}
                 renderTrack={({ props, children }) => (
                     <div
@@ -95,10 +80,10 @@ function TwoThumbs({price, onChange}: any) {
                                 width: "100%",
                                 borderRadius: "4px",
                                 background: getTrackBackground({
-                                    values: price,
+                                    values,
                                     colors: ["#d9d9d9", "#000", "#d9d9d9"],
-                                    min: MIN,
-                                    max: MAX,
+                                    min: min ? min : MIN,
+                                    max: max ? max : MAX,
                                 }),
                                 alignSelf: "center",
                             }}
