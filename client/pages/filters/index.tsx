@@ -4,11 +4,13 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 
+import { setInputWidth } from "../../utils/setInputWidth"
 import RangeSlider from "../../components/UI/RangeSlider"
 import Pagination from "../../components/UI/Pagination"
 import Navbar from "../../components/Common/Navbar"
 import CheckBox from "../../components/UI/CheckBox"
 import Dropdown from "../../components/UI/Dropdown"
+import Input from "../../components/UI/Input"
 
 function index({ dataFromCategory, dataFromProduct, allFilters, query }: any) {
     const [showSub, setShowSub] = useState("")
@@ -37,17 +39,21 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any) {
             if (newCategory.length === 0) {
                 dataFromCategory.children.map((child: any) => newCategory.push(child.id))
             }
-
-            const productsFromFilters = await axios.post("http://localhost:8000/api/product/filters",
-                {
-                    fields,
-                    limit,
-                    category: newCategory,
-                    price,
-                    sort,
-                })
-
-            setState((prev) => ({ ...prev, products: productsFromFilters.data }))
+            try {
+                console.log("lol")
+                const productsFromFilters = await axios.post("http://localhost:8000/api/product/filters",
+                    {
+                        fields,
+                        limit,
+                        category: newCategory,
+                        price,
+                        sort,
+                    })
+                
+                setState((prev) => ({ ...prev, products: productsFromFilters.data }))
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         postFilter()
@@ -83,7 +89,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any) {
         newCategory[parseInt(id, 10)] = value
         setCategories(newCategory)
     }
-    
+
     const showSort = (
         <div className="sort">
             <div className="sort-item" >
@@ -112,7 +118,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any) {
             </div>
         </div>
     )
-    console.log(fields)
+   
     const showFilters = (
         <div className="filters">
             <div className="filters-categories">
@@ -156,79 +162,71 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any) {
 
             {state.filters.map((filter: any, i: number) => {
                 if (filter.type === "enum") {
-                    return filter.options.map((option: any) => {
-                        return (
-                            <div className="filters-name" key={option.uuid} style={{ marginLeft: "20px" }}>
-                                <CheckBox
-                                    id={i.toString()}
-                                    name={filter.name}
-                                    value={option.value}
-                                    checked={fields[i][filter.name] === option.name ? true : false}
-                                    onChange={onInput}
-                                    width="26px"
-                                    height="26px"
-                                />
-                                <div className="filters-childname">{option.label}</div>
+                    return (
+                        <div className="filters-sizes" key={filter.uuid}>
+                            <div className="filters-categories-header">
+                                {filter.name.slice(0, 1).toUpperCase() + filter.name.slice(1)}
                             </div>
-                        )
-                    })
+                            {
+                                filter.options.map((option: any) => {
+                                    return (
+                                        <div
+                                            className="filters-name"
+                                            key={option.uuid}
+                                            style={{ marginLeft: "20px" }}
+                                        >
+                                            <CheckBox
+                                                id={i.toString()}
+                                                name={filter.name}
+                                                value={option.value}
+                                                checked={fields[i][filter.name] === option.name ? true : false}
+                                                onChange={onInput}
+                                                width="26px"
+                                                height="26px"
+                                            />
+                                            <div className="filters-childname">{option.label}</div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    )
                 }
                 if (filter.type.toLowerCase() === "number") {
-                    return <div key={i} style={{ display: "flex", flexDirection: "column" }}>
-                        <input
+                    return <div key={i} className="filters-sizes">
+                        <Input
                             type="number"
                             name={filter.name}
                             placeholder={filter.label}
                             id={i.toString()}
                             onChange={onInput}
+                            borderRadius="1px"
+                            height={40}
+                            width={windowWidth < 1371 ? 160 : 250}
+                            bgColor="#fff"
+                            border={false}
                             min={filter.validators && filter.validators.min ? filter.validators.min : undefined}
                             max={filter.validators && filter.validators.max ? filter.validators.max : undefined}
                         />
                     </div>
                 }
                 if (filter.type.toLowerCase() === "string") {
-                    return <input
-                        key={i}
-                        name={filter.name}
-                        id={i.toString()}
-                        type="text"
-                        placeholder={filter.label}
-                        onChange={onInput}
-                    />
+                    return <div className="filters-sizes">
+                        <Input
+                            key={i}
+                            name={filter.name}
+                            id={i.toString()}
+                            type="text"
+                            placeholder={filter.label}
+                            onChange={onInput}
+                            bgColor="#fff"
+                            border={false}
+                            height={40}
+                            width={windowWidth < 1371 ? 160 : 250}
+                        />
+                    </div>
                 }
             })}
-            {/* <div className="filters-sizes">
-                <div className="filters-categories-header">Size</div>
-                <div className="filters-sizes-items">
-                    {allSizes.map((child: any, i: number) => (
-                        <div key={i} className="filters-name">
-                            <CheckBox
-                                id={child.id}
-                                name={child.name}
-                                checked={checkedSizes[child.id]}
-                                onChange={changeCheckedSizes}
-                                dataType="size"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div> */}
-            {/* <div className="filters-sizes">
-                <div className="filters-categories-header">Color</div>
-                <div className="filters-sizes-items">
-                    {allColors.map((child: any, i: number) => (
-                        <div key={i} className="filters-name">
-                            <CheckBox
-                                id={child.id}
-                                name={child.name}
-                                checked={checkedColors[child.id]}
-                                onChange={changeCheckedColors}
-                                dataType="color"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div> */}
         </div >
     )
 

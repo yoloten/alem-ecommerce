@@ -305,7 +305,7 @@ export default function AdminMacro(props: any) {
                                                                     ? macros[macroIndex].validators.min
                                                                     : ""
                                                                 }
-                                                            />
+                                                            /> 
                                                         } else {
                                                             return <Input
                                                                 key={i}

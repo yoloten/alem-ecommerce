@@ -115,24 +115,24 @@ export default function index(props: any) {
                     <div className="cart-title">Shopping Cart</div>
                     <Progress status="cart" />
                 </div>
-                <div className="cart-table">
-                    <div className="cart-table-titles">
-                        <div className="cart-table-title cart-title-product">Product</div>
-                        <div className="cart-table-title cart-title-color">Color</div>
-                        <div className="cart-table-title cart-title-color">Size</div>
-                        <div className="cart-table-title cart-title-color">Amount</div>
-                        <div className="cart-table-title cart-title-color">Price</div>
-                        <div className="cart-table-title cart-title-remove"></div>
+                <div className="table">
+                    <div className="table-titles">
+                        <div className="table-title-product">Product</div>
+                        <div className="table-title-attribute">Color</div>
+                        <div className="table-title-attribute">Size</div>
+                        <div className="table-title-attribute">Amount</div>
+                        <div className="table-title-attribute">Price</div>
+                        <div className="table-title-remove"></div>
                     </div>
-                    <div className="cart-table-content">
+                    <div className="table-content">
                         {sessionData.map((product: any, i: number) => {
                             if (product) {
                                 const price = parseFloat(product.price)
                                 const discount = parseFloat(product.discount)
                                 const quantity = parseFloat(product.quantity)
 
-                                return <div key={i} className="cart-product">
-                                    <div className="cart-name">
+                                return <div key={i} className="table-product">
+                                    <div className="table-product-name">
                                         <div
                                             style={{
                                                 backgroundImage: "url(" +
@@ -149,9 +149,9 @@ export default function index(props: any) {
                                         />
                                         {product.name}
                                     </div>
-                                    <div className="cart-color">{product.color}</div>
-                                    <div className="cart-color">{product.size.toUpperCase()}</div>
-                                    <div className="cart-quantity-box">
+                                    <div className="table-product-attribute">{product.color}</div>
+                                    <div className="table-product-attribute">{product.size.toUpperCase()}</div>
+                                    <div className="table-product-quantity-box">
                                         <div className="cart-remove" id={product.key} onClick={decrementAmount}>-</div>
                                         <div className="cart-number">{product.quantity}</div>
                                         <div className="cart-remove" onClick={incrementAmount} id={product.key}>+</div>

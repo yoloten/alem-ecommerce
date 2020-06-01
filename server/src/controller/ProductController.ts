@@ -6,7 +6,9 @@ import { filterMany } from "../utils/filterMany"
 import { Request, Response } from "express"
 import * as multer from "multer"
 import * as sharp from "sharp"
+import * as path from "path"
 import { v4 } from "uuid"
+import * as fs from "fs"
 
 import { Options } from "../entity/Options"
 import { Schema } from "../entity/Schema"
@@ -39,6 +41,39 @@ const upload = multer({ storage, fileFilter: multerFilter })
 @Controller("api/product")
 export class ProductController {
 
+    @Get("list/")
+    public async list(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+
+        try {
+            const { search, sortBy, category } = req.query
+
+            const products = await connection.query(`
+                SELECT 
+                    product.name, 
+                    product.count,
+                    product.id,
+                    product.sold,
+                    pricing.price,
+                    pricing.discount,
+                    pricing.currency,
+                    category.name as category_name
+                FROM product 
+                LEFT JOIN pricing ON product.price_id = pricing.id
+                LEFT JOIN category ON product.category_id = category.id
+                WHERE 
+                    product.name ILIKE '%${search}%'
+                    ${category && "AND category.uuid = " + `'${category}'`}
+                ${sortBy && "ORDER BY " + sortBy};
+            `)
+
+            res.json(products)
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Get("onebyid/")
     public async getOneById(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
@@ -52,26 +87,31 @@ export class ProductController {
 
             for (let i = 0; i < schema.attributes.length; i++) {
                 const attribute = schema.attributes[i]
-                
+
                 const hasColumn = await queryRunner.hasColumn("product",
-                    attribute.type === "Number" || attribute.type === "String" ? attribute.name : attribute.name + "_product_id")
-            
+                    attribute.type === "Number" || attribute.type === "String"
+                        ? attribute.name
+                        : attribute.name + "_product_id",
+                )
+
                 if (hasColumn) {
                     if (attribute.type !== "Number" && attribute.type !== "String") {
                         joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
                     }
                 }
-
             }
-            
+
             const product: any = await connection.query(`
-                SELECT * 
+                SELECT 
+                    category.name as category_name,
+                    *
                 FROM product
+                LEFT JOIN category ON category.id = product.category_id
                 LEFT JOIN pricing ON pricing.id = product.price_id
                 ${joins.join(" ")}
                 WHERE product.id = ${id}
             `)
-            
+
             const photos = await connection.query(`
                     SELECT *
                     FROM photo
@@ -79,7 +119,7 @@ export class ProductController {
                 `)
 
             product[0].photos = photos
-            
+
             res.json(product[0])
         } catch (error) {
             res.status(400).json(error)
@@ -342,9 +382,8 @@ export class ProductController {
                         const hasColumn = await queryRunner.hasColumn("product", `${key}_product_id`)
 
                         if (hasColumn) {
-                            joins.push(`LEFT JOIN ${key}_product ON ${key}_product.id = product.${key}_product_id`)
-
                             if (keyAndVal[1]) {
+                                joins.push(`LEFT JOIN ${key}_product ON ${key}_product.id = product.${key}_product_id`)
                                 wheres.push(`${keyAndVal[0]}_name = '${keyAndVal[1]}'`)
                             }
                         }
@@ -352,26 +391,31 @@ export class ProductController {
                 }
             }
 
-            const products = await connection.query(`
-                SELECT * FROM product
-                ${joins.join(" ")}
-                ${wheres.length > 0 ? "WHERE" : ""} ${wheres.join(" AND ")}
-                ORDER BY ${sort}
-                LIMIT ${limit};
-            `)
-
-            for (let i = 0; i < products.length; i++) {
-                const photos = await connection.query(`
-                    SELECT *
-                    FROM photo
-                    WHERE photo.product_id = ${products[i].id}
-                    limit 1;
+            try {
+                const products = await connection.query(`
+                    SELECT * FROM product
+                    ${joins.join(" ")}
+                    ${wheres.length > 0 ? "WHERE" : ""} ${wheres.join(" AND ")}
+                    ORDER BY ${sort}
+                    LIMIT ${limit};
                 `)
 
-                products[i].photos = photos
+                // console.log(products.length)
+                res.json(products)
+            } catch (error) {
+                console.log(error)
             }
 
-            res.json(products)
+            // for (let i = 0; i < products.length; i++) {
+            //     const photos = await connection.query(`
+            //         SELECT *
+            //         FROM photo
+            //         WHERE photo.product_id = ${products[i].id}
+            //         limit 1;
+            //     `)
+
+            //     products[i].photos = photos
+            // }
         } catch (error) {
             res.status(400).json(error)
         }
@@ -623,56 +667,56 @@ export class ProductController {
         }
     }
 
-    // @Post("setnewprice/:id")
-    // public async setNewPrice(req: Request, res: Response): Promise<void> {
-    //     const connection = getConnection()
+    @Delete("deleteone/")
+    public async deleteOne(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
 
-    //     try {
-    //         const product = await connection
-    //             .getRepository(Product)
-    //             .find({
-    //                 join: {
-    //                     alias: "product",
-    //                     leftJoinAndSelect: {
-    //                         price: "product.price",
-    //                     },
-    //                 },
-    //                 where: { id: req.params.id },
-    //             })
+        try {
+            const { id } = req.body
 
-    //         const priceProps = {
-    //             price: req.body.price,
-    //             currency: req.body.currency,
-    //             discount: req.body.discount,
-    //             product: product[0],
-    //         }
-    //         const price = new Price()
-    //         Object.assign(price, priceProps)
+            const deletedPhotos = await connection.query(`
+                SELECT filename FROM photo
+                WHERE photo.product_id = ${id}
+            `)
 
-    //         await connection.manager.save(price)
+            const deleteProduct = await connection.query(`
+                DELETE FROM product
+                WHERE id = ${id}
+                RETURNING *
+            `)
 
-    //         res.status(200).json({ success: true })
-    //     } catch (error) {
-    //         res.status(400).json(error)
-    //     }
-    // }
+            Object.keys(deleteProduct[0][0]).map(async (relation: any) => {
+                if (relation.slice(-3) === "_id" && relation.slice(0, -3) !== "category") {
+                    let price_id
 
-    // @Delete("deleteone/:id")
-    // public async deleteOne(req: Request, res: Response): Promise<void> {
-    //     const connection = getConnection()
+                    if (relation.slice(0, -3) === "price") {
+                        price_id = "pricing"
+                    }
 
-    //     try {
-    //         await connection
-    //             .createQueryBuilder()
-    //             .delete()
-    //             .from(Product)
-    //             .where("id = :id", { id: req.params.id })
-    //             .execute()
+                    await connection.query(`
+                        DELETE FROM ${relation.slice(0, -3) === "price" ? price_id : relation.slice(0, -3)}
+                        WHERE id = ${deleteProduct[0][0][relation]}
+                    `)
+                }
+            })
 
-    //         res.status(200).json({ succuss: true })
+            fs.readdir("public", (err, files) => {
+                if (err) { throw err }
 
-    //     } catch (error) {
-    //         res.status(400).json(error)
-    //     }
-    // }
+                for (const file of files) {
+                    deletedPhotos.map((item: any) => {
+                        if (item.filename === file) {
+                            fs.unlink(path.join("public", file), (error: any) => {
+                                if (error) { throw error }
+                            })
+                        }
+                    })
+                }
+            })
+
+            res.json({ success: true })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
 }

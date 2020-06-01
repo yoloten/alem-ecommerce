@@ -5,7 +5,29 @@ export default function Dropdown(props: any) {
     const [open, setOpen] = useState(false)
 
     const onOpen = () => setOpen(!open)
-    
+
+    const showOptions = () => {
+        if (props.macros) {
+            return props.macros.map((opt: any, index: number) => (
+                <option
+                    key={index}
+                    value={JSON.stringify(opt)}
+                >
+                    {opt.name}
+                </option>
+            ))
+        } else {
+            return props.options.map((opt: any, index: number) => (
+                <option
+                    key={index}
+                    value={props.name === "category" ? opt.uuid : opt.value}
+                >
+                    {props.name === "category" ? opt.name : opt.label}
+                </option>
+            ))
+        }
+    }
+
     return (
         <>
             <div className={props.className}>
@@ -23,19 +45,22 @@ export default function Dropdown(props: any) {
                         ))
                         : ""
                     }
-                    {props[props.macros ? "macros" : "options"].map((opt: any, index: number) => (
-                        <option
-                            key={index}
-                            value={props.macros ? JSON.stringify(opt) : opt.value}
-                        >
-                            {props.macros ? opt.name : opt.value}
-                        </option>
-                    ))}
+                    {showOptions()}
                 </select>
                 <div className="arrow">
                     <div className="dropdown-text">
-                        <div className="placeholder">{props.placeholder ? props.placeholder + "*" : ""}</div>
-                        <div className="val">{props.value}</div>
+                        <div className="placeholder">
+                            {props.placeholder && props.required ? props.placeholder + "*" : ""}
+                        </div>
+                        <div className="val">
+                            {props.name === "category"
+                                ? props.options.map((opt: any, i: number) => {
+                                    if (opt.uuid === props.value) {
+                                        return opt.name
+                                    }
+                                })
+                                : props.value}
+                        </div>
                     </div>
                     <div className="icon">{open ? <Icons.ArrowUp /> : <Icons.ArrowDown />}</div>
                 </div>
@@ -63,11 +88,11 @@ export default function Dropdown(props: any) {
                 .arrow{
                     width: ${props.width - 40}px;
                     height: ${props.height ? props.height + "px" : "40px"};
-                    border: ${props.border ? "1px solid #d9d9d9" : "none"};
+                    border: ${props.border ? "1px solid " + `${props.borderColor ? props.borderColor : "#d9d9d9"}` : "none"};
                     border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     cursor: pointer;
                     background: ${props.bgColor ? props.bgColor : "#fff"};
-                    padding-left: 20px;
+                    padding-left: 25px;
                     padding-right: 20px;
                     z-index: -1;
                     outline: none;

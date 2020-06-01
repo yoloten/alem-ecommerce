@@ -18,7 +18,11 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/product": [
+    "/admin/editproduct": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/admin/productslist": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

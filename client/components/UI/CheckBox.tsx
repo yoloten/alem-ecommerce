@@ -20,8 +20,7 @@ const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, widt
     const counter = () => {
         setClick(click + 1)
     }
-
-    console.log()
+    
     return (
         <>
             <input

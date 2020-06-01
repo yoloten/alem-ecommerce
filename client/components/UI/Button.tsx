@@ -15,7 +15,7 @@ namespace Btn {
         focusable?: boolean
         className?: string
         fontSize?: string
-        content?: string
+        content?: string | React.ReactNode
         height?: string
         color?: string
         width?: string

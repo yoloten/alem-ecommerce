@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { useRouter } from "next/router"
 import axios from "axios"
 
-import { setInputWidth } from "../../utils/setInputWidth"
 import AdminMainContent from "./AdminUI/AdminMainContent"
-import AdminSidebar from "./AdminUI/AdminSidebar"
-import AdminNav from "./AdminUI/AdminNav"
+import * as Icons from "../../public/icons/_compiled"
 import AdminInput from "./AdminInput"
 import Dropdown from "../UI/Dropdown"
 import Button from "../UI/Button"
@@ -33,27 +32,47 @@ export default function CreateProduct() {
             setPhotos([...photos, acceptedFiles])
         },
     })
+    const router = useRouter()
+    const { pathname, query } = router
 
     useEffect(() => {
         const getDataFromServer = async () => {
-            const newSchema = await axios.get("http://localhost:8000/api/product/schema", {
+            const schema = await axios.get("http://localhost:8000/api/product/schema", {
                 params: { table: "product" },
             })
             const getCategory = await axios.get("http://localhost:8000/api/category/last")
 
-            if (newSchema.data && newSchema.data.attributes.length > 0) {
-                setAttributes(newSchema.data.attributes)
+            if (schema.data && schema.data.attributes.length > 0) {
+                setAttributes(schema.data.attributes)
 
-                const arr = []
-                const errArr = []
+                if (pathname === "/admin/editproduct" && query.id) {
+                    const product: any = await axios.get("http://localhost:8000/api/product/onebyid", {
+                        params: { id: query.id },
+                    })
 
-                for (let i = 0; i < newSchema.data.attributes.length; i++) {
-                    arr.push({})
-                    errArr.push("")
+                    if (product.data) {
+                        schema.data.attributes.map((attr: any, i: number) => {
+                            return Object.keys(product.data).map((key: string) => {
+                                if (attr[key]) {
+                                   // setFields([...fields, {attr[key] : product.data[key]})
+                                } else if (attr[key.slice(0, -5)]) {
+                                   //console.log(attr[key.slice(0, -5)])
+                                }
+                            })
+                        })
+                    }
+                } else {
+                    const arr = []
+                    const errArr = []
+
+                    for (let i = 0; i < schema.data.attributes.length; i++) {
+                        arr.push({})
+                        errArr.push("")
+                    }
+
+                    setFields(arr)
+                    setErrors(errArr)
                 }
-
-                setFields(arr)
-                setErrors(errArr)
             }
             if (getCategory.data && getCategory.data.length > 0) {
                 setCategries(getCategory.data)
@@ -62,7 +81,7 @@ export default function CreateProduct() {
 
         getDataFromServer()
     }, [])
-
+    console.log(attributes)
     const deletePhoto = (index: number) => {
         const newPhotos = [...photos]
         newPhotos.splice(index, 1)
@@ -127,53 +146,108 @@ export default function CreateProduct() {
 
     return (
         <AdminMainContent>
-            <div className="admin-title">Create Product</div>
-            <div className="admin-subtitle">
-                On this page you can create a product from properties you defined
+            <div className="admin-right-side">
+                <div className="admin-title">Create Product</div>
+                <div className="admin-subtitle">
+                    On this page you can create a product from properties you defined
                     </div>
 
-            <form className="admin-form createproduct-flex" action="submit" onSubmit={submit}>
-                <div className="createproduct-attributes">
-                    <div className="main-attributes">
-                        <div className="createproduct-secondtitle">Main Attributes</div>
-                        <Input
-                            className="createproduct-input"
-                            onChange={changeMainProperties}
-                            placeholder="Name"
-                            borderRadius="6px"
-                            bgColor="#f3f3f3"
-                            border={false}
-                            width={200}
-                            height="31"
-                            type="text"
-                            name="name"
-                            value={mainProperties.name}
-                            required={true}
-                        />
-                        <Input
-                            className="createproduct-input"
-                            onChange={changeMainProperties}
-                            placeholder="Count"
-                            borderRadius="6px"
-                            bgColor="#f3f3f3"
-                            border={false}
-                            width={190}
-                            height="31"
-                            type="number"
-                            name="count"
-                            min="0"
-                            value={mainProperties.count}
-                            required={true}
-                        />
-                        <div className="createproduct-price" style={{ width: 100 * 3.5 }}>
+                <form className="admin-form" action="submit" onSubmit={submit}>
+                    <div className="createproduct-attributes">
+                        <div className="main-attributes">
+                            <div className="createproduct-secondtitle">Main Attributes</div>
+                            <div className="createproduct-dropzone-photolist">
+                                <div {...getRootProps({ className: "dropzone" })}>
+                                    <input {...getInputProps()} />
+                                    <Icons.AddImage />
+                                </div>
+                                <div className="photos-list">
+                                    {photos.length === 0
+                                        ? <div className="dropzone-text">Maximum 8 photos are allowed</div>
+                                        : photos.flat().map((file: any, index: number) => {
+                                            return <div className="craeteproduct-photos">
+                                                <img
+                                                    className="createproduct-img"
+                                                    height="40" width="40"
+                                                    src={URL.createObjectURL(file)} alt=""
+                                                />
+                                                <div
+                                                    className="photo-delete"
+                                                    id={index.toString()}
+                                                    onClick={() => deletePhoto(index)}
+                                                >
+                                                    <Icons.Trash style={{ zIndex: "-1", position: "relative" }} />
+                                                </div>
+                                            </div>
+                                        })}
+                                </div>
+                            </div>
                             <Input
                                 className="createproduct-input"
                                 onChange={changeMainProperties}
+                                placeholder="Name"
+                                borderRadius="3px"
+                                bgColor="#fff"
+                                border={true}
+                                width={220}
+                                height="31"
+                                type="text"
+                                name="name"
+                                value={mainProperties.name}
+                                required={true}
+                            />
+                            <Dropdown
+                                onChange={changeMainProperties}
+                                className="createproduct-input"
+                                value={mainProperties.category}
+                                options={categories}
+                                borderRadius="3px"
+                                borderColor="#f1f1f1"
+                                bgColor="#fff"
+                                border={true}
+                                width={220 + 30}
+                                height="40"
+                                name="category"
+                                placeholder="Category"
+                                required={true}
+                            />
+                            <Input
+                                onChange={changeMainProperties}
+                                className="createproduct-input"
+                                placeholder="Description"
+                                borderRadius="3px"
+                                bgColor="#fff"
+                                border={true}
+                                width={220}
+                                height="31"
+                                type="text"
+                                name="description"
+                                value={mainProperties.description}
+                                required={true}
+                            />
+                            <Input
+                                onChange={changeMainProperties}
+                                className="createproduct-input"
+                                placeholder="Count"
+                                borderRadius="3px"
+                                bgColor="#fff"
+                                border={true}
+                                width={210}
+                                height="31"
+                                type="number"
+                                name="count"
+                                min="0"
+                                value={mainProperties.count}
+                                required={true}
+                            />
+                            <Input
+                                onChange={changeMainProperties}
+                                className="createproduct-input"
                                 placeholder="Price"
-                                borderRadius="6px"
-                                bgColor="#f3f3f3"
-                                border={false}
-                                width={65}
+                                borderRadius="3px"
+                                bgColor="#fff"
+                                border={true}
+                                width={210}
                                 height="31"
                                 type="number"
                                 name="price"
@@ -183,18 +257,17 @@ export default function CreateProduct() {
                                 required={true}
                             />
                             <Input
-                                className="createproduct-input"
                                 onChange={changeMainProperties}
+                                className="createproduct-input"
                                 placeholder="Discount"
-                                borderRadius="6px"
-                                bgColor="#f3f3f3"
-                                border={false}
-                                width={65}
+                                borderRadius="3px"
+                                bgColor="#fff"
+                                border={true}
+                                width={210}
                                 height="31"
                                 type="number"
                                 name="discount"
                                 min="0"
-                                max="1"
                                 step="0.01"
                                 value={mainProperties.discount}
                                 required={true}
@@ -204,74 +277,79 @@ export default function CreateProduct() {
                                 className="createproduct-input"
                                 value={mainProperties.currency}
                                 options={[{ value: "USD" }, { value: "RUB" }]}
-                                borderRadius="6px"
-                                bgColor="#f3f3f3"
-                                border={false}
-                                width={65 + 30}
+                                borderRadius="3px"
+                                borderColor="#f1f1f1"
+                                bgColor="#fff"
+                                border={true}
+                                width={220 + 30}
                                 height="40"
                                 name="currency"
                                 placeholder="Currency"
                                 required={true}
                             />
                         </div>
-
-                        <Input
-                            className="createproduct-input"
-                            onChange={changeMainProperties}
-                            placeholder="Description"
-                            borderRadius="6px"
-                            bgColor="#f3f3f3"
-                            border={false}
-                            width={200}
-                            height="31"
-                            type="text"
-                            name="description"
-                            value={mainProperties.description}
-                            required={true}
-                        />
-                        <select required name="category" onChange={changeMainProperties} id="">
-                            <option selected disabled>Choose Category</option>
-                            {categories.map((item: any) => {
-                                return <option value={item.uuid}>{item.name}</option>
-                            })}
-                        </select>
-                        <div {...getRootProps({ className: "dropzone" })}>
-                            <input {...getInputProps()} />
-                            {isDragAccept && (<p>All photos will be accepted</p>)}
-                            {isDragReject && (<p>Some photos will be rejected</p>)}
-                            {!isDragActive && (<p>Drop some photos here(maximum 8) ...</p>)}
+                        <div className="secondary-attributes">
+                            <div className="createproduct-secondtitle">Your Custom Attributes</div>
+                            {attributes && attributes.length > 0
+                                ? attributes.map((attribute: any, i: number) => (
+                                    <>
+                                        <AdminInput
+                                            key={i}
+                                            id={i}
+                                            attribute={attribute}
+                                            onChangeInputField={onChangeInputField}
+                                            val={fields[i]}
+                                        />
+                                        {errors.length > 0 ? errors.map((error: any, index: number) => {
+                                            return index === i ? <div key={index}>{error}</div> : ""
+                                        }) : ""}
+                                    </>
+                                ))
+                                : ""
+                            }
                         </div>
-                        {photos.flat().map((file: any, index: number) => {
-                            return <div className="craeteproduct-photos">
-                                <img height="50" width="50" src={URL.createObjectURL(file)} alt="" />
-                                <div className="delete" id={index.toString()} onClick={() => deletePhoto(index)}>
-                                    delete
-                                </div>
-                            </div>
-                        })}
                     </div>
-                    <div className="secondary-attributes">
-                        <div className="createproduct-secondtitle">Secondary Attributes</div>
-                        {attributes && attributes.length > 0
-                            ? attributes.map((attribute: any, i: number) => (
-                                <>
-                                    <AdminInput
-                                        key={i}
-                                        id={i}
-                                        attribute={attribute}
-                                        onChangeInputField={onChangeInputField}
-                                    />
-                                    {errors.length > 0 ? errors.map((error: any, index: number) => {
-                                        return index === i ? <div key={index}>{error}</div> : ""
-                                    }) : ""}
-                                </>
-                            ))
-                            : ""
-                        }
-                    </div>
-                </div>
-                <button disabled={disabledBtn} style={{ alignSelf: "center", marginTop: "40px" }} >Create</button>
-            </form>
+                    <Button
+                        borderColor="#eee"
+                        border={true}
+                        backgroundColor="transparent"
+                        content="CREATE"
+                        color="#92b967"
+                        width="150px"
+                        fontSize="13px"
+                        customStyleObject={{ alignSelf: "center", marginTop: "20px", marginBottom: "20px" }}
+                    />
+                    {/* <button disabled={disabledBtn} style={{ alignSelf: "center", marginTop: "40px" }} >
+                    Create
+                    </button> */}
+                </form>
+            </div>
+            <div className="admin-left-side">
+                <div className="admin-title">Info</div>
+                <div className="admin-subtitle">Product creation explanation</div>
+                <ul>
+                    <li className="admin-li">
+                        <div className="admin-text">
+                            <span className="admin-bold-span">Main Attributes </span>
+                        </div>
+                        <div className="admin-text">
+                            These attributes are common for all product types you will create.
+                            They are all required to fill.
+                        </div>
+                    </li>
+                    <li className="admin-li">
+                        <div className="admin-text">
+                            <span className="admin-bold-span">Custom Attributes</span>
+                        </div>
+                        <div className="admin-text">
+                            In that section of inputs will be placed all atttributes you
+                            created in the "Edit Attributes".
+                            Those that you marked as required will be with *.
+                            Enums will be displayed as select element with options
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </AdminMainContent>
     )
 }

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
-export default function AdminInput({ attribute, onChangeInputField, id }: any) {
+import Dropdown from "../UI/Dropdown"
+import Input from "../UI/Input"
+
+// TODO: ADD MASKS, WRITE NORMAL VALIDATIONS AND DEAL WITH ENUMS
+
+export default function AdminInput({ attribute, onChangeInputField, id, val }: any) {
     const [macro, setState]: any = useState({})
 
     useEffect(() => {
         const getMacro = async () => {
-            const macroFromServer = await axios.get("http://localhost:8000/api/product/macro", { 
+            const macroFromServer = await axios.get("http://localhost:8000/api/product/macro", {
                 params: { name: attribute.type },
             })
 
@@ -17,7 +22,7 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
             getMacro()
         }
     }, [attribute])
-    
+
     const changeInput = (e: any) => {
         const { value, id, name, type } = e.target
         const { validators }: any = macro
@@ -37,22 +42,22 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
             }
             if (type === "text") {
                 if (value.length < parseInt(validators.minLength, 10)) {
-                    error = `Write at least ${validators.minLength} characters` 
+                    error = `Write at least ${validators.minLength} characters`
                 }
                 if (value.length > parseInt(validators.maxLength, 10)) {
-                    error = `Write less than ${validators.minLength} characters` 
+                    error = `Write less than ${validators.minLength} characters`
                 }
                 if (validators.pattern) {
                     const newRegExp = new RegExp(validators.pattern)
-    
+
                     if (!newRegExp.test(value)) {
-                       error = "Please follow the pattern" 
+                        error = "Please follow the pattern"
                     }
                 }
                 if (validators.required && !value) {
                     error = "This field is required"
                 }
-                
+
             }
         }
 
@@ -64,56 +69,73 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
 
         if (attribute.type === "string") {
             return (
-                <input
+                <Input
+                    className="createproduct-input"
                     name={attribute.name}
                     type="text"
                     onChange={changeInput}
                     placeholder={attribute.label}
                     required={true}
+                    borderRadius="3px"
+                    bgColor="#fff"
+                    border={true}
+                    width={220}
+                    height="31"
                     id={id}
                 />
             )
         }
         if (attribute.type === "number") {
             return (
-                <input
+                <Input
+                    className="createproduct-input"
                     type="number"
                     name={attribute.name}
                     onChange={changeInput}
                     placeholder={attribute.label}
                     required={true}
+                    borderRadius="3px"
+                    bgColor="#fff"
+                    border={true}
+                    width={210}
+                    height="31"
                     id={id}
                 />
             )
         }
-
+        
         if (macro) {
             if (macro.type === "enum") {
                 return (
-                    <select
-                        required={macro.validators.required}
-                        name={attribute.name} id={id}
+                    <Dropdown
                         onChange={changeInput}
-                    >
-                        <option value="" disabled selected>
-                            {attribute.label}
-                        </option>
-                        {macro.options.map((option: any, index: any) => (
-                            <option
-                                key={index}
-                                value={option.value}
-                            >
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
+                        className="createproduct-input"
+                        value={val[macro.name] && val[macro.name].length > 0 && val[macro.name].slice(-1)}
+                        options={macro.options}
+                        borderRadius="3px"
+                        borderColor="#f1f1f1"
+                        bgColor="#fff"
+                        border={true}
+                        width={220 + 30}
+                        height="40"
+                        name={attribute.name} 
+                        id={id}
+                        placeholder={attribute.label}
+                        required={true}
+                    />
                 )
             }
             if (macro.type === "string") {
                 return (
-                    <input
+                    <Input
+                        className="createproduct-input"
                         required={macro.validators.required}
                         name={attribute.name}
+                        borderRadius="3px"
+                        bgColor="#fff"
+                        border={true}
+                        width={220}
+                        height="31"
                         type="text"
                         onChange={changeInput}
                         placeholder={macro.validators.mask ? macro.validators.mask : attribute.label}
@@ -124,7 +146,13 @@ export default function AdminInput({ attribute, onChangeInputField, id }: any) {
 
             if (macro.type === "number") {
                 return (
-                    <input
+                    <Input
+                        className="createproduct-input"
+                        borderRadius="3px"
+                        bgColor="#fff"
+                        border={true}
+                        width={210}
+                        height="31"
                         required={macro.validators.required}
                         type="number"
                         name={attribute.name}

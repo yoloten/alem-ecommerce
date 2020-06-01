@@ -104,9 +104,8 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                     name="type"
                                     placeholder="Type"
                                     required={true}
-                                />
+                                /> 
                                 <Input
-                                    className="attribute-input"
                                     onChange={changeAttributes}
                                     windowWidth={windowWidth}
                                     id={index.toString()}
@@ -122,7 +121,6 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any) {
                                     required={true}
                                 />
                                 <Input
-                                    className="attribute-input"
                                     onChange={changeAttributes}
                                     windowWidth={windowWidth}
                                     id={index.toString()}

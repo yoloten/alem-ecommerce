@@ -2,7 +2,7 @@ import * as Icons from "../../public/icons/_compiled"
 import React from "react"
 
 export default function Input(props: any) {
-    
+
     return (
         <>
             <div className={props.className}>
@@ -19,8 +19,9 @@ export default function Input(props: any) {
                     value={props.value}
                 />
                 <div className="arrow">
+                    {props.icon && <div className="icon">{props.icon}</div>}
                     <div className="dropdown-text">
-                        <div className="placeholder">{props.placeholder + `${props.required ? "*" : ""}`}</div>
+                        <div className="placeholder">{props.placeholder && props.placeholder + `${props.required ? "*" : ""}`}</div>
                     </div>
                     {/* {props.type === "number"
                         ? <div className="buttons">
@@ -36,6 +37,15 @@ export default function Input(props: any) {
                 </div>
             </div>
             <style jsx>{`
+                .icon {
+                    
+                    margin-left: -20px;
+                    align-self: center;
+                    height: ${props.height ? props.height + "px" : "45px"};
+                    display: flex;
+                    align-items: center;
+                    padding-top: 5px
+                }
                 .dropdown-text {
                     height: 100%;  
                 }
@@ -66,17 +76,17 @@ export default function Input(props: any) {
                     appearance: none;
                     outline: none;
                     position: absolute;
-                    padding-left: 20px;
+                    padding-left: 25px;
                     padding-top: 8px
                 }
                
                 .arrow{
                     width: ${props.type === "number" ? props.width : parseInt(props.width, 10) - 10}px;
                     height: ${props.height ? parseInt(props.height, 10) + 9 + "px" : "45px"};
-                    border: ${props.border ? "1px solid #f1f1f1" : "none"};
+                    border: ${props.border ? `1px solid ${props.borderColor ? props.borderColor : "#f1f1f1"}` : "none"};
                     border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     background: ${props.bgColor ? props.bgColor : "#fff"};
-                    padding-left: 20px;
+                    padding-left: 25px;
                     padding-right: 20px;
                     z-index: -1;
                     outline: none;

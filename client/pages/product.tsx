@@ -81,7 +81,7 @@ function index({ dataFromProduct, query }: any) {
     }
 
     const incrementAmount = () => setAmount(amount + 1)
-
+  
     return (
         <div>
             <Navbar data={forNavbar} />
@@ -128,10 +128,10 @@ function index({ dataFromProduct, query }: any) {
 
                         <div className="details-product">
                             <div className="details-sale-id">
-                                <div className={`${dataFromProduct.price.discount ? "sale" : ""}`}>
-                                    {dataFromProduct.price.discount ? "SALE" : ""}
+                                <div className={`${parseFloat(dataFromProduct.discount) > 0 ? "sale" : ""}`}>
+                                    {parseFloat(dataFromProduct.discount) > 0 ? "SALE" : ""}
                                 </div>
-                                <div className="details-id">{`Product ID: ${dataFromProduct.primaryKey}`}</div>
+                                <div className="details-id">{`Product ID: ${dataFromProduct.id}`}</div>
                             </div>
 
                             <div className="details-product-name">

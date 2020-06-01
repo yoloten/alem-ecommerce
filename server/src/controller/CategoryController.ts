@@ -12,8 +12,8 @@ export class CategoryController {
 
         try {
             const { id } = req.query
-            let productCount = [{ count: "0"}]
             let children: any = []
+            let productCount = [{ count: "0" }]
 
             const category = await connection
                 .query(`
@@ -21,8 +21,8 @@ export class CategoryController {
                     FROM category 
                     WHERE category.id = $1;
                 `, [parseInt(id, 10)])
-            
-            if (!category[0].children) {
+
+            if (category[0].children.length === 0) {
                 productCount = await connection
                     .query(`
                         SELECT 
@@ -31,15 +31,13 @@ export class CategoryController {
                         WHERE product.category_id = $1;
                     `, [parseInt(id, 10)])
             } else {
-                const childrenArray = category[0].children.split(", ")
-               
                 children = await connection
                     .query(`
                         SELECT * 
                         FROM category 
-                        WHERE category.uuid IN (${childrenArray.map((item: any) => `'${item}'`).join(", ")});
+                        WHERE category.uuid IN (${category[0].children.map((item: any) => `'${item}'`).join(", ")});
                     `)
-                
+
                 for (let i = 0; i < children.length; i++) {
                     const childrenProductCount = await connection
                         .query(`
@@ -48,7 +46,7 @@ export class CategoryController {
                             FROM product 
                             WHERE product.category_id = $1;
                         `, [children[i].id])
-                    
+
                     productCount.push(childrenProductCount[0])
                     children[i].count = childrenProductCount[0].count
                 }
@@ -136,9 +134,9 @@ export class CategoryController {
                 .query(`
                     SELECT * 
                     FROM category 
-                    WHERE category.children = ''
+                    WHERE category.children = '{}'
                 `)
-
+            
             res.json(category)
 
         } catch (error) {
@@ -153,56 +151,53 @@ export class CategoryController {
         try {
             const allCategories = await connection.query(`SELECT * FROM category ORDER BY category.index ASC`)
 
-            for (let i = 0; i < allCategories.length; i++) {
-                if (allCategories[i].children) {
-                    allCategories[i].children = allCategories[i].children.split(", ")
-                } else {
-                    allCategories[i].children = []
-                }
-            }
-
             res.json(allCategories)
         } catch (error) {
             res.status(400).json(error)
         }
     }
 
-    @Get("subcategories/")
-    public async oneByGender(req: Request, res: Response): Promise<void> {
+    @Get("subcategoriesandallproducts/")
+    public async subCategories(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
             const { parent } = req.query
+            const children: any = []
+            const products: any = []
 
             const category = await connection
                 .query(`
-                    SELECT children 
+                    SELECT *
                     FROM category 
                     WHERE category.id = $1;
                     `, [parseInt(parent, 10)])
 
-            const childrenUuids = category[0].children.split(", ")
-            const children: any = []
-            const products: any = []
-
-            for (let i = 0; i < childrenUuids.length; i++) {
+            for (let i = 0; i < category[0].children.length; i++) {
                 const child = await connection
                     .query(`
                         SELECT * 
                         FROM category 
                         WHERE category.uuid = $1;
-                        `, [childrenUuids[i]])
+                        `, [category[0].children[i]])
 
-                const sub = await connection
+                children.push(child[0])
+            }
+
+            const childrenForAllProducts = await connection
+                .query(`
+                    SELECT id, parents
+                    FROM category 
+                    WHERE ('${category[0].uuid}')=ANY(category.parents);
+                `)
+
+            const existedTable = await queryRunner.getTable("product")
+
+            if (childrenForAllProducts.length > 0 && existedTable) {
+
+                const productWithCategory = await connection
                     .query(`
-                        SELECT * 
-                        FROM category 
-                        WHERE category.uuid IN (${child[0].children.split(", ").map((item: any) => `'${item}'`).join(", ")});
-                    `)
-
-                if (sub.length > 0) {
-                    const productWithCategory = await connection
-                        .query(`
                         SELECT 
                             product.name, 
                             product.id,
@@ -211,30 +206,26 @@ export class CategoryController {
                             pricing.currency
                         FROM product 
                         LEFT JOIN pricing ON product.price_id = pricing.id
-                        WHERE product.category_id IN (${sub.map((subCategory: any) => subCategory.id).join(", ")});
+                        WHERE product.category_id IN (${childrenForAllProducts.map((subCategory: any) => subCategory.id).join(", ")});
                     `)
 
-                    if (productWithCategory.length > 0) {
-                        for (let j = 0; j < productWithCategory.length; j++) {
-                            const photos = await connection
-                                .query(`
+                if (productWithCategory && productWithCategory.length > 0) {
+                    for (let j = 0; j < productWithCategory.length; j++) {
+                        const photos = await connection
+                            .query(`
                                 SELECT *
                                 FROM photo
                                 WHERE photo.product_id = (${productWithCategory[j].id})
                             `)
 
-                            productWithCategory[j].photos = photos
-                        }
+                        productWithCategory[j].photos = photos
                     }
-
-                    products.push(productWithCategory)
                 }
 
-                child[0].children = sub
-                children.push(child[0])
+                products.push(productWithCategory)
             }
 
-            res.json({ children, products: products.flat() })
+            res.json({ children, products: products.length > 0 ? products.flat() : [] })
         } catch (error) {
             res.status(400).json(error)
         }
@@ -276,12 +267,12 @@ export class CategoryController {
                         CREATE TABLE IF NOT EXISTS category (
                             id SERIAL PRIMARY KEY,
                             name VARCHAR NOT NULL,
-                            parent VARCHAR,
+                            parents VARCHAR [],
                             uuid VARCHAR NOT NULL,
                             created_index INT NOT NULL, 
                             index INT NOT NULL,
                             chosen_for_nav BOOLEAN DEFAULT FALSE,
-                            children VARCHAR
+                            children VARCHAR []
                         );
                     `)
 
@@ -295,36 +286,39 @@ export class CategoryController {
                 if (existedCategory.length < 1) {
                     await queryRunner.manager
                         .query(`
-                            INSERT INTO category (name, parent, uuid, created_index, index, children)
+                            INSERT INTO category (name, parents, uuid, created_index, index, children, chosen_for_nav)
                             VALUES
-                                ($1, $2, $3, $4, $5, $6);
+                                ($1, $2, $3, $4, $5, $6, $7);
                         `, [
                             tree[i].name,
-                            tree[i].parent,
+                            tree[i].parents,
                             tree[i].uuid,
                             tree[i].created_index,
                             tree[i].index,
-                            tree[i].children.join(", "),
+                            tree[i].children,
+                            tree[i].created_index === 1 ? true : false,
                         ])
                 } else {
                     await queryRunner.manager
                         .query(`
                             UPDATE category
                             SET name = $1,
-                                parent = $2,
+                                parents = $2,
                                 uuid = $3,
                                 created_index = $4,
                                 index = $5,
-                                children = $6
+                                children = $6,
+                                chosen_for_nav = $8
                             WHERE id = $7
                         `, [
                             tree[i].name,
-                            tree[i].parent,
+                            tree[i].parents,
                             tree[i].uuid,
                             tree[i].created_index,
                             tree[i].index,
-                            tree[i].children.join(", "),
+                            tree[i].children,
                             existedCategory[0].id,
+                            tree[i].created_index === 1 ? true : false,
                         ])
                 }
 
