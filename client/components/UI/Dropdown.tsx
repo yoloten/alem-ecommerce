@@ -36,7 +36,7 @@ export default function Dropdown(props: any) {
                     id={props.id} name={props.name}
                     onClick={onOpen}
                     onChange={props.onChange}
-                    defaultValue={props.value}
+                    value={props.value}
                 >
                     <option value="">Select option</option>
                     {props.extraTypes && props.extraTypes.length > 0
@@ -87,7 +87,7 @@ export default function Dropdown(props: any) {
                 }
                 .arrow{
                     width: ${props.width - 40}px;
-                    height: ${props.height ? props.height + "px" : "40px"};
+                    min-height: ${props.height ? props.height + "px" : "40px"};
                     border: ${props.border ? "1px solid " + `${props.borderColor ? props.borderColor : "#d9d9d9"}` : "none"};
                     border-radius: ${props.borderRadius ? props.borderRadius : "50px"};
                     cursor: pointer;
@@ -99,6 +99,7 @@ export default function Dropdown(props: any) {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    word-break: break-all 
                 }
                 .icon{
                     margin-top: -2px

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Middleware } from "@overnightjs/core"
+import { Controller, Post, Get, Delete, Middleware, Put } from "@overnightjs/core"
 import { findDuplicates } from "../utils/findDuplicates"
 import { getConnection, TableColumn, TableForeignKey } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
@@ -13,6 +13,14 @@ import * as fs from "fs"
 import { Options } from "../entity/Options"
 import { Schema } from "../entity/Schema"
 import { Macro } from "../entity/Macro"
+
+function getImgFromDir(fileName: string) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(fileName, (err, data) => {
+            err ? reject(err) : resolve(data)
+        })
+    })
+}
 
 const selectType = (type: string) => {
     if (type === "enum") {
@@ -80,7 +88,8 @@ export class ProductController {
         const queryRunner = connection.createQueryRunner()
 
         try {
-            const { id } = req.query
+            const { id, edit } = req.query
+            const selects: any = []
             const joins: any = []
 
             const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
@@ -96,15 +105,27 @@ export class ProductController {
 
                 if (hasColumn) {
                     if (attribute.type !== "Number" && attribute.type !== "String") {
+                        selects.push(`${attribute.name}_product.${attribute.name}_name`)
                         joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
                     }
+                }
+                if (attribute.type === "Number" || attribute.type === "String") {
+                    selects.push(`product.${attribute.name}`)
                 }
             }
 
             const product: any = await connection.query(`
                 SELECT 
+                    product.name as name,
+                    product.description as description,
+                    product.count as count,
+                    product.id as id,
+                    category.uuid as category_uuid,
                     category.name as category_name,
-                    *
+                    pricing.price,
+                    pricing.discount,
+                    pricing.currency,
+                    ${selects.join(", ")}
                 FROM product
                 LEFT JOIN category ON category.id = product.category_id
                 LEFT JOIN pricing ON pricing.id = product.price_id
@@ -118,7 +139,25 @@ export class ProductController {
                     WHERE photo.product_id = ${id}
                 `)
 
-            product[0].photos = photos
+            if (edit) {
+                const filesArr: any = []
+
+                for (let i = 0; i < photos.length; i++) {
+                    if (photos[i].filename) {
+                        const imgFile: any = await getImgFromDir(path.join("public", photos[i].filename))
+                        const obj = {
+                            image: imgFile.toString("base64"),
+                            name: photos[i].filename,
+                        }
+
+                        filesArr.push(obj)
+                    }
+                }
+
+                product[0].photos = filesArr
+            } else {
+                product[0].photos = photos
+            }
 
             res.json(product[0])
         } catch (error) {
@@ -667,6 +706,108 @@ export class ProductController {
         }
     }
 
+    @Put("update/")
+    @Middleware(upload.array("photos[]", 8))
+    public async update(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const { table, fields, mainProperties } = req.body
+            const primaryProperties = JSON.parse(mainProperties)
+            const parsedFields = JSON.parse(fields)
+            const photos: any = req.files
+            const fieldsSetStrings: any = []
+
+            if (parsedFields.length > 0) {
+                for (let i = 0; i < parsedFields.length; i++) {
+                    const key = parsedFields[i][Object.keys(parsedFields[i])[0]]
+                    const existedMacroTable = await connection
+                        .getRepository(Macro).findOne({ name: parsedFields[i].type })
+
+                    if (existedMacroTable) {
+                        const id = await connection.query(`
+                            INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type)
+                            VALUES
+                                ($1, $2)
+                            Returning id;
+                        `, [Array.isArray(key) ? key[0] : key, parsedFields[i].type])
+
+                        fieldsSetStrings.push(`${parsedFields[i].type + "_product_id = " + id[0].id}`)
+                    } else {
+                        if (parsedFields[i].type === "string" || parsedFields[i].type === "String") {
+                            fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = '${key}'`)
+                        } else {
+                            fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = ${key}`)
+                        }
+
+                    }
+                }
+            }
+
+            const category = await connection.query(`
+                SELECT id 
+                FROM category 
+                WHERE category.uuid = $1
+            `, [primaryProperties.category])
+
+            const newPrice = await connection.query(`
+                INSERT INTO pricing (price, discount, currency)
+                VALUES
+                    ($1, $2, $3)
+                RETURNING id;
+            `, [primaryProperties.price, primaryProperties.discount, primaryProperties.currency])
+
+            await connection
+                .query(`
+                UPDATE product
+                SET 
+                    name = $1,
+                    description = $2,
+                    count = $3,
+                    price_id = $4,
+                    category_id = $5,
+                    ${fieldsSetStrings.join(", ")}
+                WHERE id = $6
+            `, [
+                    primaryProperties.name,
+                    primaryProperties.description,
+                    primaryProperties.count,
+                    newPrice[0].id,
+                    category[0].id,
+                    primaryProperties.id,
+                ])
+
+
+            for (let i = 0; i < photos.length; i++) {
+                const photo = await connection.query(`
+                    SELECT filename
+                    FROM photo
+                    WHERE filename = '${photos[i].originalname}'
+                `)
+
+                if (photo.length === 0) {
+                    const generated = "product_image_" + v4() + ".jpeg"
+
+                    await sharp(photos[i].buffer)
+                        .resize(1500)
+                        .toFormat("jpeg")
+                        .jpeg({ quality: 75 })
+                        .toFile(`public/${generated}`)
+
+                    await connection.query(`
+                            INSERT INTO photo(filename, extension, path, product_id)
+                            VALUES 
+                                ($1, $2, $3, $4);
+                        `, [generated, "jpeg", `public/${generated}`, primaryProperties.id])
+                }
+            }
+
+            res.json({ success: true })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     @Delete("deleteone/")
     public async deleteOne(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
@@ -711,6 +852,35 @@ export class ProductController {
                             })
                         }
                     })
+                }
+            })
+
+            res.json({ success: true })
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+    @Delete("deletephoto/")
+    public async deletePhoto(req: Request, res: Response): Promise<void> {
+        const connection = getConnection()
+
+        try {
+            const { filename } = req.body
+
+            await connection.query(`
+                DELETE FROM photo
+                WHERE filename = '${filename}'
+            `)
+
+            fs.readdir("public", (err, files) => {
+                if (err) { throw err }
+
+                for (const file of files) {
+                    if (filename === file) {
+                        fs.unlink(path.join("public", file), (error: any) => {
+                            if (error) { throw error }
+                        })
+                    }
                 }
             })
 

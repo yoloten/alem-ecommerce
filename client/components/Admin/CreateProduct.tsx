@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { useRouter } from "next/router"
+import { b64toBlob } from "../../utils/b64ToBlob"
 import axios from "axios"
 
 import AdminMainContent from "./AdminUI/AdminMainContent"
@@ -47,19 +48,55 @@ export default function CreateProduct() {
 
                 if (pathname === "/admin/editproduct" && query.id) {
                     const product: any = await axios.get("http://localhost:8000/api/product/onebyid", {
-                        params: { id: query.id },
+                        params: { id: query.id, edit: true },
                     })
 
+                    if (product.data.photos && product.data.photos.length > 0) {
+                        const photosArr: any = []
+
+                        for (let i = 0; i < product.data.photos.length; i++) {
+                            const content = "image/jpeg"
+                            const blob = b64toBlob(product.data.photos[i].image, content)
+                            const file = new File([blob], product.data.photos[i].name, { type: content })
+
+                            photosArr.push(file)
+                        }
+
+                        setPhotos(photosArr)
+                    }
+
                     if (product.data) {
+                        const newFields = [...fields]
+
                         schema.data.attributes.map((attr: any, i: number) => {
                             return Object.keys(product.data).map((key: string) => {
-                                if (attr[key]) {
-                                   // setFields([...fields, {attr[key] : product.data[key]})
-                                } else if (attr[key.slice(0, -5)]) {
-                                   //console.log(attr[key.slice(0, -5)])
+                                const obj: any = {}
+
+                                if (key === attr.name + "_name") {
+                                    obj[attr.name] = product.data[attr.name + "_name"]
+                                    obj.type = attr.type
+                                    newFields.push(obj)
+                                } else if (key === attr.name) {
+                                    obj[attr.name] = product.data[attr.name]
+                                    obj.type = attr.type
+                                    newFields.push(obj)
                                 }
                             })
                         })
+
+                        setFields(newFields)
+                        setMainProperites((state: any) => ({
+                            ...state, ...{
+                                name: product.data.name,
+                                description: product.data.description,
+                                price: product.data.price,
+                                count: product.data.count,
+                                discount: product.data.discount,
+                                currency: product.data.currency,
+                                category: product.data.category_uuid,
+                                id: product.data.id,
+                            },
+                        }))
                     }
                 } else {
                     const arr = []
@@ -81,9 +118,17 @@ export default function CreateProduct() {
 
         getDataFromServer()
     }, [])
-    console.log(attributes)
-    const deletePhoto = (index: number) => {
+
+    const deletePhoto = async (index: number) => {
         const newPhotos = [...photos]
+
+        if (pathname === "/admin/editproduct" && query.id) {
+            await axios.delete("http://localhost:8000/api/product/deletephoto",
+                {
+                    data: { filename: newPhotos[index].name },
+                })
+        }
+
         newPhotos.splice(index, 1)
         setPhotos(newPhotos)
     }
@@ -137,10 +182,14 @@ export default function CreateProduct() {
         formData.append("fields", JSON.stringify(fields))
         formData.append("mainProperties", JSON.stringify(mainProperties))
 
-        const created = await axios.post("http://localhost:8000/api/product/create", { table: "product" })
+        if (pathname === "/admin/editproduct" && query.id) {
+            await axios.put("http://localhost:8000/api/product/update", formData)
+        } else {
+            const created = await axios.post("http://localhost:8000/api/product/create", { table: "product" })
 
-        if (created.data.success) {
-            await axios.post("http://localhost:8000/api/product/insert", formData)
+            if (created.data.success) {
+                await axios.post("http://localhost:8000/api/product/insert", formData)
+            }
         }
     }
 
@@ -151,7 +200,6 @@ export default function CreateProduct() {
                 <div className="admin-subtitle">
                     On this page you can create a product from properties you defined
                     </div>
-
                 <form className="admin-form" action="submit" onSubmit={submit}>
                     <div className="createproduct-attributes">
                         <div className="main-attributes">
@@ -165,7 +213,7 @@ export default function CreateProduct() {
                                     {photos.length === 0
                                         ? <div className="dropzone-text">Maximum 8 photos are allowed</div>
                                         : photos.flat().map((file: any, index: number) => {
-                                            return <div className="craeteproduct-photos">
+                                            return <div key={index} className="craeteproduct-photos">
                                                 <img
                                                     className="createproduct-img"
                                                     height="40" width="40"
@@ -319,9 +367,6 @@ export default function CreateProduct() {
                         fontSize="13px"
                         customStyleObject={{ alignSelf: "center", marginTop: "20px", marginBottom: "20px" }}
                     />
-                    {/* <button disabled={disabledBtn} style={{ alignSelf: "center", marginTop: "40px" }} >
-                    Create
-                    </button> */}
                 </form>
             </div>
             <div className="admin-left-side">

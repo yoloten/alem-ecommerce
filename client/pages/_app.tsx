@@ -5,38 +5,7 @@ function MyApp({ Component, pageProps }: any) {
         <>
             <Component {...pageProps} />
             <style jsx global>{`
-                @font-face {
-                    font-family: 'SegoeUI';
-                    src: url('fonts/SegoeUI.ttf');
-                }
-
-                @font-face {
-                    font-family: 'Poppins';
-                    src: url('fonts/Poppins-Medium.ttf');
-                }
-
-                @font-face {
-                    font-family: 'PoppinsLight';
-                    src: url('fonts/Poppins-Light.ttf');
-                }
-
-                @font-face {
-                    font-family: 'PoppinsSemiBold';
-                    src: url('fonts/Poppins-SemiBold.ttf');
-                }
-
-                @font-face {
-                    font-family: 'TimeBurner';
-                    src: url('fonts/timeburnernormal.ttf');
-                }
-
-                @font-face {
-                    font-family: 'SegoeUIBold';
-                    src: url('fonts/SegoeUI-Bold.ttf');
-                }
-
                 body{
-                    font-family: 'PoppinsLight', serif;
                     margin: 0;
                 }
             `}</style>

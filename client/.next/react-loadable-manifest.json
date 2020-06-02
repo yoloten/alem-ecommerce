@@ -1163,6 +1163,12 @@
       "name": "./public/icons/_compiled/index.ts",
       "file": "static/chunks/2.js",
       "publicPath": "static/chunks/2.js"
+    },
+    {
+      "id": "./utils/b64ToBlob.ts",
+      "name": "./utils/b64ToBlob.ts",
+      "file": "static/chunks/2.js",
+      "publicPath": "static/chunks/2.js"
     }
   ],
   "../../components/Admin/ProductsList": [

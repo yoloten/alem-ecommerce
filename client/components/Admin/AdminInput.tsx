@@ -70,6 +70,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
         if (attribute.type === "string") {
             return (
                 <Input
+                    value={val && Object.keys(val).length > 0 ? val[attribute.name] : ""}
                     className="createproduct-input"
                     name={attribute.name}
                     type="text"
@@ -88,6 +89,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
         if (attribute.type === "number") {
             return (
                 <Input
+                    value={val && Object.keys(val).length > 0 ? val[attribute.name] : ""}
                     className="createproduct-input"
                     type="number"
                     name={attribute.name}
@@ -103,14 +105,14 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                 />
             )
         }
-        
+       
         if (macro) {
             if (macro.type === "enum") {
                 return (
                     <Dropdown
                         onChange={changeInput}
                         className="createproduct-input"
-                        value={val[macro.name] && val[macro.name].length > 0 && val[macro.name].slice(-1)}
+                        value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
                         options={macro.options}
                         borderRadius="3px"
                         borderColor="#f1f1f1"
@@ -128,6 +130,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
             if (macro.type === "string") {
                 return (
                     <Input
+                        value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
                         className="createproduct-input"
                         required={macro.validators.required}
                         name={attribute.name}
@@ -147,6 +150,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
             if (macro.type === "number") {
                 return (
                     <Input
+                        value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
                         className="createproduct-input"
                         borderRadius="3px"
                         bgColor="#fff"
