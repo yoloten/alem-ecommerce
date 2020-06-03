@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "target": "es5",
+        "jsx": "react",
+        "module": "es6",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "downlevelIteration": true,
+        "declaration": false,
+        "removeComments": true,
+        "noImplicitReturns": true,
+        "strict": true,
+        "outDir": "build",
+        "lib": ["es6", "es7", "dom"],
+        "baseUrl": "src",
+        "paths": {
+            // "middlewares/*": [
+            //     "middlewares/*"
+            // ],
+            // "containers/*": [
+            //     "containers/*"
+            // ],
+            "components/*": ["components/*"],
+            "reducers/*": ["reducers/*"],
+            "actions/*": ["actions/*"],
+            "utils/*": ["utils/*"],
+            "store/*": ["store/*"]
+            // "icons/*": [
+            //     "assets/icons/*"
+            // ],
+        }
+    },
+    "exclude": ["dist", "build", "node_modules"]
+}
