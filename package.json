@@ -1,12 +1,20 @@
 {
   "name": "alem-ecommerce",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rustam Sahatov",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoloten/alem-ecommerce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yoloten/alem-ecommerce/issues"
+  },
+  "homepage": "https://github.com/yoloten/alem-ecommerce#readme",
+  "description": ""
 }

@@ -1,16 +1,16 @@
-import "../styles/global.sass"
+import "../../global.sass";
 
 function MyApp({ Component, pageProps }: any) {
-    return (
-        <>
-            <Component {...pageProps} />
-            <style jsx global>{`
-                body{
-                    margin: 0;
-                }
-            `}</style>
-        </>
-    )
+  return (
+    <>
+      <Component {...pageProps} />
+      <style jsx global>{`
+        body {
+          margin: 0;
+        }
+      `}</style>
+    </>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -25,4 +25,4 @@ function MyApp({ Component, pageProps }: any) {
 //   return { ...appProps }
 // }
 
-export default MyApp
+export default MyApp;
