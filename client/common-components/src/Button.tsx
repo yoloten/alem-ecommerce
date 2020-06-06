@@ -10,9 +10,7 @@ export interface Props {
     backgroundColor?: string
     size?: "big" | "small"
     borderRadius?: string
-    onClick?: () => void
     borderColor?: string
-    focusable?: boolean
     className?: string
     fontSize?: string
     border?: boolean
@@ -20,6 +18,7 @@ export interface Props {
     color?: string
     width?: string
     type?: string
+    onClick?: any
     id?: string
 }
 

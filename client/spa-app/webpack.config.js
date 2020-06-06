@@ -50,12 +50,12 @@ const commonConfig = {
             // middlewares: srcPaths("src/middlewares"),
             // components: srcPaths("src/components"),
             containers: srcPaths("src/containers"),
-            // reducers: srcPaths("src/reducers"),
+            reducers: srcPaths("src/reducers"),
             // services: srcPaths("src/services"),
             // locales: srcPaths("src/locales"),
-            // actions: srcPaths("src/actions"),
+            actions: srcPaths("src/actions"),
             // models: srcPaths("src/models"),
-            // store: srcPaths("src/store"),
+            store: srcPaths("src/store"),
             // utils: srcPaths("src/utils"),
             // api: srcPaths("src/api"),
         },
@@ -65,7 +65,7 @@ const commonConfig = {
         contentBase: path.join(__dirname, "./src/"),
         historyApiFallback: { disableDotRule: true },
         inline: true,
-        hot: true
+        hot: true,
     },
 
     optimization: {

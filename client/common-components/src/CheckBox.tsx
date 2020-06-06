@@ -1,4 +1,4 @@
-import * as Icons from "./icons"
+import * as Icons from "../icons"
 import React, { useState, useEffect } from "react"
 
 export interface Props {

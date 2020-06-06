@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import * as Icons from "./icons"
+import * as Icons from "../icons"
 
 export interface Props {
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
@@ -14,9 +14,9 @@ export interface Props {
     height?: number
     value?: string
     width: number
+    options?: any
     macros?: any
     name: string
-    options: any
     id: string
 }
 

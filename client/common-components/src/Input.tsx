@@ -2,6 +2,7 @@ import React from "react"
 
 export interface Props {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    value?: string | number
     icon?: React.ReactNode
     step?: string | number
     borderRadius?: string
@@ -12,7 +13,6 @@ export interface Props {
     bgColor?: string
     border?: boolean
     height?: number
-    value?: string
     width: number
     name: string
     type: string
