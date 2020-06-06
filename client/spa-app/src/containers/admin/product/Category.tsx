@@ -1,4 +1,8 @@
+import { getAllCategories, deleteCategory, createOrEditCategory, Category } from "actions/admin/product"
+import { addCategory, changeCategory, deleteSuccessMsg } from "reducers/admin/productReducer"
+import { useDispatch, useSelector } from "react-redux"
 import React, { useState, useEffect } from "react"
+import { RootState } from "reducers"
 import { v4 } from "uuid"
 import axios from "axios"
 
@@ -6,76 +10,29 @@ import * as Icons from "../../../../../common-components/icons"
 import * as UI from "../../../../../common-components/src/"
 import AdminMainContent from "../UI/AdminMainContent"
 
-export interface Category {
-    name: string
-    parents: any[]
-    uuid: string
-    created_index: number
-    index: number
-    children: any[]
-}
-
 export default function CreateCategory(): JSX.Element {
-    const [tree, setTree]: any = useState([])
-    const [successMsg, SetSuccessMsg] = useState("")
+    const { categories, success } = useSelector((state: RootState) => state.product)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setTimeout(() => {
-            SetSuccessMsg("")
+            dispatch(deleteSuccessMsg())
         }, 3000)
-    }, [successMsg])
+    }, [success])
 
     useEffect(() => {
-        const getAllCategories = async () => {
-            try {
-                const allCategories = await axios.get("http://localhost:8000/api/category/all")
-
-                if (allCategories.data && allCategories.data.length > 0) {
-                    setTree(allCategories.data)
-                } else {
-                    setTree([
-                        {
-                            value: "",
-                            name: "",
-                            uuid: v4(),
-                            created_index: 0,
-                            index: 0,
-                            children: [],
-                            parents: [],
-                        },
-                    ])
-                }
-            } catch (error) {
-                setTree([
-                    {
-                        value: "",
-                        name: "",
-                        uuid: v4(),
-                        created_index: 0,
-                        index: 0,
-                        children: [],
-                        parents: [],
-                    },
-                ])
-            }
-        }
-
-        getAllCategories()
+        dispatch(getAllCategories())
     }, [])
 
     const changeTree = (e: any) => {
-        const { name, value, id } = e.target
-        const newTree = [...tree]
+        const { value, id } = e.target
 
-        newTree[parseInt(id, 10)].name = value
-
-        setTree(newTree)
+        dispatch(changeCategory({ id: parseInt(id, 10), value }))
     }
 
     const addChild = (e: any) => {
         e.preventDefault()
         const { id } = e.target
-        const newTree = [...tree]
         const child: Category = {
             name: "",
             parents: [],
@@ -85,59 +42,21 @@ export default function CreateCategory(): JSX.Element {
             children: [],
         }
 
-        if (id) {
-            newTree.map((item: Category, i: number) => {
-                if (item.uuid === id) {
-                    if (item.parents.length > 0) {
-                        child.parents = child.parents.concat(item.parents)
-                        child.parents.push(item.uuid)
-                    } else {
-                        child.parents.push(item.uuid)
-                    }
-
-                    newTree.splice(i + 1, 0, child)
-                    child.created_index = newTree[i].created_index + 1
-                    item.children.push(child.uuid)
-                }
-            })
-        }
-
-        setTree(newTree)
+        dispatch(addCategory({ id, child }))
     }
 
     const deleteNode = async (e: any) => {
         e.preventDefault()
         const { id } = e.currentTarget
-        const newTree = [...tree]
-        const node = newTree[parseInt(id, 10)]
+        const node = categories[parseInt(id, 10)]
 
-        newTree.map((item: any, i: number) => {
-            if (item.uuid === node.parent) {
-                item.children.map((child: any, index: number) => {
-                    if (child === node.uuid) {
-                        item.children.splice(index, 1)
-                    }
-                })
-            }
-        })
-
-        newTree.splice(parseInt(id, 10), 1)
-        setTree(newTree)
-
-        await axios.delete("http://localhost:8000/api/category/delete", { data: { uuid: node.uuid } })
+        dispatch(deleteCategory({ id: parseInt(id, 10), node }))
     }
 
     const submit = async (e: any) => {
         e.preventDefault()
-        const treeForServer = [...tree]
 
-        treeForServer.map((item: any, index: number) => (item.index = index))
-
-        const created = await axios.post("http://localhost:8000/api/category/create", { tree: treeForServer })
-
-        if (created.data.success) {
-            SetSuccessMsg("Success!")
-        }
+        dispatch(createOrEditCategory(categories))
     }
 
     return (
@@ -146,7 +65,7 @@ export default function CreateCategory(): JSX.Element {
                 <div className="admin-title">Create Categories</div>
                 <div className="admin-subtitle">Here you can create, edit and delete your categories</div>
                 <form className="admin-form" action="submit" onSubmit={submit}>
-                    {tree.map((node: any, index: number) => {
+                    {categories.map((node: any, index: number) => {
                         return (
                             <div
                                 key={index}
@@ -216,7 +135,7 @@ export default function CreateCategory(): JSX.Element {
                         fontSize="13px"
                         customStyleObject={{ margin: "20px", marginLeft: "125px" }}
                     />
-                    <div className="success">{successMsg}</div>
+                    <div className="success">{success}</div>
                 </form>
             </div>
             <div className="admin-left-side">

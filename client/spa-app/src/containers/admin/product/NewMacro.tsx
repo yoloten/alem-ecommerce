@@ -1,143 +1,86 @@
-import React, { useState, useRef, useEffect } from "react"
+import { getAllMacros, Macro, Options, createMacros } from "actions/admin/product"
+import { useDispatch, useSelector } from "react-redux"
+import React, { useState, useEffect } from "react"
+import {
+    deleteSuccessMsg,
+    addNewMacro,
+    addNewOption,
+    validatorsChange,
+    macrosChange,
+    optionsChange,
+} from "reducers/admin/productReducer"
+import { RootState } from "reducers"
 import axios from "axios"
 import { v4 } from "uuid"
 
 import * as UI from "../../../../../common-components/src/"
 
-export default function AdminMacro(props: any) {
-    const [macros, setMacros]: any = useState([])
-    const [successMsg, setSuccessMsg] = useState("")
+export default function AdminMacro(props: any): JSX.Element {
     const [err, setErr] = useState("")
 
+    const { macros, success } = useSelector((state: RootState) => state.product)
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        const getAllMacros = async () => {
-            const allMacros = await axios.get("http://localhost:8000/api/product/allmacros")
-
-            if (allMacros.data) {
-                setMacros(allMacros.data)
-            }
-        }
-
-        getAllMacros()
+        dispatch(getAllMacros())
     }, [])
 
     useEffect(() => {
         setTimeout(() => {
-            setSuccessMsg("")
+            dispatch(deleteSuccessMsg())
         }, 3000)
-    }, [successMsg])
+    }, [success])
 
     const changeMacroProperties = (e: any) => {
-        const newMacros = [...macros]
+        const { name, value, id } = e.target
 
-        if (e.target.name === "type") {
-            newMacros[parseInt(e.target.id, 10)].type = e.target.value
-            newMacros[parseInt(e.target.id, 10)].validators = {}
-
-            if (e.target.value === "number") {
-                newMacros[parseInt(e.target.id, 10)].validatorsList = ["min", "max", "required"]
-            }
-            if (e.target.value === "string") {
-                newMacros[parseInt(e.target.id, 10)].validatorsList = [
-                    "minLength",
-                    "maxLength",
-                    "pattern",
-                    "pattern-description",
-                    "mask",
-                    "required",
-                ]
-            }
-
-            if (e.target.value === "enum") {
-                newMacros[parseInt(e.target.id, 10)].validatorsList = ["required"]
-            }
-
-            setMacros(newMacros)
-        }
-
-        if (e.target.name === "name") {
-            newMacros[parseInt(e.target.id, 10)].name = e.target.value
-            setMacros(newMacros)
-        }
-        if (e.target.name === "label") {
-            newMacros[parseInt(e.target.id, 10)].label = e.target.value
-            setMacros(newMacros)
-        }
+        dispatch(macrosChange({ name, value, id: parseInt(id, 10) }))
     }
 
     const changeOption = (e: any) => {
-        const newMacros = [...macros]
-        const className = e.target.className.slice(-1)
+        const { id, className, value, name } = e.target
 
-        if (e.target.name === "name") {
-            newMacros[parseInt(className, 10)].options[parseInt(e.target.id, 10)].name = e.target.value
-            setMacros(newMacros)
-        }
-        if (e.target.name === "label") {
-            newMacros[parseInt(className, 10)].options[parseInt(e.target.id, 10)].label = e.target.value
-            setMacros(newMacros)
-        }
-        if (e.target.name === "value") {
-            newMacros[parseInt(className, 10)].options[parseInt(e.target.id, 10)].value = e.target.value
-            setMacros(newMacros)
-        }
+        dispatch(optionsChange({ id: parseInt(id, 10), className: parseInt(className, 10), value, name }))
     }
 
-    const addMacro = () =>
-        setMacros([
-            ...macros,
-            {
-                label: "",
-                name: "",
-                type: "",
-                validators: {},
-                options: [],
-                validatorsList: [],
-                uuid: v4(),
-            },
-        ])
+    const addMacro = () => {
+        const newMacro: Macro = {
+            label: "",
+            name: "",
+            type: "",
+            validators: {},
+            options: [],
+            validatorsList: [],
+            uuid: v4(),
+        }
+
+        dispatch(addNewMacro(newMacro))
+    }
 
     const addOption = (e: any) => {
         e.preventDefault()
-        const newMacro = [...macros]
+        const option = {
+            name: "",
+            label: "",
+            value: "",
+            meta: {},
+            uuid: v4(),
+        }
 
-        newMacro[parseInt(e.target.id, 10)].options = [
-            ...newMacro[parseInt(e.target.id, 10)].options,
-            {
-                name: "",
-                label: "",
-                value: "",
-                meta: {},
-                uuid: v4(),
-            },
-        ]
-        setMacros(newMacro)
+        dispatch(addNewOption({ id: parseInt(e.target.id, 10), option }))
     }
 
     const onValidatorChange = (e: any) => {
-        const { name, value, type, checked, id, className }: any = e.target
-        const newMacros = [...macros]
+        const { name, value, type, checked, id }: any = e.target
 
-        if (type === "checkbox") {
-            newMacros[parseInt(id, 10)].validators[name] = checked
-        } else {
-            newMacros[parseInt(id, 10)].validators[name] = value
-        }
-        setMacros(newMacros)
+        dispatch(validatorsChange({ name, value, type, checked, id }))
     }
 
     const submit = async (e: any) => {
         e.preventDefault()
 
         if (macros && macros.length > 0) {
-            const postMacros = await axios.post("http://localhost:8000/api/product/createmacro", macros)
-
-            if (postMacros.data.msg) {
-                setErr(postMacros.data.msg)
-            }
-            if (postMacros.data.success) {
-                setSuccessMsg("Success!")
-            }
+            dispatch(createMacros(macros))
 
             props.onMacroSubmit(macros)
         } else {
@@ -429,7 +372,7 @@ export default function AdminMacro(props: any) {
                 {err}
             </div>
             <div className="success-message" style={{ color: "#5beb78" }}>
-                {successMsg}
+                {success}
             </div>
 
             <UI.Button

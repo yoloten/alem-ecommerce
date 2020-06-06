@@ -5,6 +5,8 @@ export interface Props {
     value?: string | number
     icon?: React.ReactNode
     step?: string | number
+    min?: string | number
+    max?: string | number
     borderRadius?: string
     borderColor?: string
     placeholder?: string
@@ -16,8 +18,6 @@ export interface Props {
     width: number
     name: string
     type: string
-    min?: string
-    max?: string
     id: string
 }
 

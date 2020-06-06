@@ -1,7 +1,7 @@
+import { getAdminProductsList, deleteAdminItemFromList, getLastLevelCategories } from "actions/admin/product"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
 import { RootState } from "reducers"
-import { getAdminProductsList, deleteAdminItemFromList } from "actions/admin/product"
 import { Link } from "react-navi"
 import axios from "axios"
 
@@ -10,41 +10,35 @@ import * as UI from "../../../../../common-components/src/"
 import AdminMainContent from "../UI/AdminMainContent"
 
 export default function ProductsList(): JSX.Element {
-    const [categories, setCategories] = useState([])
     const [sort] = useState([
         { label: "By creation time desc", value: "product.created_at DESC" },
         { label: "By creation time asc", value: "product.created_at ASC" },
-        { label: "By price asc", value: "pricing.price ASC" },
+        { label: "By discount desc", value: "pricing.discount DESC" },
+        { label: "By discount asc", value: "pricing.discount ASC" },
         { label: "By price desc", value: "pricing.price DESC" },
+        { label: "By price asc", value: "pricing.price ASC" },
         { label: "By sold desc", value: "product.sold DESC" },
         { label: "By sold asc", value: "product.sold ASC" },
-        { label: "By discount asc", value: "pricing.discount ASC" },
-        { label: "By discount desc", value: "pricing.discount DESC" },
     ])
     const [filters, setFilters] = useState({
         search: "",
         sortBy: "",
         category: "",
     })
-    const { productsList } = useSelector((state: RootState) => state.product)
+
+    const { productsList, lastLevelCategories } = useSelector((state: RootState) => state.product)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const getCategories = async () => {
-            const categoriesFromServer = await axios.get("http://localhost:8000/api/category/last")
-
-            setCategories(categoriesFromServer.data)
-        }
-
-        getCategories()
+        dispatch(getLastLevelCategories())
     }, [])
 
     useEffect(() => {
         dispatch(
             getAdminProductsList({
+                category: filters.category,
                 search: filters.search,
                 sortBy: filters.sortBy,
-                category: filters.category,
             }),
         )
     }, [filters])
@@ -101,7 +95,7 @@ export default function ProductsList(): JSX.Element {
                             onChange={filtersChange}
                             className="products-list-input"
                             value={filters.category}
-                            options={categories}
+                            options={lastLevelCategories}
                             borderRadius="3px"
                             borderColor="#d5d5d5"
                             bgColor="#fff"
@@ -143,6 +137,7 @@ export default function ProductsList(): JSX.Element {
                                                 <div className="table-product-attribute">{product.count}</div>
                                                 <div className="table-product-attribute">{product.sold}</div>
                                                 <Link
+                                                    style={{ marginTop: "4px" }}
                                                     href={{
                                                         pathname: "/admin/editproduct",
                                                         query: {
@@ -150,9 +145,7 @@ export default function ProductsList(): JSX.Element {
                                                         },
                                                     }}
                                                 >
-                                                    <a className="products-list-edit-link">
-                                                        <Icons.Edit />
-                                                    </a>
+                                                    <Icons.Edit />
                                                 </Link>
                                                 <UI.Button
                                                     id={product.id}
