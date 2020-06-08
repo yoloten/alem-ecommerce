@@ -1,4 +1,5 @@
-import { getAdminProductsList, deleteAdminItemFromList, getLastLevelCategories } from "actions/admin/product"
+import { getAdminProductsList, deleteAdminItemFromList } from "actions/admin/product/product"
+import { getLastLevelCategories } from "actions/admin/product/category"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
 import { RootState } from "reducers"
@@ -26,7 +27,10 @@ export default function ProductsList(): JSX.Element {
         category: "",
     })
 
-    const { productsList, lastLevelCategories } = useSelector((state: RootState) => state.product)
+    const { product, category } = useSelector((state: RootState) => state)
+    const { productsList } = product
+    const { lastLevelCategories } = category
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -139,7 +143,7 @@ export default function ProductsList(): JSX.Element {
                                                 <Link
                                                     style={{ marginTop: "4px" }}
                                                     href={{
-                                                        pathname: "/admin/editproduct",
+                                                        pathname: "/admin/product/edit",
                                                         query: {
                                                             id: product.id,
                                                         },

@@ -2,9 +2,10 @@ import { mount, route, redirect, lazy } from "navi"
 import { Router } from "react-navi"
 import * as React from "react"
 
-import CreateAndEdit from "../admin/product/CreateAndEdit"
 import Attributes from "../admin/product/Attributes"
 import CreateCategory from "../admin/product/Category"
+import Create from "../admin/product/Create"
+import Edit from "../admin/product/Edit"
 import List from "../admin/product/List"
 
 export const rootRoutes = mount({
@@ -16,7 +17,7 @@ export const rootRoutes = mount({
                     title: "Products List",
                 }),
                 "/create": route({
-                    view: <CreateAndEdit />,
+                    view: <Create />,
                     title: "Create Product",
                 }),
                 "/attributes": route({
@@ -26,6 +27,10 @@ export const rootRoutes = mount({
                 "/category": route({
                     view: <CreateCategory />,
                     title: "Edit Category",
+                }),
+                "/edit": route({
+                    view: <Edit />,
+                    title: "Edit Product",
                 }),
             }),
         ),

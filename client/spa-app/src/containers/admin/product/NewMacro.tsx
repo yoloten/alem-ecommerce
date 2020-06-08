@@ -1,4 +1,4 @@
-import { getAllMacros, Macro, Options, createMacros } from "actions/admin/product"
+import { getAllMacros, Macro, Options, createMacros } from "actions/admin/product/attributes"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useState, useEffect } from "react"
 import {
@@ -8,7 +8,7 @@ import {
     validatorsChange,
     macrosChange,
     optionsChange,
-} from "reducers/admin/productReducer"
+} from "reducers/admin/attributeReducer"
 import { RootState } from "reducers"
 import axios from "axios"
 import { v4 } from "uuid"
@@ -18,7 +18,7 @@ import * as UI from "../../../../../common-components/src/"
 export default function AdminMacro(props: any): JSX.Element {
     const [err, setErr] = useState("")
 
-    const { macros, success } = useSelector((state: RootState) => state.product)
+    const { macros, success } = useSelector((state: RootState) => state.attribute)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -104,7 +104,11 @@ export default function AdminMacro(props: any): JSX.Element {
                                     <div className="attribute-macro-item">
                                         <UI.Dropdown
                                             id={macroIndex.toString()}
-                                            options={[{ value: "string" }, { value: "number" }, { value: "enum" }]}
+                                            options={[
+                                                { value: "string", label: "String" },
+                                                { value: "number", label: "Number" },
+                                                { value: "enum", label: "Enum" },
+                                            ]}
                                             className="attribute-input"
                                             onChange={changeMacroProperties}
                                             borderRadius="6px"
@@ -234,6 +238,7 @@ export default function AdminMacro(props: any): JSX.Element {
                                                       if (item === "required") {
                                                           return (
                                                               <div
+                                                                  key={i}
                                                                   className="attrbute-checkbox-div"
                                                                   style={{
                                                                       width: "115px",
@@ -242,13 +247,13 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                   <div className="attribute-checkbox-label">
                                                                       Required:
                                                                   </div>
-                                                                  <input
-                                                                      type="checkbox"
+                                                                  <UI.Checkbox
                                                                       name="required"
                                                                       id={macroIndex.toString()}
                                                                       onChange={onValidatorChange}
-                                                                      className={macro.type}
-                                                                      checked={macro.validators.required}
+                                                                      width="26px"
+                                                                      height="26px"
+                                                                      checked={macro.validators.required ? true : false}
                                                                   />
                                                               </div>
                                                           )
@@ -267,7 +272,11 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                       height={31}
                                                                       id={macroIndex.toString()}
                                                                       className={macro.type}
-                                                                      value={macro.validators[item]}
+                                                                      value={
+                                                                          macro.validators[item]
+                                                                              ? macro.validators[item]
+                                                                              : "0"
+                                                                      }
                                                                       min={
                                                                           item === "max"
                                                                               ? macros[macroIndex].validators.min
@@ -279,7 +288,11 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               return (
                                                                   <UI.Input
                                                                       key={i}
-                                                                      type="text"
+                                                                      type={
+                                                                          item === "minLength" || item === "maxLength"
+                                                                              ? "number"
+                                                                              : "text"
+                                                                      }
                                                                       name={item}
                                                                       placeholder={item}
                                                                       borderRadius="0px"
@@ -287,7 +300,11 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                       width={115}
                                                                       border={true}
                                                                       height={31}
-                                                                      value={macro.validators[item]}
+                                                                      value={
+                                                                          macro.validators[item]
+                                                                              ? macro.validators[item]
+                                                                              : ""
+                                                                      }
                                                                       id={macroIndex.toString()}
                                                                       className={macro.type}
                                                                       min={
@@ -308,6 +325,7 @@ export default function AdminMacro(props: any): JSX.Element {
                                                       if (item === "required") {
                                                           return (
                                                               <div
+                                                                  key={i}
                                                                   className="attrbute-checkbox-div"
                                                                   style={{
                                                                       width: "135px",
@@ -316,13 +334,14 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                   <div className="attribute-checkbox-label">
                                                                       Required:
                                                                   </div>
-                                                                  <input
+                                                                  <UI.Checkbox
                                                                       type="checkbox"
                                                                       name="required"
                                                                       id={macroIndex.toString()}
                                                                       onChange={onValidatorChange}
-                                                                      className={macro.type}
-                                                                      checked={macro.validators.required}
+                                                                      width="26px"
+                                                                      height="26px"
+                                                                      checked={macro.validators.required ? true : false}
                                                                   />
                                                               </div>
                                                           )

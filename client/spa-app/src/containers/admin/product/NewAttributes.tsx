@@ -1,64 +1,39 @@
+import { changeAttributes, addNewAttribute, deleteSuccessMsg } from "reducers/admin/attributeReducer"
+import { getAllAttributes, createAttribute, Attribute } from "actions/admin/product/attributes"
+import { useDispatch, useSelector } from "react-redux"
 import React, { useState, useEffect } from "react"
+import { RootState } from "reducers"
 import { v4 } from "uuid"
 import axios from "axios"
 
 import * as UI from "../../../../../common-components/src/"
 
 export default function AdminNewAttributes({ macroConfig, windowWidth }: any): JSX.Element {
-    const [attributes, setAttributes]: any = useState([])
-    const [macros, setMacros]: any = useState([])
     const [err, setErr] = useState("")
-    const [successMsg, setSuccessMsg] = useState("")
+
+    const { macros, success, attributes } = useSelector((state: RootState) => state.attribute)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const getMacros = async () => {
-            const macrosFromServer = await axios.get("http://localhost:8000/api/product/allmacros")
-            const atributesFromServer = await axios.get("http://localhost:8000/api/product/schema", {
-                params: { table: "product" },
-            })
-
-            if (atributesFromServer.data && atributesFromServer.data.attributes.length > 0) {
-                setAttributes(atributesFromServer.data.attributes)
-            }
-            setMacros(macrosFromServer.data)
-        }
-
-        getMacros()
+        dispatch(getAllAttributes())
     }, [macroConfig])
 
     useEffect(() => {
         setTimeout(() => {
-            setSuccessMsg("")
+            deleteSuccessMsg()
         }, 3000)
-    }, [successMsg])
+    }, [success])
 
-    const changeAttributes = (e: any) => {
-        const newAttributes = [...attributes]
+    const onChangeAttribute = (e: any) => {
+        const { name, id, value, checked } = e.target
 
-        if (e.target.name === "label") {
-            newAttributes[parseInt(e.target.id, 10)].label = e.target.value
-            setAttributes([...newAttributes])
-        }
-        if (e.target.name === "name") {
-            newAttributes[parseInt(e.target.id, 10)].name = e.target.value.toLowerCase().split(" ").join("_")
-            setAttributes([...newAttributes])
-        }
-        if (e.target.name === "type") {
-            const value = JSON.parse(e.target.value)
-
-            newAttributes[parseInt(e.target.id, 10)].type = value.name
-            setAttributes([...newAttributes])
-        }
-        if (e.target.name === "allowFilter") {
-            newAttributes[parseInt(e.target.id, 10)].allowFilter = e.target.checked
-            setAttributes([...newAttributes])
-        }
+        dispatch(changeAttributes({ name, value, checked, id: parseInt(id, 10) }))
     }
 
     const addAttribute = (e: any) => {
         e.preventDefault()
 
-        setAttributes([...attributes, { label: "", name: "", type: "", allowFilter: false }])
+        dispatch(addNewAttribute({ label: "", name: "", type: "", allowFilter: false }))
     }
 
     const submit = async (e: any) => {
@@ -66,11 +41,7 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
         const obj = { table: "product", attributes }
 
         if (attributes.length > 0) {
-            const res = await axios.post("http://localhost:8000/api/product/createschema", obj)
-
-            if (res.data.success) {
-                setSuccessMsg("Success!")
-            }
+            dispatch(createAttribute(obj))
         } else {
             setErr("Please, add at least one attribute")
         }
@@ -83,13 +54,13 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                 On this page you can create new properties of your product and edit existed ones
             </div>
             <form action="submit" onSubmit={submit} className="admin-attribute-list">
-                {attributes && attributes.length > 0
-                    ? attributes.map((val: any, index: number) => {
+                {attributes.length > 0
+                    ? attributes.map((val: Attribute, index: number) => {
                           return (
                               <div key={`attribute-${index}`} className="attribute-item">
                                   <UI.Dropdown
                                       extraTypes={["String", "Number"]}
-                                      onChange={changeAttributes}
+                                      onChange={onChangeAttribute}
                                       className="attribute-input"
                                       id={index.toString()}
                                       value={val.type}
@@ -104,7 +75,7 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                                       required={true}
                                   />
                                   <UI.Input
-                                      onChange={changeAttributes}
+                                      onChange={onChangeAttribute}
                                       id={index.toString()}
                                       placeholder="Name"
                                       borderRadius="6px"
@@ -118,7 +89,7 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                                       required={true}
                                   />
                                   <UI.Input
-                                      onChange={changeAttributes}
+                                      onChange={onChangeAttribute}
                                       id={index.toString()}
                                       placeholder="Label"
                                       borderRadius="6px"
@@ -133,24 +104,26 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                                   />
                                   <div className="checkbox attribute-input-checkbox">
                                       <div>Allow Filter:</div>
-                                      <input
-                                          type="checkbox"
+                                      <UI.Checkbox
                                           name="allowFilter"
                                           id={index.toString()}
-                                          onChange={changeAttributes}
+                                          onChange={onChangeAttribute}
                                           checked={val.allowFilter}
+                                          width="26px"
+                                          height="26px"
                                       />
                                   </div>
                               </div>
                           )
                       })
                     : ""}
-                {attributes && attributes.length > 0 ? (
+                {attributes.length > 0 ? (
                     <UI.Button
                         borderColor="#eee"
                         border={true}
                         backgroundColor="transparent"
                         content="SAVE CHANGES"
+                        color="#92b967"
                         width="140px"
                         fontSize="13px"
                         customStyleObject={{ marginTop: "20px" }}
@@ -183,7 +156,7 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                 {err}
             </div>
             <div className="success-message" style={{ color: "#5beb78" }}>
-                {successMsg}
+                {success}
             </div>
         </div>
     )

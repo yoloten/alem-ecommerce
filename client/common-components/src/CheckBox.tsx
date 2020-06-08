@@ -26,6 +26,7 @@ export function Checkbox({
     width,
     height,
     value,
+    className,
 }: Props): JSX.Element {
     const [click, setClick] = useState(0)
 
@@ -34,9 +35,10 @@ export function Checkbox({
     }
 
     return (
-        <>
+        <div className="checkbox-main">
             <input
-                style={{ width: width ? width : "42px", height: height ? height : "42px" }}
+                className={className}
+                style={{ width: width ? width : "26px", height: height ? height : "26px" }}
                 value={click % 2 === 0 ? value : ""}
                 onChange={onChange}
                 onClick={counter}
@@ -47,13 +49,13 @@ export function Checkbox({
             <div
                 style={{
                     marginLeft: width ? "-" + width : "-44px",
-                    height: height ? height : "42px",
-                    width: width ? width : "42px",
+                    height: height ? height : "26px",
+                    width: width ? width : "26px",
                 }}
                 className="checkbox"
             >
-                {checked && click % 2 ? <Icons.CheckMark /> : ""}
+                {checked && click % 2 ? <Icons.CheckMark width={width} height={height} /> : ""}
             </div>
-        </>
+        </div>
     )
 }

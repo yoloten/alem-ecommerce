@@ -128,17 +128,21 @@ export class CategoryController {
     @Get("last/")
     public async getLast(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
             const category = await connection
-                .query(`
-                    SELECT * 
-                    FROM category 
-                    WHERE category.children = '{}'
-                `)
-            
-            res.json(category)
-
+                    .query(`
+                        SELECT * 
+                        FROM category 
+                        WHERE category.children = '{}'
+                    `)
+                
+            if (category) {
+                res.json(category)
+            } else {
+                res.json({ msg: "No category" })
+            }
         } catch (error) {
             res.status(400).json(error)
         }
@@ -147,11 +151,16 @@ export class CategoryController {
     @Get("all/")
     public async getAll(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
             const allCategories = await connection.query(`SELECT * FROM category ORDER BY category.index ASC`)
 
-            res.json(allCategories)
+            if (allCategories) {
+                res.json(allCategories)   
+            } else {
+                res.json({ msg: "No category" })
+            }
         } catch (error) {
             res.status(400).json(error)
         }

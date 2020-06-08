@@ -12,7 +12,7 @@ export interface Props {
     bgColor?: string
     border?: boolean
     height?: number
-    value?: string
+    value: string
     width: number
     options?: any
     macros?: any
@@ -28,7 +28,7 @@ export function Dropdown(props: Props): JSX.Element {
     const showOptions = () => {
         if (props.macros) {
             return props.macros.map((opt: any, index: number) => (
-                <option key={index} value={JSON.stringify(opt)}>
+                <option key={index} value={opt.name}>
                     {opt.name}
                 </option>
             ))
@@ -59,7 +59,7 @@ export function Dropdown(props: Props): JSX.Element {
                 <option value="">Select option</option>
                 {props.extraTypes && props.extraTypes.length > 0
                     ? props.extraTypes.map((type: any, index: number) => (
-                          <option key={index} value={JSON.stringify({ name: type })}>
+                          <option key={index} value={type}>
                               {type}
                           </option>
                       ))

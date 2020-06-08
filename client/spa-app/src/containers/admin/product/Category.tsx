@@ -1,5 +1,5 @@
-import { getAllCategories, deleteCategory, createOrEditCategory, Category } from "actions/admin/product"
-import { addCategory, changeCategory, deleteSuccessMsg } from "reducers/admin/productReducer"
+import { getAllCategories, deleteCategory, createOrEditCategory, Category } from "actions/admin/product/category"
+import { addCategory, changeCategory, deleteSuccessMsg } from "reducers/admin/categoryReducer"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useState, useEffect } from "react"
 import { RootState } from "reducers"
@@ -11,7 +11,7 @@ import * as UI from "../../../../../common-components/src/"
 import AdminMainContent from "../UI/AdminMainContent"
 
 export default function CreateCategory(): JSX.Element {
-    const { categories, success } = useSelector((state: RootState) => state.product)
+    const { categories, success } = useSelector((state: RootState) => state.category)
     const dispatch = useDispatch()
 
     useEffect(() => {

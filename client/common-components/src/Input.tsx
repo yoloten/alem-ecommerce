@@ -25,7 +25,7 @@ export function Input(props: Props): JSX.Element {
     return (
         <div className={props.className}>
             <input
-                type={props.name === "minLength" || props.name === "maxLength" ? "number" : props.type}
+                type={props.type}
                 style={{
                     borderRadius: props.borderRadius ? props.borderRadius : "50px",
                     height: props.height ? props.height + "px" : "45px",

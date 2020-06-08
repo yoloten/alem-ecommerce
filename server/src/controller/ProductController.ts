@@ -27,7 +27,7 @@ const selectType = (type: string) => {
         return "ENUM"
     }
     if (type === "number") {
-        return "INT"
+        return "NUMERIC"
     }
     if (type === "string") {
         return "VARCHAR"
@@ -94,23 +94,27 @@ export class ProductController {
 
             const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
 
-            for (let i = 0; i < schema.attributes.length; i++) {
-                const attribute = schema.attributes[i]
+            if (schema.attributes) {
+                const attributes = JSON.parse(schema.attributes)
 
-                const hasColumn = await queryRunner.hasColumn("product",
-                    attribute.type === "Number" || attribute.type === "String"
-                        ? attribute.name
-                        : attribute.name + "_product_id",
-                )
+                for (let i = 0; i < attributes.length; i++) {
+                    const attribute = schema.attributes[i]
 
-                if (hasColumn) {
-                    if (attribute.type !== "Number" && attribute.type !== "String") {
-                        selects.push(`${attribute.name}_product.${attribute.name}_name`)
-                        joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
+                    const hasColumn = await queryRunner.hasColumn("product",
+                        attribute.type === "Number" || attribute.type === "String"
+                            ? attribute.name
+                            : attribute.name + "_product_id",
+                    )
+
+                    if (hasColumn) {
+                        if (attribute.type !== "Number" && attribute.type !== "String") {
+                            selects.push(`${attribute.name}_product.${attribute.name}_name`)
+                            joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
+                        }
                     }
-                }
-                if (attribute.type === "Number" || attribute.type === "String") {
-                    selects.push(`product.${attribute.name}`)
+                    if (attribute.type === "Number" || attribute.type === "String") {
+                        selects.push(`product.${attribute.name}`)
+                    }
                 }
             }
 
@@ -168,12 +172,18 @@ export class ProductController {
     @Get("schema/")
     public async getSchema(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
         const table: any = req.query.table
 
         try {
+
             const schema = await connection.getRepository(Schema).findOne({ table })
 
-            res.json(schema)
+            if (schema) {
+                res.json(schema)
+            } else {
+                res.json({ msg: "no schema" })
+            }
         } catch (error) {
             res.status(400).json(error)
         }
@@ -290,11 +300,16 @@ export class ProductController {
                     } else {
                         const getSchema: any = await connection.getRepository(Schema).findOne({ table: "product" })
 
-                        getSchema.attributes.map((attribute: any) => {
-                            if (attribute.type === existedMacro.name) {
-                                attribute.type = req.body[i].name
+                        for (let i = 0; i < getSchema.attributes.length; i++) {
+                            if (getSchema.attributes[i].type === existedMacro.name) {
+                                getSchema.attributes[i].type = req.body[i].name
+
+                                await connection.query(`
+                                    ALTER TABLE IF EXISTS ${existedMacro.name + "_name"}
+                                    RENAME TO ${req.body[i].name + "_name"};
+                                `)
                             }
-                        })
+                        }
 
                         const updated = await getConnection()
                             .createQueryBuilder()
@@ -546,60 +561,74 @@ export class ProductController {
             }
 
             // CUSTOM FIELDS
-            for (let i = 0; i < schema.attributes.length; i++) {
-                const macro = await connection.getRepository(Macro).findOne({ name: schema.attributes[i].type })
-                const options = await connection.getRepository(Options).find({ macro })
-                const optionValues: any[] = options ? options.map((option: any) => `'${option.value}'`) : []
+            if (schema.attributes) {
+                const attributes = JSON.parse(schema.attributes)
 
-                if (macro) {
-                    const type: any = selectType(macro.type)
-                    const macroTableName = macro.name.toLowerCase() + "_" + table
+                for (let i = 0; i < attributes.length; i++) {
+                    const macro = await connection.getRepository(Macro).findOne({ name: attributes[i].type })
+                    const options = await connection.getRepository(Options).find({ macro })
+                    const optionValues: any[] = options ? options.map((option: any) => `'${option.value}'`) : []
 
-                    if (type === "ENUM") {
+                    if (macro) {
+                        const type: any = selectType(macro.type)
+                        const macroTableName = macro.name.toLowerCase() + "_" + table
+
+                        if (type === "ENUM") {
+                            await queryRunner.manager
+                                .query(`
+                                    DO $$ BEGIN
+                                        CREATE TYPE ${macro.name.toLowerCase() + "_enum"} AS ENUM ${"(" + optionValues.join(', ') + ")"};
+                                    EXCEPTION
+                                        WHEN duplicate_object THEN null;
+                                    END $$;
+                                `)
+
+                            await queryRunner.manager
+                                .query(`
+                                        CREATE TABLE IF NOT EXISTS ${macroTableName} (
+                                            id SERIAL PRIMARY KEY,
+                                            ${macro.name.toLowerCase() + "_name"} ${type === "ENUM" ? macro.name.toLowerCase() + "_enum" : type} NOT NULL,
+                                            type VARCHAR NOT NULL,
+                                            ${type === "ENUM" ? `product_id INT NOT NULL, FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE` : ""}
+                                        );
+                                    `)
+                        }
+
                         await queryRunner.manager
                             .query(`
-                                DO $$ BEGIN
-                                    CREATE TYPE ${macro.name.toLowerCase() + "_enum"} AS ENUM ${"(" + optionValues.join(', ') + ")"};
-                                EXCEPTION
-                                    WHEN duplicate_object THEN null;
-                                END $$;
+                                CREATE TABLE IF NOT EXISTS ${macroTableName} (
+                                    id SERIAL PRIMARY KEY,
+                                    ${macro.name.toLowerCase() + "_name"} ${type === "ENUM" ? macro.name.toLowerCase() + "_enum" : type} NOT NULL,
+                                    type VARCHAR NOT NULL
+                                );
                             `)
+
+                        const hasColumn = await queryRunner.hasColumn(table, macro.name + "_" + table + "_id")
+
+                        if (!hasColumn && type !== "ENUM") {
+                            await queryRunner.addColumn(table, new TableColumn({
+                                name: macro.name + "_product_id",
+                                type: "int",
+                            }))
+
+                            await queryRunner.createForeignKey(table, new TableForeignKey({
+                                columnNames: [macro.name + "_" + table + "_id"],
+                                referencedColumnNames: ["id"],
+                                referencedTableName: macro.name + "_" + table,
+                            }))
+                        }
+                    } else {
+                        // Just add column to main table if it's not a macro
+                        const columnType: any = selectType(attributes[i].type.toLowerCase())
+
+                        await queryRunner.manager
+                            .query(`
+                                ALTER TABLE ${table}
+                                    ADD COLUMN IF NOT EXISTS ${attributes[i].name} ${columnType};
+                                `)
                     }
 
-                    await queryRunner.manager
-                        .query(`
-                            CREATE TABLE IF NOT EXISTS ${macroTableName} (
-                                id SERIAL PRIMARY KEY,
-                                ${macro.name.toLowerCase() + "_name"} ${type === "ENUM" ? macro.name.toLowerCase() + "_enum" : type} NOT NULL,
-                                type VARCHAR NOT NULL
-                            );
-                        `)
-
-                    const hasColumn = await queryRunner.hasColumn(table, macro.name + "_" + table + "_id")
-
-                    if (!hasColumn) {
-                        await queryRunner.addColumn(table, new TableColumn({
-                            name: macro.name + "_" + table + "_id",
-                            type: "int",
-                        }))
-
-                        await queryRunner.createForeignKey(table, new TableForeignKey({
-                            columnNames: [macro.name + "_" + table + "_id"],
-                            referencedColumnNames: ["id"],
-                            referencedTableName: macro.name + "_" + table,
-                        }))
-                    }
-                } else {
-                    // Just add column to main table if it's not a macro
-                    const columnType: any = selectType(schema.attributes[i].type.toLowerCase())
-
-                    await queryRunner.manager
-                        .query(`
-                            ALTER TABLE ${table}
-                                ADD COLUMN IF NOT EXISTS ${schema.attributes[i].name} ${columnType};
-                            `)
                 }
-
             }
 
             res.json({ success: true })
@@ -621,7 +650,8 @@ export class ProductController {
             const photos: any = req.files
             const names: any = []
             const values: any = []
-
+            const enums: any = []
+           
             // CATEGORY
             const getCategory = await connection.query(`
                 SELECT id FROM category WHERE category.uuid = $1
@@ -645,7 +675,7 @@ export class ProductController {
             for (let i = 0; i < parsedFields.length; i++) {
                 const existedMacroTable = await connection.getRepository(Macro).findOne({ name: parsedFields[i].type })
                 const key = parsedFields[i][Object.keys(parsedFields[i])[0]]
-
+                
                 if (!existedMacroTable) {
                     // Push data if it is not a macro 
                     names.push(Object.keys(parsedFields[i])[0])
@@ -656,19 +686,22 @@ export class ProductController {
                         values.push(key)
                     }
                 } else {
-                    // First insert data to macro table and return id(needs for relation)
-                    const id = await queryRunner.manager
-                        .query(`
-                            INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type)
-                            VALUES
-                                ($1, $2)
-                            Returning id;
-                        `, [Array.isArray(key) ? key[0] : key, parsedFields[i].type])
+                    if (!Array.isArray(key)) {
+                        // First insert data to macro table and return id(needs for relation)
+                        const id = await queryRunner.manager
+                            .query(`
+                                INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type)
+                                VALUES
+                                    ($1, $2)
+                                Returning id;
+                            `, [key, parsedFields[i].type])
 
-                    // Then push that id into arrays with values and names to insert into main table
-                    names.push(parsedFields[i].type + "_product_id")
-                    values.push(id[0].id)
-
+                        // Then push that id into arrays with values and names to insert into main table
+                        names.push(parsedFields[i].type + "_product_id")
+                        values.push(id[0].id)
+                    } else {
+                        enums.push({key, type: parsedFields[i].type})
+                    }
                 }
             }
 
@@ -698,6 +731,17 @@ export class ProductController {
                     VALUES 
                         ($1, $2, $3, $4);
                 `, [generated, "jpeg", `public/${generated}`, productID[0].id])
+            }
+            
+            for (let i = 0; i < enums.length; i++) {
+                for (let j = 0; j < enums[i].key.length; j++) {
+                    await queryRunner.manager
+                    .query(`
+                        INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type, product_id)
+                        VALUES
+                            ($1, $2, $3)
+                    `, [enums[i].key[j], parsedFields[i].type, productID[0].id])
+                }
             }
 
             res.json({ success: true })

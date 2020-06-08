@@ -1,3 +1,4 @@
+import { Options } from "actions/admin/product/attributes"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
@@ -23,7 +24,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
     }, [attribute])
 
     const changeInput = (e: any) => {
-        const { value, id, name, type } = e.target
+        const { value, id, name, type, className } = e.target
         const { validators }: any = macro
         let error = ""
 
@@ -58,13 +59,13 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
             }
         }
 
-        onChangeInputField({ value, id, name, attributeType: attribute.type }, error, macro.type)
+        onChangeInputField({ value, id, name, attributeType: attribute.type, className }, error, macro.type)
     }
 
     const inputTypes = () => {
-        attribute.type = attribute.type.toLowerCase()
+        const attributeType = attribute.type.toLowerCase()
 
-        if (attribute.type === "string") {
+        if (attributeType === "string") {
             return (
                 <UI.Input
                     value={val && Object.keys(val).length > 0 ? val[attribute.name] : ""}
@@ -83,7 +84,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                 />
             )
         }
-        if (attribute.type === "number") {
+        if (attributeType === "number") {
             return (
                 <UI.Input
                     value={val && Object.keys(val).length > 0 ? val[attribute.name] : ""}
@@ -105,24 +106,41 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
 
         if (macro) {
             if (macro.type === "enum") {
-                return (
-                    <UI.Dropdown
-                        onChange={changeInput}
-                        className="createproduct-input"
-                        value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
-                        options={macro.options}
-                        borderRadius="3px"
-                        borderColor="#f1f1f1"
-                        bgColor="#fff"
-                        border={true}
-                        width={220 + 30}
-                        height={40}
-                        name={attribute.name}
-                        id={id}
-                        placeholder={attribute.label}
-                        required={true}
-                    />
-                )
+                return macro.options.map((option: Options, i: number) => {
+                    return (
+                        <div className="filters-name" key={option.uuid} style={{ marginLeft: "20px" }}>
+                            <UI.Checkbox
+                                id={id}
+                                className={option.name}
+                                name={attribute.name}
+                                value={option.value}
+                                checked={val && val[macro.name] && val[macro.name].includes(option.name) ? true : false}
+                                onChange={changeInput}
+                                width="20px"
+                                height="20px"
+                            />
+                            <div className="filters-childname">{option.label}</div>
+                        </div>
+                    )
+                })
+                // return (
+                //     <UI.Dropdown
+                //         onChange={changeInput}
+                //         className="createproduct-input"
+                //         value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
+                //         options={macro.options}
+                //         borderRadius="3px"
+                //         borderColor="#f1f1f1"
+                //         bgColor="#fff"
+                //         border={true}
+                //         width={220 + 30}
+                //         height={40}
+                //         name={attribute.name}
+                //         id={id}
+                //         placeholder={attribute.label}
+                //         required={true}
+                //     />
+                // )
             }
             if (macro.type === "string") {
                 return (

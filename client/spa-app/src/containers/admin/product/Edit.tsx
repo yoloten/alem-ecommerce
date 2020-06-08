@@ -1,17 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react"
+import { getOneById } from "actions/admin/product/product"
+import { getLastLevelCategories } from "actions/admin/product/category"
+import { getAllAttributes } from "actions/admin/product/attributes"
+import { useDispatch, useSelector } from "react-redux"
 import { b64toBlob } from "../../../utils/b64ToBlob"
+import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { useCurrentRoute } from "react-navi"
+import { redirect } from "navi"
+import { RootState } from "reducers"
 import axios from "axios"
 
 import * as Icons from "../../../../../common-components/icons"
-import * as UI from "../../../../../common-components/src/"
+import * as UI from "../../../../../common-components/src"
 import AdminMainContent from "../UI/AdminMainContent"
 import AdminInput from "./AdminInput"
 
 export default function CreateProduct(): JSX.Element {
-    const [categories, setCategries]: any = useState([])
-    const [attributes, setAttributes]: any = useState([])
     const [fields, setFields]: any = useState([])
     const [errors, setErrors]: any = useState([])
     const [disabledBtn, setDisabledBtn]: any = useState(true)
@@ -25,7 +29,7 @@ export default function CreateProduct(): JSX.Element {
         currency: "",
         category: "",
     })
-    const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+    const { getRootProps, getInputProps } = useDropzone({
         accept: "image/jpeg, image/png",
         onDrop: (acceptedFiles: any) => {
             setPhotos([...photos, acceptedFiles])
@@ -34,88 +38,73 @@ export default function CreateProduct(): JSX.Element {
     const route = useCurrentRoute()
     const { pathname, query } = route.url
 
+    const { product, category, attribute } = useSelector((state: RootState) => state)
+    const { oneProduct } = product
+    const { lastLevelCategories } = category
+    const { attributes } = attribute
+
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        const getDataFromServer = async () => {
-            const schema = await axios.get("http://localhost:8000/api/product/schema", {
-                params: { table: "product" },
-            })
-            const getCategory = await axios.get("http://localhost:8000/api/category/last")
+        dispatch(getLastLevelCategories())
+        dispatch(getAllAttributes())
 
-            if (schema.data && schema.data.attributes.length > 0) {
-                setAttributes(schema.data.attributes)
+        if (query.id) {
+            dispatch(getOneById({ id: query.id }))
 
-                if (pathname === "/admin/editproduct" && query.id) {
-                    const product: any = await axios.get("http://localhost:8000/api/product/onebyid", {
-                        params: { id: query.id, edit: true },
-                    })
+            if (oneProduct.photos && oneProduct.photos.length > 0) {
+                const photosArr: any = []
 
-                    if (product.data.photos && product.data.photos.length > 0) {
-                        const photosArr: any = []
+                for (let i = 0; i < oneProduct.photos.length; i++) {
+                    const content = "image/jpeg"
+                    const blob = b64toBlob(oneProduct.photos[i].image, content)
+                    const file = new File([blob], oneProduct.photos[i].name, { type: content })
 
-                        for (let i = 0; i < product.data.photos.length; i++) {
-                            const content = "image/jpeg"
-                            const blob = b64toBlob(product.data.photos[i].image, content)
-                            const file = new File([blob], product.data.photos[i].name, { type: content })
-
-                            photosArr.push(file)
-                        }
-
-                        setPhotos(photosArr)
-                    }
-
-                    if (product.data) {
-                        const newFields = [...fields]
-
-                        schema.data.attributes.map((attr: any, i: number) => {
-                            return Object.keys(product.data).map((key: string) => {
-                                const obj: any = {}
-
-                                if (key === attr.name + "_name") {
-                                    obj[attr.name] = product.data[attr.name + "_name"]
-                                    obj.type = attr.type
-                                    newFields.push(obj)
-                                } else if (key === attr.name) {
-                                    obj[attr.name] = product.data[attr.name]
-                                    obj.type = attr.type
-                                    newFields.push(obj)
-                                }
-                            })
-                        })
-
-                        setFields(newFields)
-                        setMainProperites((state: any) => ({
-                            ...state,
-                            ...{
-                                name: product.data.name,
-                                description: product.data.description,
-                                price: product.data.price,
-                                count: product.data.count,
-                                discount: product.data.discount,
-                                currency: product.data.currency,
-                                category: product.data.category_uuid,
-                                id: product.data.id,
-                            },
-                        }))
-                    }
-                } else {
-                    const arr = []
-                    const errArr = []
-
-                    for (let i = 0; i < schema.data.attributes.length; i++) {
-                        arr.push({})
-                        errArr.push("")
-                    }
-
-                    setFields(arr)
-                    setErrors(errArr)
+                    photosArr.push(file)
                 }
-            }
-            if (getCategory.data && getCategory.data.length > 0) {
-                setCategries(getCategory.data)
-            }
-        }
 
-        getDataFromServer()
+                setPhotos(photosArr)
+            }
+
+            if (oneProduct) {
+                const newFields = [...fields]
+
+                if (attributes && attributes.length > 0) {
+                    attributes.map((attr: any, i: number) => {
+                        return Object.keys(oneProduct).map((key: string) => {
+                            const obj: any = {}
+
+                            if (key === attr.name + "_name") {
+                                obj[attr.name] = oneProduct[attr.name + "_name"]
+                                obj.type = attr.type
+                                newFields.push(obj)
+                            } else if (key === attr.name) {
+                                obj[attr.name] = oneProduct[attr.name]
+                                obj.type = attr.type
+                                newFields.push(obj)
+                            }
+                        })
+                    })
+                }
+
+                setFields(newFields)
+                setMainProperites((state: any) => ({
+                    ...state,
+                    ...{
+                        name: oneProduct.name,
+                        description: oneProduct.description,
+                        price: oneProduct.price,
+                        count: oneProduct.count,
+                        discount: oneProduct.discount,
+                        currency: oneProduct.currency,
+                        category: oneProduct.category_uuid,
+                        id: oneProduct.id,
+                    },
+                }))
+            }
+        } else {
+            redirect("/admin/product/list")
+        }
     }, [])
 
     const deletePhoto = async (index: number) => {
@@ -194,8 +183,8 @@ export default function CreateProduct(): JSX.Element {
     return (
         <AdminMainContent>
             <div className="admin-right-side">
-                <div className="admin-title">Create Product</div>
-                <div className="admin-subtitle">On this page you can create a product from properties you defined</div>
+                <div className="admin-title">Edit Product</div>
+                <div className="admin-subtitle">On this page you can edit a product from properties you defined</div>
                 <form className="admin-form" action="submit" onSubmit={submit}>
                     <div className="createproduct-attributes">
                         <div className="main-attributes">
@@ -251,7 +240,7 @@ export default function CreateProduct(): JSX.Element {
                                 onChange={changeMainProperties}
                                 className="createproduct-input"
                                 value={mainProperties.category}
-                                options={categories}
+                                options={lastLevelCategories}
                                 borderRadius="3px"
                                 borderColor="#f1f1f1"
                                 bgColor="#fff"
@@ -381,28 +370,6 @@ export default function CreateProduct(): JSX.Element {
             </div>
             <div className="admin-left-side">
                 <div className="admin-title">Info</div>
-                <div className="admin-subtitle">Product creation explanation</div>
-                <ul>
-                    <li className="admin-li">
-                        <div className="admin-text">
-                            <span className="admin-bold-span">Main Attributes </span>
-                        </div>
-                        <div className="admin-text">
-                            These attributes are common for all product types you will create. They are all required to
-                            fill.
-                        </div>
-                    </li>
-                    <li className="admin-li">
-                        <div className="admin-text">
-                            <span className="admin-bold-span">Custom Attributes</span>
-                        </div>
-                        <div className="admin-text">
-                            In that section of inputs will be placed all atttributes you created in the &#34;Edit
-                            Attributes&#34; section. Those that you marked as required will be with *. Enums will be
-                            displayed as select element with options
-                        </div>
-                    </li>
-                </ul>
             </div>
         </AdminMainContent>
     )
