@@ -1,10 +1,11 @@
+import React from "react"
+
 import * as Icons from "../../public/icons/_compiled"
 import Carousel from "nuka-carousel"
 import Button from "../UI/Button"
 import Card from "../UI/Card"
 
 export default function WithCarousel(props: any) {
-
     const previousButton = ({ previousSlide }: any) => (
         <div style={{ marginTop: "-80px" }}>
             <Icons.ArrowRight style={{ cursor: "pointer" }} onClick={previousSlide} />
@@ -19,8 +20,7 @@ export default function WithCarousel(props: any) {
 
     return (
         <div className="withcarousel-popular">
-            {props.header === "withcarousel-popular-header"
-                ?
+            {props.header === "withcarousel-popular-header" ? (
                 <div className="withcarousel-popular-header">
                     <div className="withcarousel-popular-title">Popular</div>
                     <Button
@@ -32,9 +32,9 @@ export default function WithCarousel(props: any) {
                         width="120px"
                     />
                 </div>
-                :
+            ) : (
                 <div className="withcarousel-pros-header">Products in today</div>
-            }
+            )}
             <Carousel
                 className="carousel"
                 height="500px"
@@ -43,24 +43,22 @@ export default function WithCarousel(props: any) {
                 wrapAround={false}
                 renderCenterLeftControls={previousButton}
                 renderCenterRightControls={nextButtom}
-                renderBottomCenterControls={(): any => { }}
             >
                 {[0, 1, 2, 3, 4].map((i) => (
                     <div className="withcarousel-card" key={i}>
-                        <Card
-                            height="375px"
-                            width="350px"
-                            backgroundColor="purple"
-                            color="#fff"
-                            fontSize="30px"
-                        />
+                        <Card height="375px" width="350px" backgroundColor="purple" color="#fff" fontSize="30px" />
                         <div className="withcarousel-product-info">
                             <div className="withcarousel-product-name">Jacket</div>
                             <div className="withcarousel-product-price">
                                 <div className="withcarousel-new-price">$21.99</div>
-                                <div className="withcarousel-old-price" style={{
-                                    textDecoration: "line-through",
-                                }}>$39.99</div>
+                                <div
+                                    className="withcarousel-old-price"
+                                    style={{
+                                        textDecoration: "line-through",
+                                    }}
+                                >
+                                    $39.99
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,10 @@
-import * as Icons from "../public/icons/_compiled"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import React from "react"
 import axios from "axios"
 import { v4 } from "uuid"
 
 import WithCarousel from "../components/LandingComponents/WithCarousel"
+import * as Icons from "../public/icons/_compiled"
 import Navbar from "../components/Common/Navbar"
 import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
@@ -11,65 +12,63 @@ import Button from "../components/UI/Button"
 
 function index({ dataFromProduct, query }: any) {
     const [photo, setPhoto] = useState(dataFromProduct.photos[0].path)
-    const [checkedSize, setCheckedSize]: any = useState({})
-    const [checkedColor, setCheckedColor]: any = useState({})
-    const [targetSize, setTargetSize]: any = useState()
-    const [targetColor, setTargetColor]: any = useState()
+    const [checkedEnum, setCheckedEnum]: any = useState({})
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
-    const [addedItem, setAddedItem]: any = useState(1)
     const [forNavbar, setForNavbar] = useState("")
-    console.log(dataFromProduct)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setAlert("")
+        }, 3000)
+    }, [alert])
+
     const changePhoto = (e: any) => {
         setPhoto(e.target.id)
     }
 
-    const changeCheckedSize = (event: any) => {
-        setCheckedSize({ ...checkedSize, [event.target.name]: event.target.checked })
-        setTargetSize(event.target.name)
+    const changeCheckedEnum = (event: any) => {
+        if (checkedEnum[event.target.name] !== event.target.id) {
+            setCheckedEnum({ ...checkedEnum, [event.target.name]: event.target.id })
+        } else {
+            const newCheckedEnum = { ...checkedEnum }
 
-        if (!event.target.checked) {
-            setTargetSize()
-        }
-    }
-
-    const changeCheckedColor = (event: any) => {
-        setCheckedColor({ ...checkedColor, [event.target.name]: event.target.checked })
-        setTargetColor(event.target.name)
-
-        if (!event.target.checked) {
-            setTargetColor()
+            delete newCheckedEnum[event.target.name]
+            setCheckedEnum(newCheckedEnum)
         }
     }
 
     const addToCart = () => {
+        let ifAllChosen = false
         const toCart = {
-            discount: dataFromProduct.price.discount,
-            currency: dataFromProduct.price.currency,
-            primaryKey: dataFromProduct.primaryKey,
-            price: dataFromProduct.price.price,
+            discount: dataFromProduct.discount,
+            currency: dataFromProduct.currency,
+            price: dataFromProduct.price,
             name: dataFromProduct.name,
-            color: targetColor,
-            size: targetSize,
             quantity: amount,
             photo,
+            ...checkedEnum,
         }
 
-        if (!targetColor) {
-            setAlert("Choose color")
-        }
-        else if (!targetSize) {
-            setAlert("Choose size")
-        } else {
-            setAlert("")
-            sessionStorage.setItem(v4(), JSON.stringify(toCart))
+        const enumsFromProduct = Object.keys(dataFromProduct).filter((i) => i.slice(-5) === "_enum")
+        const enumsFromChecked = Object.keys(checkedEnum).map((i) => i)
 
-            const id = sessionStorage.getItem("id")
+        enumsFromProduct.map((i) => {
+            if (enumsFromChecked.indexOf(i) !== -1) {
+                ifAllChosen = true
+            } else {
+                ifAllChosen = false
+                setAlert(`you did not choose ${i}`)
+            }
+        })
+
+        if (ifAllChosen) {
+            localStorage.setItem("product_item_" + v4(), JSON.stringify(toCart))
+            const id = localStorage.getItem("id")
 
             if (!id) {
-                sessionStorage.setItem("id", v4())
+                localStorage.setItem("id", v4())
             }
-
             setForNavbar(v4())
         }
     }
@@ -80,8 +79,12 @@ function index({ dataFromProduct, query }: any) {
         }
     }
 
-    const incrementAmount = () => setAmount(amount + 1)
-  
+    const incrementAmount = () => {
+        if (amount < dataFromProduct.count) {
+            setAmount(amount + 1)
+        }
+    }
+
     return (
         <div>
             <Navbar data={forNavbar} />
@@ -89,36 +92,49 @@ function index({ dataFromProduct, query }: any) {
                 <div className="details-maininfo">
                     <div className="details-photos">
                         <div className="details-photo-list">
-                            {dataFromProduct ? dataFromProduct.photos.map((item: any) => (
-                                <div key={item.primaryKey} id={item.path} onClick={changePhoto} style={{
-                                    backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
-                                    backgroundPosition: "center center",
-                                    backgroundRepeat: "no-repeat",
-                                    backgroundSize: "cover",
-                                    width: "100px",
-                                    height: "100px",
-                                    marginBottom: "10px",
-                                    marginRight: "10px",
-                                    cursor: "pointer",
-                                }} />
-                            )) : "..."}
+                            {dataFromProduct
+                                ? dataFromProduct.photos.map((item: any) => (
+                                      <div
+                                          key={item.primaryKey}
+                                          id={item.path}
+                                          onClick={changePhoto}
+                                          style={{
+                                              backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
+                                              backgroundPosition: "center center",
+                                              backgroundRepeat: "no-repeat",
+                                              backgroundSize: "cover",
+                                              width: "100px",
+                                              height: "100px",
+                                              marginBottom: "10px",
+                                              marginRight: "10px",
+                                              cursor: "pointer",
+                                          }}
+                                      />
+                                  ))
+                                : "..."}
                         </div>
                         <div
                             className="details-first-photo"
-                            style={{ backgroundImage: "url(" + "http://localhost:8000/" + photo + ")" }}
+                            style={{
+                                backgroundImage: "url(" + "http://localhost:8000/" + photo + ")",
+                            }}
                         />
                     </div>
                     <div className="details-info">
                         <div className="details-delivery">
                             <div className="details-standard">
-                                <div className="details-icon"><Icons.TruckEmpty /></div>
+                                <div className="details-icon">
+                                    <Icons.TruckEmpty />
+                                </div>
                                 <div className="details-shipping-info">
                                     <div className="details-shipping-title">Standard shipment</div>
                                     <div className="details-shipping-text">Free within 3-6 bussiness days</div>
                                 </div>
                             </div>
                             <div className="details-standard">
-                                <div className="details-icon"><Icons.TruckFull /></div>
+                                <div className="details-icon">
+                                    <Icons.TruckFull />
+                                </div>
                                 <div className="details-shipping-info">
                                     <div className="details-shipping-title">Express delivery</div>
                                     <div className="details-shipping-text">$35 available</div>
@@ -134,33 +150,34 @@ function index({ dataFromProduct, query }: any) {
                                 <div className="details-id">{`Product ID: ${dataFromProduct.id}`}</div>
                             </div>
 
-                            <div className="details-product-name">
-                                {dataFromProduct.name}
-                            </div>
+                            <div className="details-product-name">{dataFromProduct.name}</div>
                             <div className="details-price-brand">
-                                {parseFloat(dataFromProduct.discount)
-                                    && parseFloat(dataFromProduct.discount) !== 0
-                                    ? <div className="details-prices">
+                                {parseFloat(dataFromProduct.discount) && parseFloat(dataFromProduct.discount) !== 0 ? (
+                                    <div className="details-prices">
                                         <div className="details-price">
-                                            {
-                                                (parseFloat(dataFromProduct.price) - parseFloat(dataFromProduct.price) * parseFloat(dataFromProduct.discount)).toFixed(2)
-                                            }
+                                            {(
+                                                parseFloat(dataFromProduct.price) -
+                                                parseFloat(dataFromProduct.price) * parseFloat(dataFromProduct.discount)
+                                            ).toFixed(2)}
                                             {dataFromProduct.currency}
                                         </div>
                                         <div className="details-oldprice">
-                                            {parseFloat(dataFromProduct.price).toFixed(2) + " " + dataFromProduct.currency}
+                                            {parseFloat(dataFromProduct.price).toFixed(2) +
+                                                " " +
+                                                dataFromProduct.currency}
                                         </div>
                                     </div>
-                                    : <div className="details-oldprice">
+                                ) : (
+                                    <div className="details-oldprice">
                                         {parseFloat(dataFromProduct.price.price) + " " + dataFromProduct.price.currency}
                                     </div>
-                                }
-                                {/* <div className="details-brand">{dataFromProduct.brand.name}</div> */}
+                                )}
                             </div>
                         </div>
 
                         <div className="details-checkboxes">
-                            {Object.keys(dataFromProduct).filter((i: any) => i.includes("_name"))
+                            {Object.keys(dataFromProduct)
+                                .filter((i: any) => i.includes("_name"))
                                 .map((item: any, i: any) => {
                                     return (
                                         <div key={i} className="details-colors">
@@ -169,57 +186,51 @@ function index({ dataFromProduct, query }: any) {
                                             </div>
                                             <div className="details-name">
                                                 <div>{dataFromProduct[item]}</div>
-                                                {/* <CheckBox
-                                                    id={i.toString()}
-                                                    name={dataFromProduct[item]}
-                                                   
-                                                    onChange={changeCheckedColor}
-                                                    dataType="color"
-                                                /> */}
                                             </div>
                                         </div>
                                     )
                                 })}
-                            {/* <div className="details-colors">
-                                <div className="details-colors-title">Color:</div>
-                                <div className="details-color-list">
-                                    {dataFromProduct.colors.map((child: any, i: number) => (
-                                        <div key={i} className="details-name">
-                                            <CheckBox
-                                                id={child.id}
-                                                name={child.name}
-                                                checked={checkedColor[child.name]}
-                                                onChange={changeCheckedColor}
-                                                dataType="color"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
+                            <div className="details-checkboxes">
+                                {Object.keys(dataFromProduct).map((attr: any, i: number) => {
+                                    if (attr.includes("_enum")) {
+                                        return (
+                                            <div key={i} className="details-colors">
+                                                <div className="details-colors-title">{attr}:</div>
+                                                <div className="details-name">
+                                                    {dataFromProduct[attr].map((opt: any) => (
+                                                        <>
+                                                            <CheckBox
+                                                                checked={
+                                                                    checkedEnum.hasOwnProperty(attr) &&
+                                                                    checkedEnum[attr] === opt
+                                                                        ? true
+                                                                        : false
+                                                                }
+                                                                onChange={changeCheckedEnum}
+                                                                id={opt}
+                                                                name={attr}
+                                                            />
+                                                            {opt}
+                                                        </>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                })}
                             </div>
-                            <div className="details-colors">
-                                <div className="details-colors-title">Size:</div>
-                                <div className="details-color-list">
-                                    {dataFromProduct.sizes.map((child: any, i: number) => (
-                                        <div key={i} className="details-name">
-                                            <CheckBox
-                                                id={child.id}
-                                                name={child.name}
-                                                checked={checkedSize[child.name]}
-                                                onChange={changeCheckedSize}
-                                                dataType="size"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div> */}
                         </div>
                         <div className="details-actions">
                             <div className="details-quantity">
                                 <div className="details-quantity-title">Quantity:</div>
                                 <div className="details-quantity-box">
-                                    <div className="details-remove" onClick={decrementAmount}>-</div>
+                                    <div className="details-remove" onClick={decrementAmount}>
+                                        -
+                                    </div>
                                     <div className="details-number">{amount}</div>
-                                    <div className="details-remove" onClick={incrementAmount}>+</div>
+                                    <div className="details-remove" onClick={incrementAmount}>
+                                        +
+                                    </div>
                                 </div>
                             </div>
                             <Button
@@ -237,30 +248,7 @@ function index({ dataFromProduct, query }: any) {
                 </div>
                 <div className="details-additional-main">
                     <div className="details-additional-title">DESCRIPTION</div>
-                    <div className="details-additional">
-                        <div className="details-description">
-                            <div className="details-description-icon"><Icons.Paper /></div>
-                            <div className="details-description-title">Details and Description</div>
-                            <div className="details-description-text">{dataFromProduct.description}</div>
-                        </div>
-                        <div className="details-description">
-                            <div className="details-description-icon"><Icons.Tools /></div>
-                            <div className="details-description-title">Material(s) and care</div>
-                            <div className="details-material-care">
-                                {/* <div className="details-materials">
-                                    {dataFromProduct.materials.map((item: any) => (
-                                        <div key={item.id} className="details-material">{item.name}</div>
-                                    ))}
-                                </div>
-                                <div className="details-materials">
-                                    {dataFromProduct.care.map((item: any) => (
-                                        <div key={item.id} className="details-material">{item.name}</div>
-                                    ))}
-                                </div> */}
-                            </div>
-                        </div>
-
-                    </div>
+                    <div className="details-description-text">{dataFromProduct.description}</div>
                 </div>
                 <div className="details-carousel">
                     <WithCarousel />
@@ -272,7 +260,6 @@ function index({ dataFromProduct, query }: any) {
 }
 
 index.getInitialProps = async ({ query }: any) => {
-
     const resFromProduct = await axios.get("http://localhost:8000/api/product/onebyid", {
         params: { id: query.id },
     })

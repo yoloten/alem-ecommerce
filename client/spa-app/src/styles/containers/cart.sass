@@ -1,0 +1,92 @@
+.cart-main
+    border-top: 1px solid #d9d9d9
+
+.cart-header
+    display: flex
+    justify-content: space-between
+    margin-top: 40px
+    margin-left: 170px
+    margin-right: 170px
+
+.cart-title
+    font-size: 20px
+
+.cart-icon
+    background: #ff7070
+    min-height: 30px
+    min-width: 30px
+    border-radius: 30px
+    display: flex
+    justify-content: center
+    align-items: center
+
+.cart-color-remove
+    width: 40px
+    display: flex
+    align-items: center
+    height: 50px
+    justify-content: center
+    cursor: pointer
+
+.cart-remove
+    cursor: pointer
+    user-select: none
+
+.cart-actions
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-top: 60px
+
+.cart-continue
+    text-decoration: none
+    color: #000
+    cursor: pointer
+
+.cart-total-checkout
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 350px
+
+.cart-total
+    display: flex
+
+    &-price
+        margin-left: 5px
+
+@media (max-width: 1200px)
+    .cart-header
+        margin-left: 60px
+        margin-right: 60px
+
+@media (max-width: 1000px)
+    .cart-header
+        margin-left: 30px
+        margin-right: 30px
+
+@media (max-width: 700px)
+    .cart-header
+        margin-left: 15px
+        margin-right: 15px
+
+@media (max-width: 450px)
+    .cart-header
+        display: flex
+        flex-direction: column
+
+    .cart-title
+        margin-bottom: 10px
+
+    .cart-actions
+        display: flex
+        flex-direction: column-reverse
+        align-items: flex-start
+
+    .cart-total-checkout
+        width: 100%
+
+@media (max-width: 370px)
+    .cart-header
+        margin-left: 5px
+        margin-right: 5px

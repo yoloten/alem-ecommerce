@@ -20,7 +20,7 @@ const initialState: CategoryState = {
 }
 
 export const categorySlice = createSlice({
-    name: "product",
+    name: "category",
     initialState,
     reducers: {
         deleteSuccessMsg(state) {

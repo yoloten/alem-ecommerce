@@ -19,7 +19,8 @@
         "react-navi": "^0.14.4",
         "react-redux": "^7.2.0",
         "regenerator-runtime": "^0.13.5",
-        "uuid": "^8.1.0"
+        "uuid": "^8.1.0",
+        "validator": "^13.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.10.2",
@@ -31,6 +32,7 @@
         "@types/node-sass": "^4.11.1",
         "@types/react-redux": "^7.1.9",
         "@types/uuid": "^8.0.0",
+        "@types/validator": "^13.0.0",
         "@types/webpack-env": "^1.15.2",
         "@typescript-eslint/eslint-plugin": "^3.1.0",
         "@typescript-eslint/parser": "^3.1.0",

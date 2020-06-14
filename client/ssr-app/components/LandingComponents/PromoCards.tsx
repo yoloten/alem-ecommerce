@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
+import React from "react"
+
 import Button from "../UI/Button"
 import Card from "../UI/Card"
-import React from "react"
 
 export default function PromoCards() {
     const [windowWidth, setWindowWidth] = useState(0)
@@ -29,7 +30,6 @@ export default function PromoCards() {
     }
 
     const bigCardWidth = () => {
-    
         if (windowWidth < 800) {
             return "290px"
         }
@@ -66,7 +66,6 @@ export default function PromoCards() {
     }
 
     const fontSizeChange = () => {
-        
         if (windowWidth < 950) {
             return "24px"
         }
@@ -105,15 +104,16 @@ export default function PromoCards() {
                 color="#fff"
                 fontSize={fontSizeChange()}
                 customStyleObject={{ justifyContent: "center", marginTop: "20px" }}
-                actionButton={<Button
-                    content="Show All"
-                    color="#fff"
-                    backgroundColor="#ff7070"
-                    borderRadius="30px"
-                    height={windowWidth < 950 ? "35px" : "50px"}
-                    width={windowWidth < 950 ? "96px" : "150px"}
-                    fontSize={windowWidth < 950 ? "12px" : "16px"}
-                />
+                actionButton={
+                    <Button
+                        content="Show All"
+                        color="#fff"
+                        backgroundColor="#ff7070"
+                        borderRadius="30px"
+                        height={windowWidth < 950 ? "35px" : "50px"}
+                        width={windowWidth < 950 ? "96px" : "150px"}
+                        fontSize={windowWidth < 950 ? "12px" : "16px"}
+                    />
                 }
             />
             <Card

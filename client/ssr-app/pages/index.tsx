@@ -1,5 +1,6 @@
 import Link from "next/link"
 import axios from "axios"
+import React from "react"
 
 import WithCarousel from "../components/LandingComponents/WithCarousel"
 import PromoCards from "../components/LandingComponents/PromoCards"
@@ -12,7 +13,7 @@ function index() {
     const btnClick = (): void => {
         console.log("click")
     }
- 
+
     return (
         <>
             <div>

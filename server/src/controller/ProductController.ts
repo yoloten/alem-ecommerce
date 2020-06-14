@@ -91,33 +91,43 @@ export class ProductController {
             const { id, edit } = req.query
             const selects: any = []
             const joins: any = []
+            const additionalEnums: any = {}
 
             const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
 
             if (schema.attributes) {
                 const attributes = JSON.parse(schema.attributes)
-
+                
                 for (let i = 0; i < attributes.length; i++) {
-                    const attribute = schema.attributes[i]
+                    const attribute = attributes[i]
 
                     const hasColumn = await queryRunner.hasColumn("product",
                         attribute.type === "Number" || attribute.type === "String"
                             ? attribute.name
                             : attribute.name + "_product_id",
                     )
-
+                    
                     if (hasColumn) {
                         if (attribute.type !== "Number" && attribute.type !== "String") {
                             selects.push(`${attribute.name}_product.${attribute.name}_name`)
                             joins.push(`LEFT JOIN ${attribute.name}_product ON ${attribute.name}_product.id = product.${attribute.name}_product_id`)
                         }
                     }
+                    if (!hasColumn) {
+                        const enums = await connection.query(`
+                            SELECT ${attribute.name}_name
+                            FROM ${attribute.name}_product
+                            WHERE ${attribute.name}_product.product_id = ${id}
+                        `)
+
+                        additionalEnums[attribute.name + "_enum"] = enums.map((item: any) => item[attribute.name + "_name"])
+                    }
                     if (attribute.type === "Number" || attribute.type === "String") {
                         selects.push(`product.${attribute.name}`)
                     }
                 }
             }
-
+           
             const product: any = await connection.query(`
                 SELECT 
                     product.name as name,
@@ -142,7 +152,7 @@ export class ProductController {
                     FROM photo
                     WHERE photo.product_id = ${id}
                 `)
-
+            
             if (edit) {
                 const filesArr: any = []
 
@@ -163,7 +173,9 @@ export class ProductController {
                 product[0].photos = photos
             }
 
-            res.json(product[0])
+            const final = Object.assign(product[0], additionalEnums)
+            
+            res.json(final)
         } catch (error) {
             res.status(400).json(error)
         }

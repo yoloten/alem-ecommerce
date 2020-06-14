@@ -2,6 +2,7 @@ import { withAuthSync } from "../utils/auth"
 import nextCookie from "next-cookies"
 import dynamic from "next/dynamic"
 import jwtDecode from "jwt-decode"
+import React from "react"
 
 import Navbar from "../components/Common/Navbar"
 import Login from "../components/Auth/Login"
@@ -11,10 +12,9 @@ const Address = dynamic(() => import("../components/Address"), {
 })
 
 function address(props: any) {
-
     const showAddress = () => {
         if (props.login) {
-          return <Login />
+            return <Login />
         }
         if (props.address) {
             return <Address decoded={props.decoded} token={props.token} />
@@ -27,14 +27,12 @@ function address(props: any) {
     return (
         <>
             <Navbar />
-            <div className="main">
-                {showAddress()}
-            </div>
+            <div className="main">{showAddress()}</div>
             <style jsx>{`
-                .main{
+                .main {
                     margin-top: 20px;
                     border-top: 1px solid #d9d9d9;
-                    padding-top: 40px
+                    padding-top: 40px;
                 }
             `}</style>
         </>
@@ -52,10 +50,10 @@ address.getInitialProps = async (ctx: any) => {
             return { login: "login" }
         } else {
             if (ctx.req) {
-                ctx.res.writeHead(302, { Location: '/' })
+                ctx.res.writeHead(302, { Location: "/" })
                 ctx.res.end()
             } else {
-                return { 
+                return {
                     address: "address",
                     decoded,
                     token,

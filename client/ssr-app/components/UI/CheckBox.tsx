@@ -15,24 +15,19 @@ import React, { useState, useEffect } from "react"
 // }
 
 const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, width, height, value }: any) => {
-    const [click, setClick] = useState(0)
 
-    const counter = () => {
-        setClick(click + 1)
-    }
-    
+
     return (
         <>
             <input
-                onClick={counter}
                 type={type}
-                value={click % 2 === 0 ? value : ""}
+                value={value}
                 name={name}
                 onChange={onChange}
                 id={id}
             />
             <div className="styled">
-                {checked && click % 2 ? <Icons.CheckMark /> : ""}
+                {checked ? <Icons.CheckMark /> : ""}
             </div>
             <style jsx>{`
                 input[type=checkbox]{

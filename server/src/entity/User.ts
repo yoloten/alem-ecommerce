@@ -28,7 +28,10 @@ export class User {
     @Column({ type: "enum", enum: Role, default: Role.customer })
     public role: Role
 
-    @Column({ nullable: true })
+    @Column({ type: "json", nullable: true })
+    public photo: JSON
+
+    @Column()
     public password: string
 
     @Column({ nullable: true })

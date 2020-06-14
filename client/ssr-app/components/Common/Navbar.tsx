@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react"
+import Router from "next/router"
 import Link from "next/link"
 import axios from "axios"
 
 import * as Icons from "../../public/icons/_compiled"
 
-namespace Nav {
-    export interface Props {
-        landing?: boolean
-        data?: string
-        removeData?: string
-    }
+export interface Props {
+    landing?: boolean
+    data?: string
+    removeData?: string
 }
 
-export default function Navbar(props: Nav.Props) {
+export default function Navbar(props: Props) {
     const [count, setCount]: any = useState(0)
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
         const getCategories = async () => {
             const categoriesFromServer = await axios.get("http://localhost:8000/api/category/fornavbar")
-            
+
             if (categoriesFromServer.data && categoriesFromServer.data.length > 0) {
                 setCategories(categoriesFromServer.data)
             }
@@ -27,15 +26,21 @@ export default function Navbar(props: Nav.Props) {
 
         getCategories()
         setCount(
-            Object.keys(sessionStorage).map((key: string) => {
-                if (key !== "id" && key !== "deliveryPrimaryKey") {
-                    const data: any = sessionStorage.getItem(key)
-                    const parsed = JSON.parse(data)
-                    parsed.key = key
+            Object.keys(localStorage)
+                .map((key) => {
+                    if (key.slice(0, 13) === "product_item_") {
+                        const data: any = localStorage.getItem(key)
 
-                    return parsed
-                }
-            }).filter((i) => i !== undefined).length
+                        if (data) {
+                            console.log(data)
+                            const parsed = JSON.parse(data)
+                            parsed.key = key
+
+                            return parsed
+                        }
+                    }
+                })
+                .filter((i) => i !== undefined).length,
         )
     }, [])
 
@@ -47,6 +52,22 @@ export default function Navbar(props: Nav.Props) {
             setCount(count - 1)
         }
     }, [props.data, props.removeData])
+
+    const toCart = () => {
+        if (process.env.NODE_ENV === "development") {
+            window.location.href = `http://localhost:8080/user/cart?data=${JSON.stringify(localStorage)}`
+        } else {
+            Router.push("/user/cart")
+        }
+    }
+
+    const toAuth = () => {
+        if (process.env.NODE_ENV === "development") {
+            window.location.href = "http://localhost:8080/auth/login"
+        } else {
+            Router.push("/auth/login")
+        }
+    }
 
     return (
         <>
@@ -75,23 +96,21 @@ export default function Navbar(props: Nav.Props) {
                     <div className="search">
                         <Icons.Search />
                     </div>
-                    <Link href="/cart">
-                        <a><Icons.Cart color="#000000" />
-                            {count !== 0
-                                ? <div
-                                    className="count">{count > 1000 ? Math.floor(count / 1000) + "k" : count}
-                                </div>
-                                : ""
-                            }
-                        </a>
-                    </Link>
-                    <Link href="/auth">
-                        <a><Icons.Avatar /></a>
-                    </Link>
+                    <div className="cart" onClick={toCart}>
+                        <Icons.Cart color="#000000" />
+                        {count !== 0 ? (
+                            <div className="count">{count > 1000 ? Math.floor(count / 1000) + "k" : count}</div>
+                        ) : (
+                            ""
+                        )}
+                    </div>
+                    <div className="cart" onClick={toAuth}>
+                        <Icons.Avatar />
+                    </div>
                 </div>
             </div>
             <style jsx>{`
-                .navbar{
+                .navbar {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -99,34 +118,37 @@ export default function Navbar(props: Nav.Props) {
                     margin-right: 170px;
                     padding-top: ${props.landing ? "40px" : "10px"};
                 }
-                .categories{
+                .cart {
+                    cursor: pointer;
+                }
+                .categories {
                     display: flex;
                     width: 104px;
                     justify-content: space-between;
                 }
-                .actions{
+                .actions {
                     display: flex;
                     width: 120px;
                     justify-content: space-between;
                 }
-                .search{
-                    cursor: pointer
+                .search {
+                    cursor: pointer;
                 }
-                .men{
+                .men {
                     text-decoration: none;
-                    color: #000
+                    color: #000;
                 }
-                .logo-nav{
+                .logo-nav {
                     text-decoration: none;
                     color: #000;
                     font-size: 40px;
-                    font-family: TimeBurner
+                    font-family: TimeBurner;
                 }
-                a{
+                a {
                     text-decoration: none;
-                    position: relative
+                    position: relative;
                 }
-                .count{
+                .count {
                     position: absolute;
                     background: red;
                     display: flex;
@@ -139,70 +161,70 @@ export default function Navbar(props: Nav.Props) {
                     color: #fff;
                     margin-top: -30px;
                     margin-left: 10px;
-                    z-index: 10
+                    z-index: 10;
                 }
 
-                @media (max-width: 1200px) { 
-                    .navbar{
+                @media (max-width: 1200px) {
+                    .navbar {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         margin-left: 60px;
-                        margin-right: 60px; 
+                        margin-right: 60px;
                         padding-top: ${props.landing ? "40px" : "10px"};
                     }
-                    .logo{
+                    .logo {
                         text-decoration: none;
                         color: #000;
                         font-size: 30px;
-                        font-family: TimeBurner
+                        font-family: TimeBurner;
                     }
                 }
 
-                @media (max-width: 1000px) { 
-                    .navbar{
+                @media (max-width: 1000px) {
+                    .navbar {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         margin-left: 30px;
-                        margin-right: 30px; 
+                        margin-right: 30px;
                         padding-top: ${props.landing ? "40px" : "10px"};
                     }
-                    .logo{
+                    .logo {
                         text-decoration: none;
                         color: #000;
                         font-size: 22px;
-                        font-family: TimeBurner
+                        font-family: TimeBurner;
                     }
-                    .actions{
+                    .actions {
                         display: flex;
                         width: 90px;
                         justify-content: space-between;
                     }
-                    .categories{
+                    .categories {
                         display: flex;
                         width: 100px;
                         justify-content: space-between;
-                        font-size: 15px
+                        font-size: 15px;
                     }
                 }
-                @media (max-width: 700px) { 
-                    .navbar{
+                @media (max-width: 700px) {
+                    .navbar {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         margin-left: 15px;
-                        margin-right: 15px; 
+                        margin-right: 15px;
                         padding-top: ${props.landing ? "40px" : "10px"};
                     }
                 }
-                @media (max-width: 370px) { 
-                    .navbar{
+                @media (max-width: 370px) {
+                    .navbar {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         margin-left: 5px;
-                        margin-right: 5px; 
+                        margin-right: 5px;
                         padding-top: ${props.landing ? "40px" : "10px"};
                     }
                 }

@@ -48,7 +48,7 @@ const commonConfig = {
             // icons: srcPaths("src/assets/icons"),
 
             // middlewares: srcPaths("src/middlewares"),
-            // components: srcPaths("src/components"),
+            components: srcPaths("src/components"),
             containers: srcPaths("src/containers"),
             reducers: srcPaths("src/reducers"),
             // services: srcPaths("src/services"),

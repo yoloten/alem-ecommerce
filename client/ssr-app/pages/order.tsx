@@ -1,6 +1,7 @@
+import { withAuthSync } from "../utils/auth"
 import nextCookie from "next-cookies"
 import dynamic from "next/dynamic"
-import { withAuthSync } from "../utils/auth"
+import React from "react"
 
 import Navbar from "../components/Common/Navbar"
 
@@ -8,17 +9,17 @@ const Order = dynamic(() => import("../components/Order"), {
     ssr: false,
 })
 
-function order({token}: any) {
+function order({ token }: any) {
     return (
         <>
             <Navbar />
             <div className="order">
-                <Order token={token}/>
+                <Order token={token} />
             </div>
             <style jsx>{`
-                .order{
+                .order {
                     border-top: 1px solid #d9d9d9;
-                    padding-top: 40px
+                    padding-top: 40px;
                 }
             `}</style>
         </>

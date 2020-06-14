@@ -5,12 +5,36 @@ import * as jwt_decode from "jwt-decode"
 import { getConnection } from "typeorm"
 import { secret } from "../keys/secret"
 import * as jwt from "jsonwebtoken"
+import validator from "validator"
 import * as bcrypt from "bcrypt"
+import * as multer from "multer"
+import * as sharp from "sharp"
+import * as path from "path"
+import { v4 } from "uuid"
+import * as fs from "fs"
 
 import { Address } from "../entity/Address"
 import { User } from "../entity/User"
 
 const saltRounds = 10
+
+const storage = multer.memoryStorage()
+
+const multerFilter = (req: any, file: any, cb: any) => {
+    if (file.mimetype.startsWith("image")) {
+        cb(null, true)
+    } else {
+        cb("Please upload only images.", false)
+    }
+}
+
+const upload = multer({ storage, fileFilter: multerFilter })
+
+interface UserInterface {
+    password: string
+    email: string
+    name: string
+}
 
 @Controller("api/user")
 export class UserController {
@@ -56,35 +80,66 @@ export class UserController {
     }
 
     @Post("register/")
+    @Middleware(upload.single("photo"))
     public async register(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
 
         try {
-            const user = await connection
+            const { fields } = req.body
+            const { email, name, password }: UserInterface = JSON.parse(fields)
+            const photo = req.file
+            
+            if (typeof email !== "string" || !validator.isEmail(email)) {
+                res.status(400).json({ success: "Not email" })
+            }
+
+            else if (typeof name !== "string" || !name) {
+                res.status(400).json({ success: "No name provided" })
+            }
+
+            else if (typeof name !== "string" || password.length < 6) {
+                res.status(400).json({ success: "Minimum password length is 6 characters" })
+            } else {
+                const user = await connection
                 .getRepository(User)
                 .createQueryBuilder("user")
-                .where("user.email = :email", { email: req.body.email })
+                .where("user.email = :email", { email })
                 .getOne()
 
-            if (user) {
-                res.status(400).json({ msg: "This user is already exists" })
-            } else {
-                const hash = await bcrypt.hash(req.body.password, saltRounds)
-                req.body.password = hash
+                if (user) {
+                    res.status(400).json({ success: "This email already exists" })
+                } else {
+                    const hash = await bcrypt.hash(password, saltRounds)
+                    const hashedPassword = hash
+                    const generatedName = "user_avatar_" + v4() + ".jpeg"
+                    
+                    await sharp(photo.buffer)
+                        .resize(900)
+                        .toFormat("jpeg")
+                        .jpeg({ quality: 75 })
+                        .toFile(`public/${generatedName}`)
 
-                await connection
-                    .createQueryBuilder()
-                    .insert()
-                    .into(User)
-                    .values([{
-                        name: req.body.name,
-                        email: req.body.email,
-                        password: req.body.password,
-                        role: req.body.role,
-                    }])
-                    .execute()
+                    const photoObj = {
+                        path: `public/${generatedName}`,
+                        filename: generatedName,
+                        extension: "jpeg",
+                    }
 
-                res.status(200).json({ success: true })
+                    const userProps = {
+                        photo: JSON.stringify(photoObj),
+                        password: hashedPassword,
+                        email,
+                        name,
+                    }
+    
+                    const newUser = new User()
+                    Object.assign(newUser, userProps)
+
+                    await connection.manager.save(newUser)
+        
+                    res.status(200).json({ success: "Success" })
+                }
             }
         } catch (error) {
             console.log(error)
@@ -103,7 +158,7 @@ export class UserController {
                 .getOne()
 
             if (!user) {
-                res.status(404).json({ msg: "User not found" })
+                res.status(400).json({ msg: "User not found" })
             } else {
                 const isMatch = await bcrypt.compare(req.body.password, user.password)
 
@@ -114,6 +169,8 @@ export class UserController {
                         email: user.email,
                         phone: user.phone,
                         primaryKey: user.primaryKey,
+                        photo: user.photo,
+                        role: user.role
                     }
 
                     const token = jwt.sign(payload, secret.secretOrKey, { expiresIn: 3600 * 24 })
