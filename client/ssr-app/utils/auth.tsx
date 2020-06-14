@@ -1,18 +1,11 @@
-import { useEffect } from "react"
-import Router from "next/router"
+import React, { useEffect } from "react"
 import nextCookie from "next-cookies"
-import cookie from "js-cookie"
 import jwtDecode from "jwt-decode"
-import axios from "axios"
+import Router from "next/router"
+import cookie from "js-cookie"
 
-export const login = (token: any, toAddress?: boolean) => {
-    if (toAddress) {
-        cookie.set("token", token)
-        Router.push("/address")
-    } else {
-        cookie.set("token", token)
-        Router.push("/")
-    }
+export const login = (jwt: any) => {
+    cookie.set("token", jwt)
 }
 
 export const auth = (ctx: any) => {
@@ -24,21 +17,19 @@ export const auth = (ctx: any) => {
         // If there's no token, it means the user is not logged in.
 
         if (decoded.exp < current) {
-    
-
             if (typeof window === "undefined") {
-                ctx.res.writeHead(302, { Location: "/auth" })
+                ctx.res.writeHead(302, { Location: "/" })
                 ctx.res.end()
             } else {
-                Router.push("/auth")
+                Router.push("/")
             }
         }
     } else {
         if (typeof window === "undefined") {
-            ctx.res.writeHead(302, { Location: "/auth" })
+            ctx.res.writeHead(302, { Location: "/" })
             ctx.res.end()
         } else {
-            Router.push("/auth")
+            Router.push("/")
         }
     }
 
@@ -49,7 +40,7 @@ export const logout = () => {
     cookie.remove("token")
     // to support logging out from all windows
     window.localStorage.setItem("logout", Date.now().toString())
-    Router.push("/login")
+    Router.push("/")
 }
 
 export const withAuthSync = (WrappedComponent: any) => {
@@ -76,9 +67,7 @@ export const withAuthSync = (WrappedComponent: any) => {
     Wrapper.getInitialProps = async (ctx: any) => {
         const token = auth(ctx)
 
-        const componentProps =
-            WrappedComponent.getInitialProps &&
-            (await WrappedComponent.getInitialProps(ctx))
+        const componentProps = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx))
 
         return { ...componentProps, token }
     }

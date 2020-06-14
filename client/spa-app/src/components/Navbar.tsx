@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Link, useCurrentRoute } from "react-navi"
 import { navigation } from "containers/Navigation"
+import { useSelector } from "react-redux"
+import { RootState } from "reducers"
 import axios from "axios"
 
 import * as Icons from "../../../common-components/icons"
@@ -14,6 +16,8 @@ interface Props {
 export default function Navbar(props: Props): JSX.Element {
     const [count, setCount]: any = useState(0)
     const [categories, setCategories] = useState([])
+
+    const { user } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
         const getCategories = async () => {
@@ -84,9 +88,42 @@ export default function Navbar(props: Props): JSX.Element {
                         ""
                     )}
                 </Link>
-                <Link href="/auth/login">
-                    <Icons.Avatar />
-                </Link>
+                {user ? (
+                    <>
+                        <div
+                            className="avatar"
+                            style={
+                                user.photo
+                                    ? {
+                                          backgroundImage:
+                                              "url(" + "http://localhost:8000/" + JSON.parse(user.photo).path + ")",
+                                          backgroundPosition: "center center",
+                                          backgroundRepeat: "no-repeat",
+                                          backgroundSize: "cover",
+                                          borderRadius: "100%",
+                                          minHeight: "36px",
+                                          minWidth: "36px",
+                                      }
+                                    : {
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          borderRadius: "100%",
+                                          border: "1px #eee",
+                                          minWidth: "36px",
+                                          minHeight: "36px",
+                                          display: "flex",
+                                      }
+                            }
+                        >
+                            {user.photo ? "" : <Icons.Avatar />}
+                        </div>
+                        <div className="user">{user.name}</div>
+                    </>
+                ) : (
+                    <Link href="/auth/login">
+                        <Icons.Avatar />
+                    </Link>
+                )}
             </div>
         </div>
     )

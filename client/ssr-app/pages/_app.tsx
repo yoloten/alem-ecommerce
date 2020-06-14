@@ -1,3 +1,5 @@
+import React from "react"
+
 import "../styles/_main.sass"
 
 function MyApp({ Component, pageProps }: any) {

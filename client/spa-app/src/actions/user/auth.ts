@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import jwt_decode from "jwt-decode"
+import cookie from "js-cookie"
 import axios from "axios"
 
 export interface User {
@@ -35,6 +36,7 @@ export const login = createAsyncThunk("user/login", async (user: User) => {
         const { token } = result.data
         const decoded: Decoded = jwt_decode(token)
 
+        cookie.set("token", token)
         localStorage.setItem("jwtToken", token)
         setAuthToken(token)
 

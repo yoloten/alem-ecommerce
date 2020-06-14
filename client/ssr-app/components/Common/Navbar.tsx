@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import jwtDecode from "jwt-decode"
 import Router from "next/router"
 import Link from "next/link"
 import axios from "axios"
@@ -9,13 +10,18 @@ export interface Props {
     landing?: boolean
     data?: string
     removeData?: string
+    token?: any
 }
 
 export default function Navbar(props: Props) {
+    const [user, setUser]: any = useState({})
     const [count, setCount]: any = useState(0)
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
+        const decoded: any = typeof props.token === "string" && jwtDecode(props.token)
+        setUser(decoded)
+
         const getCategories = async () => {
             const categoriesFromServer = await axios.get("http://localhost:8000/api/category/fornavbar")
 
@@ -25,6 +31,7 @@ export default function Navbar(props: Props) {
         }
 
         getCategories()
+
         setCount(
             Object.keys(localStorage)
                 .map((key) => {
@@ -32,7 +39,6 @@ export default function Navbar(props: Props) {
                         const data: any = localStorage.getItem(key)
 
                         if (data) {
-                            console.log(data)
                             const parsed = JSON.parse(data)
                             parsed.key = key
 
@@ -92,7 +98,7 @@ export default function Navbar(props: Props) {
                         )
                     })}
                 </div>
-                <div className="actions">
+                <div className="actions" style={{ width: user ? "240px" : "120px" }}>
                     <div className="search">
                         <Icons.Search />
                     </div>
@@ -104,9 +110,42 @@ export default function Navbar(props: Props) {
                             ""
                         )}
                     </div>
-                    <div className="cart" onClick={toAuth}>
-                        <Icons.Avatar />
-                    </div>
+                    {user ? (
+                        <div className="user">
+                            <div
+                                className="avatar"
+                                style={
+                                    user.photo
+                                        ? {
+                                              backgroundImage:
+                                                  "url(" + "http://localhost:8000/" + JSON.parse(user.photo).path + ")",
+                                              backgroundPosition: "center center",
+                                              backgroundRepeat: "no-repeat",
+                                              backgroundSize: "cover",
+                                              borderRadius: "100%",
+                                              minHeight: "36px",
+                                              minWidth: "36px",
+                                          }
+                                        : {
+                                              justifyContent: "center",
+                                              alignItems: "center",
+                                              borderRadius: "100%",
+                                              border: "1px #eee",
+                                              minWidth: "36px",
+                                              minHeight: "36px",
+                                              display: "flex",
+                                          }
+                                }
+                            >
+                                {user.photo ? "" : <Icons.Avatar />}
+                            </div>
+                            <div className="user">{user.name}</div>
+                        </div>
+                    ) : (
+                        <div className="cart" onClick={toAuth}>
+                            <Icons.Avatar />
+                        </div>
+                    )}
                 </div>
             </div>
             <style jsx>{`
@@ -121,6 +160,11 @@ export default function Navbar(props: Props) {
                 .cart {
                     cursor: pointer;
                 }
+
+                .user {
+                    display: flex;
+                    align-items: center;
+                }
                 .categories {
                     display: flex;
                     width: 104px;
@@ -128,8 +172,8 @@ export default function Navbar(props: Props) {
                 }
                 .actions {
                     display: flex;
-                    width: 120px;
                     justify-content: space-between;
+                    align-items: center;
                 }
                 .search {
                     cursor: pointer;

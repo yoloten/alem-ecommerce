@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 export interface UserState {
     isLoggedIn: boolean
-    user: Decoded | Record<string, unknown>
+    user: Decoded | Record<string, any>
     msg: string
 }
 
