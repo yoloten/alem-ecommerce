@@ -43,11 +43,12 @@ function index({ dataFromProduct, query }: any) {
         const toCart = {
             discount: dataFromProduct.discount,
             currency: dataFromProduct.currency,
+            product_id: dataFromProduct.id,
             price: dataFromProduct.price,
             name: dataFromProduct.name,
             quantity: amount,
-            photo,
             ...checkedEnum,
+            photo,
         }
 
         const enumsFromProduct = Object.keys(dataFromProduct).filter((i) => i.slice(-5) === "_enum")
@@ -169,7 +170,7 @@ function index({ dataFromProduct, query }: any) {
                                     </div>
                                 ) : (
                                     <div className="details-oldprice">
-                                        {parseFloat(dataFromProduct.price.price) + " " + dataFromProduct.price.currency}
+                                        {parseFloat(dataFromProduct.price) + " " + dataFromProduct.currency}
                                     </div>
                                 )}
                             </div>

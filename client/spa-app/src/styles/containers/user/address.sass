@@ -1,0 +1,155 @@
+.address-main
+    margin-left: 170px
+    margin-right: 170px
+    display: flex
+    flex-direction: column
+
+.address-header
+    display: flex
+    justify-content: space-between
+
+.address-title
+    font-size: 20px
+
+.address-content
+    display: flex
+    justify-content: space-between
+    margin-top: 35px
+
+.address-inputs
+    display: flex
+    flex-wrap: wrap
+    height: 400px
+
+label
+
+.address-input
+    width: "300px"
+    height: 45px
+    border-radius: 30px
+    border: 1px solid #eee
+    padding-left: 32px
+    margin-top: 10px
+    margin-right: 25px
+
+.address-with-label
+    margin-top: 25px
+    display: flex
+    flex-direction: column
+
+.address-country-label
+    margin-bottom: 10px
+
+.address-delivery
+    margin-top: 58px
+    display: flex
+    flex-wrap: wrap
+    justify-content: flex-end
+    min-width: 450px
+    max-width: 640px
+
+    &-method
+        width: 200px
+        height: 250px
+        border-radius: 15px
+        border: 1px solid #eee
+        margin-left: 10px
+        margin-bottom: 10px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        cursor: pointer
+
+    &-method:hover
+        border: 1px solid pink
+
+    &-method:focus
+        border: 1px solid pink
+        outline: none
+
+.address-label
+    color: grey
+    font-size: 20px
+    text-align: center
+    z-index: -1
+
+.address-price
+    font-size: 20px
+    margin-top: 20px
+    z-index: -1
+    text-align: center
+
+.address-actions
+    margin-top: 40px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.address-buttons
+    display: flex
+    width: 320px
+    justify-content: space-between
+
+.address-back
+    text-decoration: none
+    color: #000
+
+@media (max-width: 1200px)
+    .address-main
+        margin-left: 60px
+        margin-right: 60px
+
+@media (max-width: 1000px)
+    .address-main
+        margin-left: 30px
+        margin-right: 30px
+
+@media (max-width: 900px)
+    .address-main
+        margin-left: 30px
+        margin-right: 30px
+
+    .address-content
+        display: flex
+        flex-direction: column
+
+    .address-inputs
+        display: flex
+        flex-wrap: wrap
+        height: auto
+
+    .address-delivery
+        margin-top: 58px
+        display: flex
+        flex-wrap: wrap
+        justify-content: flex-start
+
+        &-method
+            width: 150px
+            height: 200px
+
+    .address-label
+        font-size: 16px
+
+@media (max-width: 700px)
+    .address-main
+        margin-left: 15px
+        margin-right: 15px
+
+    .address-header
+        display: flex
+        flex-direction: column
+
+    .address-title
+        margin-bottom: 10px
+    .address-input
+        width: 274px
+
+@media (max-width: 370px)
+    .address-main
+        margin-left: 5px
+        margin-right: 5px
+    .address-delivery-method
+        width: 140px
+        height: 200px

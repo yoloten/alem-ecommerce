@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn , ManyToOne } from "typeorm"
 import { v4 } from "uuid"
 
-import { OrderDetails } from "./OrderDetails"
+// import { OrderDetails } from "./OrderDetails"
 import { Delivery } from "./Delivery"
 import { Address } from "./Address"
 import { Status } from "./Status"
@@ -29,9 +29,9 @@ export class Order {
     @JoinColumn()
     public address: Address
 
-    @OneToOne((type) => OrderDetails)
-    @JoinColumn()
-    public orderDetails: OrderDetails
+    // @OneToOne((type) => OrderDetails)
+    // @JoinColumn()
+    // public orderDetails: OrderDetails
 
     @ManyToOne((type) => Delivery, (delivery) => delivery.orders)
     public delivery: Delivery

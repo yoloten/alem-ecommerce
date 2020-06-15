@@ -1,3 +1,5 @@
+import { createOrUpdateCart } from "actions/user/cart"
+import { useDispatch, useSelector } from "react-redux"
 import { navigation } from "containers/Navigation"
 import React, { useState, useEffect } from "react"
 import { useCurrentRoute } from "react-navi"
@@ -6,8 +8,8 @@ import { v4 } from "uuid"
 import axios from "axios"
 // import Progress from "../UI/Progress"
 
-import Navbar from "../components/Navbar"
-import * as UI from "../../../common-components/src"
+import * as UI from "../../../../common-components/src"
+import Navbar from "../../components/Navbar"
 
 export default function index(): JSX.Element {
     const [storageData, setStorageData]: any = useState([])
@@ -15,12 +17,17 @@ export default function index(): JSX.Element {
     const [total, setTotal]: any = useState(0)
     const [totalCurrency, setTotalCurrency]: any = useState("USD")
     const [forNavbar, setForNavbar]: any = useState("")
+    const [cartID, setCartID] = useState("")
 
+    const dispatch = useDispatch()
     const route = useCurrentRoute()
 
     useEffect(() => {
+        let id = ""
+
         if (process.env.NODE_ENV === "development") {
             const { data } = route.url.query
+
             let parsedData: any = { no: "data" }
 
             if (data) {
@@ -48,6 +55,10 @@ export default function index(): JSX.Element {
 
                             return parsedProduct
                         }
+                        if (key === "id") {
+                            id = parsedData[key]
+                            localStorage.setItem("id", id)
+                        }
                     })
                     .filter(Boolean),
             )
@@ -55,7 +66,7 @@ export default function index(): JSX.Element {
             setStorageData(
                 Object.keys(localStorage)
                     .map((key) => {
-                        const item = localStorage.getItem(key)
+                        const item: any = localStorage.getItem(key)
 
                         if (item && key.slice(0, 13) === "product_item_") {
                             const parsedProduct = JSON.parse(item)
@@ -63,33 +74,22 @@ export default function index(): JSX.Element {
 
                             return parsedProduct
                         }
+                        if (key === "id") {
+                            id = item
+                        }
                     })
                     .filter(Boolean),
             )
         }
+
+        setCartID(id)
     }, [amount])
 
     useEffect(() => {
-        const createOrUpdateCart = async () => {
-            // if (sessionData.length > 0) {
-            //     if (props.token) {
-            //         const decoded: any = jwtDecode(props.token)
-            //         const current = Date.now() / 1000
-            //         if (decoded.exp >= current) {
-            //             await axios.post("http://localhost:8000/api/order/createcart", {
-            //                 cartItems: sessionData.filter((i: any) => i !== undefined),
-            //                 id: sessionStorage.getItem("id"),
-            //             },
-            //                 {
-            //                     headers: { "Authorization": props.token }
-            //                 }
-            //             )
-            //         }
-            //     }
-            // }
+        if (storageData.length > 0) {
+            dispatch(createOrUpdateCart(storageData))
         }
 
-        createOrUpdateCart()
         const totalPrice: number[] = []
 
         if (storageData && storageData.length > 0) {

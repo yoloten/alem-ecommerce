@@ -8,12 +8,13 @@ import store from "store"
 
 import Attributes from "../Admin/Product/Attributes"
 import CreateCategory from "../Admin/Product/Category"
+import Address from "containers/User/Address"
 import Create from "../Admin/Product/Create"
 import Edit from "../Admin/Product/Edit"
 import List from "../Admin/Product/List"
 import Register from "../Auth/Register"
 import Login from "../Auth/Login"
-import Cart from "../Cart"
+import Cart from "../User/Cart"
 
 interface returningInterface {
     adminPath: Matcher<any, any>
@@ -119,6 +120,12 @@ export const rootRoutes = mount({
                 view: <Cart />,
                 title: "Cart",
             }),
+            "/address": redirectIfAuth(
+                route({
+                    view: <Address />,
+                    title: "Address",
+                }),
+            ).customerPath,
         }),
     ),
 })

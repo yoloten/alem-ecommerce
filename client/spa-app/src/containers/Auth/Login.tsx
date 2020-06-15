@@ -1,5 +1,6 @@
 import { deleteMsg, setMsg } from "reducers/user/userReducer"
 import { useDispatch, useSelector } from "react-redux"
+import { createOrUpdateCart } from "actions/user/cart"
 import React, { useState, useEffect } from "react"
 import { navigation } from "containers/Navigation"
 import { login } from "actions/user/auth"
@@ -46,7 +47,7 @@ export default function Login(): JSX.Element {
         e.preventDefault()
 
         const storageData = Object.keys(localStorage).map((key: string) => {
-            if (key.slice(0, 13) === "porduct_item_") {
+            if (key.slice(0, 13) === "product_item_") {
                 const data: any = localStorage.getItem(key)
                 const parsed = JSON.parse(data)
                 parsed.key = key
@@ -56,22 +57,12 @@ export default function Login(): JSX.Element {
         })
 
         dispatch(login(state))
+        // dispatch(createOrUpdateCart(storageData))
         // if (localStorage.getItem("jwtToken")) {
         //     navigation.navigate("/admin/product/list")
         // }
         // const res = await axios.post("http://localhost:8000/api/user/login", { email, password })
         // const token = res.data.token
-
-        // await axios.post(
-        //     "http://localhost:8000/api/order/createcart",
-        //     {
-        //         cartItems: sessionData.filter((i) => i !== undefined),
-        //         id: sessionStorage.getItem("id"),
-        //     },
-        //     {
-        //         headers: { Authorization: token },
-        //     },
-        // )
 
         // login(token, props.toAddress)
     }
