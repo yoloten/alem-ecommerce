@@ -3,6 +3,7 @@ import * as Icons from "../icons"
 
 export interface Props {
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
+    stringValues?: boolean
     borderRadius?: string
     borderColor?: string
     placeholder?: string
@@ -73,7 +74,6 @@ export function Dropdown(props: Props): JSX.Element {
                         ? "1px solid " + `${props.borderColor ? props.borderColor : "#d9d9d9"}`
                         : "none",
                     borderRadius: props.borderRadius ? props.borderRadius : "50px",
-
                     minHeight: props.height ? props.height + "px" : "40px",
                     background: props.bgColor ? props.bgColor : "#fff",
                     width: props.width - 40 + "px",

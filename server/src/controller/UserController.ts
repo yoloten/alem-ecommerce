@@ -193,24 +193,24 @@ export class UserController {
         const decoded: any = jwt_decode(req.token)
 
         try {
-            const user = await connection
-                .getRepository(User)
-                .createQueryBuilder("user")
-                .where("user.email = :email", { email: decoded.email })
-                .getOne()
+            const { postalcode, address, city, phone } = req.body
+            // const user = await connection
+            //     .getRepository(User)
+            //     .createQueryBuilder("user")
+            //     .where("user.email = :email", { email: decoded.email })
+            //     .getOne()
+            console.log(req.body, decoded)
+            // const addressProps = {
+            //     postalcode: req.body.postalcode,
+            //     address: req.body.address,
+            //     city: req.body.city,
+            //     user,
+            // }
 
-            const addressProps = {
-                postalcode: req.body.postalcode,
-                country: req.body.country,
-                address: req.body.address,
-                city: req.body.city,
-                user,
-            }
+            // const address = new Address()
+            // Object.assign(address, addressProps)
 
-            const address = new Address()
-            Object.assign(address, addressProps)
-
-            await connection.manager.save(address)
+            // await connection.manager.save(address)
 
             res.json({ success: true })
         } catch (error) {

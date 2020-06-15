@@ -117,7 +117,7 @@ export default function index(): JSX.Element {
         setForNavbar(v4())
     }
 
-    const nextStep = () => navigation.navigate("/address")
+    const nextStep = () => navigation.navigate("/user/address")
 
     return (
         <div>

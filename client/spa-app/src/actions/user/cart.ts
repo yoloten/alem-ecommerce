@@ -2,12 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import jwt_decode from "jwt-decode"
 import axios from "axios"
 
-export interface User {
-    password: string
-    email: string
-    name?: string
-}
-
 export interface Decoded {
     primaryKey: string
     email: string

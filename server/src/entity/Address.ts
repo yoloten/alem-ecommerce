@@ -12,17 +12,14 @@ export class Address {
     @Column({ type: "uuid", default: v4() })
     public id: string
 
-    @Column({ nullable: true })
+    @Column()
     public address: string
 
-    @Column({ nullable: true })
+    @Column()
     public city: string
 
-    @Column({ nullable: true })
+    @Column()
     public postalcode: number
-
-    @Column({ nullable: true })
-    public country: string
 
     @ManyToOne((type) => User, (user) => user.addresses)
     public user: User

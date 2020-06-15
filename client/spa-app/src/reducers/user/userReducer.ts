@@ -1,10 +1,11 @@
 import { register, login, Decoded, setAuthToken } from "actions/user/auth"
+import { createOrUpdateAddress } from "actions/user/address"
 import { createOrUpdateCart } from "actions/user/cart"
 import { createSlice } from "@reduxjs/toolkit"
 
 export interface UserState {
-    isLoggedIn: boolean
     user: Decoded | Record<string, any>
+    isLoggedIn: boolean
     msg: string
 }
 
@@ -49,6 +50,9 @@ export const userSlice = createSlice({
         })
         builder.addCase(createOrUpdateCart.fulfilled, (state, { payload }) => {
             console.log(payload)
+        })
+        builder.addCase(createOrUpdateAddress.fulfilled, (state, { payload }) => {
+            state.msg = "Success"
         })
     },
 })
