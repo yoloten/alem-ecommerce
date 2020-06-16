@@ -1,6 +1,6 @@
-import { deleteMsg } from "reducers/user/userReducer"
-import { createOrUpdateAddress } from "actions/user/address"
+import { createOrUpdateAddress, getUserAddresses, AddressInterface } from "actions/user/address"
 import { useDispatch, useSelector } from "react-redux"
+import { deleteMsg } from "reducers/user/userReducer"
 import React, { useState, useEffect } from "react"
 import { Link, useCurrentRoute } from "react-navi"
 import { navigation } from "containers/Navigation"
@@ -13,27 +13,44 @@ import Navbar from "components/Navbar"
 import Login from "../Auth/Login"
 
 export default function Address(): JSX.Element {
-    const [state, setState] = useState({
+    const [state, setState]: any = useState({
         postalcode: "",
         address: "",
         phone: "",
         city: "",
+        id: null,
     })
-    const [addressFromServer, setAddressFromServer] = useState()
     const [delivery, setDelivery] = useState([])
     const [deliveryFocus, setDeliveryFocus] = useState(false)
     const [windowWidth, setWindowWidth] = useState(0)
 
-    const { isLoggedIn, msg } = useSelector((state: RootState) => state.user)
+    const { isLoggedIn, msg, addresses } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getUserAddresses())
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        if (addresses.length > 0) {
+            addresses.map((address) => {
+                if (address.selected) {
+                    setState({
+                        postalcode: address.postalcode,
+                        address: address.address,
+                        phone: address.phone,
+                        city: address.city,
+                        id: address.id,
+                    })
+                }
+            })
+        }
+    }, [addresses])
 
     useEffect(() => {
         setTimeout(() => dispatch(deleteMsg()), 3000)
     }, [msg])
-
-    useEffect(() => {
-        setWindowWidth(window.innerWidth)
-    }, [])
 
     useEffect(() => {
         window.addEventListener("resize", updateDimensions)
@@ -45,85 +62,52 @@ export default function Address(): JSX.Element {
 
     const updateDimensions = () => setWindowWidth(window.innerWidth)
 
-    useEffect(() => {
-        const dataFetching = async () => {
-            //         const resFromAddress = await axios.get("http://localhost:8000/api/user/getuseraddress", {
-            //             headers: { Authorization: props.token },
-            //         })
-            //         const userPhone = await axios.get("http://localhost:8000/api/user/getuserphone", {
-            //             headers: { Authorization: props.token },
-            //         })
-            //         const allDelivery = await axios.get("http://localhost:8000/api/order/alldelivery", {
-            //             headers: { Authorization: props.token },
-            //         })
-            //         if (allDelivery.data) {
-            //             setDelivery(allDelivery.data)
-            //         }
-            //         if (userPhone.data) {
-            //             setPhone(userPhone.data.phone)
-            //         }
-            //         if (resFromAddress.data) {
-            //             setAddress(resFromAddress.data.address)
-            //             setPostal(resFromAddress.data.postalcode)
-            //             setCity(resFromAddress.data.city)
-            //             setCountry(resFromAddress.data.country)
-            //             setAddressFromServer(resFromAddress.data)
-            //         }
-        }
-
-        dataFetching()
-    }, [])
-    console.log(state)
     const onFieldsChange = (e: any) => {
         e.persist()
 
-        setState((state) => ({ ...state, [e.target.name]: e.target.value }))
+        setState((state: any) => ({ ...state, [e.target.name]: e.target.value }))
+    }
+    // const onDelivery = (e: any) => {
+    //     sessionStorage.setItem("deliveryPrimaryKey", e.target.id)
+    //     setDeliveryFocus(true)
+    // }
+
+    const selectAddress = (e: any) => {
+        const address = addresses[parseInt(e.target.id, 10)]
+
+        setState({
+            postalcode: address.postalcode,
+            address: address.address,
+            phone: address.phone,
+            city: address.city,
+            id: address.id,
+        })
     }
 
-    const continueShopping = () => navigation.navigate("/")
+    const setNewAddress = () => {
+        setState({
+            postalcode: "",
+            address: "",
+            phone: "",
+            city: "",
+            id: null,
+        })
+    }
 
     const onSubmit = async (e: any) => {
         e.preventDefault()
-        const { address, city, postalcode, phone } = state
+        const { address, city, postalcode, phone, id } = state
 
-        const addressData = {
+        const addressData: AddressInterface = {
             postalcode,
             address,
             phone,
             city,
+            id,
         }
 
         dispatch(createOrUpdateAddress(addressData))
-        //     if (
-        //         addressFromServer.address === address &&
-        //         addressFromServer.country === country &&
-        //         addressFromServer.city === city
-        //     ) {
-        //         console.log("same")
-        //     } else {
-        //         await axios.post("http://localhost:8000/api/user/createaddress", addressData, {
-        //             headers: { Authorization: props.token },
-        //         })
-        //     }
-
-        //     if (props.decoded.phone === phone) {
-        //         console.log("phone")
-        //     } else {
-        //         await axios.post(
-        //             "http://localhost:8000/api/user/updatephone",
-        //             { phone },
-        //             {
-        //                 headers: { Authorization: props.token },
-        //             },
-        //         )
-        //     }
-
         //     navigation.navigate("/order")
-    }
-
-    const onDelivery = (e: any) => {
-        sessionStorage.setItem("deliveryPrimaryKey", e.target.id)
-        setDeliveryFocus(true)
     }
 
     return (
@@ -135,6 +119,25 @@ export default function Address(): JSX.Element {
                         <div className="address-title">Address data</div>
                         {/* <Progress status="address" /> */}
                     </div>
+                    {addresses.length > 0 &&
+                        addresses.map((address, i) => {
+                            return (
+                                <div key={address.address + i} className="table-content">
+                                    <div className="table-product">
+                                        <div className="table-product-attribute">{address.city}</div>
+                                        <div className="table-product-attribute">{address.address}</div>
+                                        <div className="table-product-attribute">{address.postalcode}</div>
+                                        <div className="table-product-attribute">{address.phone}</div>
+                                        <UI.Button
+                                            onClick={selectAddress}
+                                            id={i.toString()}
+                                            width="80px"
+                                            content="Select"
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        })}
                     <div className="address-content">
                         <form action="submit" onSubmit={onSubmit} className="address-inputs">
                             <div className="address-column-one">
@@ -198,6 +201,16 @@ export default function Address(): JSX.Element {
                                 </div>
                             </div>
                             <UI.Button
+                                content="NEW ADDRESS"
+                                color="#ff7070"
+                                border={true}
+                                backgroundColor="#fff"
+                                borderRadius="30px"
+                                height="50px"
+                                width="120px"
+                                onClick={setNewAddress}
+                            />
+                            <UI.Button
                                 content="NEXT STEP"
                                 color="#fff"
                                 backgroundColor="#ff7070"
@@ -206,26 +219,6 @@ export default function Address(): JSX.Element {
                                 width="120px"
                             />
                         </form>
-                        <div className="address-delivery">
-                            {delivery
-                                ? delivery.map((item: any, i: number) => (
-                                      <div
-                                          id={item.primaryKey}
-                                          onClick={onDelivery}
-                                          className="address-delivery-method"
-                                          key={i}
-                                          tabIndex={i}
-                                      >
-                                          <div className="address-label" id={item.primaryKey}>
-                                              {item.label}
-                                          </div>
-                                          <div className="address-price" id={item.primaryKey}>
-                                              {item.price + " " + item.currency}
-                                          </div>
-                                      </div>
-                                  ))
-                                : ""}
-                        </div>
                     </div>
 
                     <div className="address-actions">
@@ -234,18 +227,18 @@ export default function Address(): JSX.Element {
                         </Link>
                         <div className="msg">{msg}</div>
                         <div className="address-buttons">
-                            <UI.Button
-                                content="CONTINUE SHOPPING"
-                                color="#000"
-                                backgroundColor="#fff"
-                                border={true}
-                                borderColor="#ff7070"
-                                borderRadius="30px"
-                                height="50px"
-                                width="180px"
-                                type="submit"
-                                onClick={continueShopping}
-                            />
+                            <Link href="/">
+                                <UI.Button
+                                    content="CONTINUE SHOPPING"
+                                    color="#000"
+                                    backgroundColor="#fff"
+                                    border={true}
+                                    borderColor="#ff7070"
+                                    borderRadius="30px"
+                                    height="50px"
+                                    width="180px"
+                                />
+                            </Link>
                         </div>
                     </div>
                 </div>

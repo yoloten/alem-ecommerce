@@ -1,16 +1,21 @@
+import { createOrUpdateAddress, AddressInterface, getUserAddresses } from "actions/user/address"
 import { register, login, Decoded, setAuthToken } from "actions/user/auth"
-import { createOrUpdateAddress } from "actions/user/address"
+import { getOrderDetails } from "actions/user/order"
 import { createOrUpdateCart } from "actions/user/cart"
 import { createSlice } from "@reduxjs/toolkit"
 
 export interface UserState {
     user: Decoded | Record<string, any>
+    addresses: AddressInterface[]
     isLoggedIn: boolean
+    orderDetails: any
     msg: string
 }
 
 const initialState: UserState = {
     isLoggedIn: false,
+    orderDetails: {},
+    addresses: [],
     user: {},
     msg: "",
 }
@@ -53,6 +58,12 @@ export const userSlice = createSlice({
         })
         builder.addCase(createOrUpdateAddress.fulfilled, (state, { payload }) => {
             state.msg = "Success"
+        })
+        builder.addCase(getUserAddresses.fulfilled, (state, { payload }) => {
+            state.addresses = payload
+        })
+        builder.addCase(getOrderDetails.fulfilled, (state, { payload }) => {
+            state.orderDetails = payload
         })
     },
 })

@@ -35,7 +35,7 @@ export class User {
     public password: string
 
     @Column({ nullable: true })
-    public phone: string
+    public orderDetailsId: number
 
     @Column({ type: "timestamp with time zone", default: new Date()})
     public createdAt: Date

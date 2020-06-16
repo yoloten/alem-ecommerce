@@ -14,6 +14,7 @@ import Edit from "../Admin/Product/Edit"
 import List from "../Admin/Product/List"
 import Register from "../Auth/Register"
 import Login from "../Auth/Login"
+import Order from "../User/Order"
 import Cart from "../User/Cart"
 
 interface returningInterface {
@@ -124,6 +125,12 @@ export const rootRoutes = mount({
                 route({
                     view: <Address />,
                     title: "Address",
+                }),
+            ).customerPath,
+            "/order": redirectIfAuth(
+                route({
+                    view: <Order />,
+                    title: "Order",
                 }),
             ).customerPath,
         }),

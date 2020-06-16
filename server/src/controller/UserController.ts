@@ -39,41 +39,29 @@ interface UserInterface {
 @Controller("api/user")
 export class UserController {
 
-    @Get("getuseraddress/")
+    @Get("getuseraddresses/")
     @Middleware(jwtVerify)
     public async getUserAddress(req: any, res: Response): Promise<void> {
         const connection = getConnection()
         const decoded: any = jwt_decode(req.token)
 
         try {
-            const address = await connection
+            const addresses = await connection
                 .getRepository(Address)
                 .createQueryBuilder("address")
+                .select([
+                    "address.address", 
+                    "address.id", 
+                    "address.city", 
+                    "address.postalcode", 
+                    "address.phone",
+                    "address.selected",
+                ])
                 .where("address.user = :user", { user: decoded.primaryKey })
                 .orderBy("address.createdAt", "DESC")
-                .getOne()
-
-            res.status(200).json(address)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    @Get("getuserphone/")
-    @Middleware(jwtVerify)
-    public async getUserPhone(req: any, res: Response): Promise<void> {
-        const connection = getConnection()
-        const decoded: any = jwt_decode(req.token)
-
-        try {
-            const phone = await connection
-                .getRepository(User)
-                .createQueryBuilder("user")
-                .select("user.phone")
-                .where("user.id = :user", { user: decoded.id })
-                .getOne()
-
-            res.status(200).json(phone)
+                .getMany()
+            
+            res.status(200).json(addresses)
         } catch (error) {
             console.log(error)
         }
@@ -167,7 +155,6 @@ export class UserController {
                         name: user.name,
                         id: user.id,
                         email: user.email,
-                        phone: user.phone,
                         primaryKey: user.primaryKey,
                         photo: user.photo,
                         role: user.role
@@ -193,45 +180,47 @@ export class UserController {
         const decoded: any = jwt_decode(req.token)
 
         try {
-            const { postalcode, address, city, phone } = req.body
-            // const user = await connection
-            //     .getRepository(User)
-            //     .createQueryBuilder("user")
-            //     .where("user.email = :email", { email: decoded.email })
-            //     .getOne()
-            console.log(req.body, decoded)
-            // const addressProps = {
-            //     postalcode: req.body.postalcode,
-            //     address: req.body.address,
-            //     city: req.body.city,
-            //     user,
-            // }
+            const { postalcode, address, city, phone, id } = req.body
 
-            // const address = new Address()
-            // Object.assign(address, addressProps)
+            const selectedItem: any = await connection.getRepository(Address).findOne({selected: true})
+            
+            if (selectedItem) {
+                selectedItem.selected = false
+                await connection.manager.save(selectedItem)
+            }
+            
+            const existedAddress = await connection.getRepository(Address).findOne({id})
+            const user: any = await connection
+                .getRepository(User)
+                .createQueryBuilder("user")
+                .where("user.email = :email", { email: decoded.email })
+                .getOne()
+        
+            if (!existedAddress) {
+                const addressProps = {
+                    selected: true,
+                    postalcode,
+                    address,
+                    phone,
+                    city,
+                    user,
+                }
 
-            // await connection.manager.save(address)
-
-            res.json({ success: true })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    @Post("updatephone/")
-    @Middleware(jwtVerify)
-    public async updatePhone(req: any, res: Response): Promise<void> {
-        const connection = getConnection()
-        const decoded: any = jwt_decode(req.token)
-
-        try {
-            await connection
-                .createQueryBuilder()
-                .update(User)
-                .set({ phone: req.body.phone })
-                .where("id = :id", { id: decoded.id })
-                .execute()
-
+                const newAddress = new Address()
+                Object.assign(newAddress, addressProps)
+                
+                await connection.manager.save(newAddress)
+            } else {
+                existedAddress.postalcode = postalcode
+                existedAddress.updatedAt = new Date()
+                existedAddress.address = address
+                existedAddress.selected = true
+                existedAddress.phone = phone
+                existedAddress.city = city
+            
+                await connection.manager.save(existedAddress)
+            }
+            
             res.json({ success: true })
         } catch (error) {
             console.log(error)

@@ -1,9 +1,9 @@
-import { CardNumberElement, CardExpiryElement, CardCVCElement, injectStripe } from "react-stripe-elements"
+// import { CardNumberElement, CardExpiryElement, CardCVCElement, injectStripe } from "react-stripe-elements"
 import React, { useState } from "react"
-import Router from "next/router"
+// import Router from "next/router"
 import axios from "axios"
 
-import Button from "../UI/Button"
+// import Button from "../UI/Button"
 
 const createOptions = (fontSize: string) => {
     return {
@@ -23,7 +23,7 @@ const createOptions = (fontSize: string) => {
     }
 }
 
-function PaymentForm({ orderDetails, stripe, authToken }: any) {
+export default function PaymentForm({ orderDetails, stripe, authToken }: any) {
     const [success, setSuccess] = useState("")
 
     const handleSubmit = async (e: any) => {
@@ -45,7 +45,7 @@ function PaymentForm({ orderDetails, stripe, authToken }: any) {
 
             setSuccess("Success!")
 
-            Router.push("/")
+            // Router.push("/")
         }
     }
 
@@ -55,7 +55,7 @@ function PaymentForm({ orderDetails, stripe, authToken }: any) {
                 success
             ) : (
                 <div className="payment-form">
-                    <div className="title">Payment</div>
+                    {/* <div className="title">Payment</div>
                     <div className="sub-title">Please enter valid data</div>
                     <form onSubmit={handleSubmit}>
                         <div className="input">
@@ -79,10 +79,10 @@ function PaymentForm({ orderDetails, stripe, authToken }: any) {
                             type="submit"
                             customStyleObject={{ marginTop: "40px" }}
                         />
-                    </form>
+                    </form> */}
                 </div>
             )}
-            <style jsx>{`
+            {/* <style jsx>{`
                 .input {
                     width: 400px;
                     border-radius: 30px;
@@ -106,9 +106,9 @@ function PaymentForm({ orderDetails, stripe, authToken }: any) {
                     color: gray;
                     margin-bottom: 20px;
                 }
-            `}</style>
+            `}</style> */}
         </>
     )
 }
 
-export default injectStripe(PaymentForm)
+// export default injectStripe(PaymentForm)

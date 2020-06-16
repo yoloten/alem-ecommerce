@@ -30,19 +30,40 @@ const upload = multer({ storage, fileFilter: multerFilter })
 @Controller("api/order")
 export class OrderController {
 
-    // @Get("orderdetails/")
-    // @Middleware(jwtVerify)
-    // public async getOrderDetails(req: Request, res: Response): Promise<void> {
-    //     const connection = getConnection()
+    @Get("getorderdetails/")
+    @Middleware(jwtVerify)
+    public async getOrderDetails(req: any, res: Response): Promise<void> {
+        const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
 
-    //     try {
-    //         const details = await connection.getRepository(OrderDetails).findOne({ id: req.query.id })
+        try {
+            const user: any = await connection
+                .getRepository(User)
+                .createQueryBuilder("user")
+                .select([
+                    "user.primaryKey",
+                    "user.orderDetailsId",
+                ])
+                .leftJoinAndMapOne("user.address", "user.addresses", "address", "address.selected = TRUE")
+                .where("user.primaryKey = :user", { user: decoded.primaryKey })
+                .getOne()
 
-    //         res.json(details)
-    //     } catch (error) {
-    //         res.status(400).json(error)
-    //     }
-    // }
+            const orderDetails = await connection.query(`
+                SELECT * 
+                FROM order_details
+                WHERE order_details.id = ${user?.orderDetailsId}
+            `)
+            
+            const cartItems = await connection.query(`SELECT * FROM cart_item WHERE order_details_id = ${orderDetails[0].id}`)
+            
+            orderDetails[0].cart = cartItems
+            orderDetails[0].address = user.address
+            
+            res.json(orderDetails[0])
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
 
     @Get("alldelivery/")
     @Middleware(jwtVerify)
@@ -153,6 +174,7 @@ export class OrderController {
     @Middleware(jwtVerify)
     public async createCart(req: any, res: Response): Promise<void> {
         const connection = getConnection()
+        const decoded: any = jwt_decode(req.token)
 
         try {
             const { id, cartItems } = req.body
@@ -275,6 +297,11 @@ export class OrderController {
                     `)
                 }
             }
+
+            const user: any = await connection.getRepository(User).findOne({ primaryKey: decoded.primaryKey })
+            user.orderDetailsId = detailsID
+
+            await connection.manager.save(user)
             
             res.json({ success: true })
         } catch (error) {
