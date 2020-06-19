@@ -3,7 +3,6 @@ import { getAllAttributes } from "actions/admin/product/attributes"
 import { deleteSuccessMsg } from "reducers/admin/productReducer"
 import { createProduct } from "actions/admin/product/product"
 import { useDispatch, useSelector } from "react-redux"
-import { b64toBlob } from "../../../utils/b64ToBlob"
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { useCurrentRoute } from "react-navi"
@@ -16,9 +15,9 @@ import AdminMainContent from "../UI/AdminMainContent"
 import AdminInput from "./AdminInput"
 
 export default function Create(): JSX.Element {
+    const [windowWidth, setWindowWidth] = useState(0)
     const [fields, setFields]: any = useState([])
     const [errors, setErrors]: any = useState([])
-    const [disabledBtn, setDisabledBtn]: any = useState(true)
     const [photos, setPhotos]: any = useState([])
     const [mainProperties, setMainProperites] = useState({
         name: "",
@@ -44,6 +43,18 @@ export default function Create(): JSX.Element {
     const { success } = product
 
     useEffect(() => {
+        setWindowWidth(window.innerWidth)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener("resize", updateDimensions)
+
+        return () => {
+            window.removeEventListener("resize", updateDimensions)
+        }
+    }, [])
+
+    useEffect(() => {
         setTimeout(() => {
             dispatch(deleteSuccessMsg())
         }, 3000)
@@ -55,6 +66,8 @@ export default function Create(): JSX.Element {
         dispatch(getLastLevelCategories())
         dispatch(getAllAttributes())
     }, [])
+
+    const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     const deletePhoto = async (index: number) => {
         const newPhotos = [...photos]
@@ -182,7 +195,7 @@ export default function Create(): JSX.Element {
                                         borderRadius="3px"
                                         bgColor="#fff"
                                         border={true}
-                                        width={220}
+                                        width={windowWidth / 8.4}
                                         height={31}
                                         type="text"
                                         name="name"
@@ -199,7 +212,7 @@ export default function Create(): JSX.Element {
                                         borderColor="#f1f1f1"
                                         bgColor="#fff"
                                         border={true}
-                                        width={220 + 30}
+                                        width={windowWidth / 8.4 + 40}
                                         height={40}
                                         name="category"
                                         placeholder="Category"
@@ -213,7 +226,7 @@ export default function Create(): JSX.Element {
                                         borderRadius="3px"
                                         bgColor="#fff"
                                         border={true}
-                                        width={220}
+                                        width={windowWidth / 8.4}
                                         height={31}
                                         type="text"
                                         name="description"
@@ -228,7 +241,7 @@ export default function Create(): JSX.Element {
                                         borderRadius="3px"
                                         bgColor="#fff"
                                         border={true}
-                                        width={210}
+                                        width={windowWidth / 8.4}
                                         height={31}
                                         type="number"
                                         name="count"
@@ -244,7 +257,7 @@ export default function Create(): JSX.Element {
                                         borderRadius="3px"
                                         bgColor="#fff"
                                         border={true}
-                                        width={210}
+                                        width={windowWidth / 8.4}
                                         height={31}
                                         type="number"
                                         name="price"
@@ -261,7 +274,7 @@ export default function Create(): JSX.Element {
                                         borderRadius="3px"
                                         bgColor="#fff"
                                         border={true}
-                                        width={210}
+                                        width={windowWidth / 8.4}
                                         height={31}
                                         type="number"
                                         name="discount"
@@ -275,12 +288,15 @@ export default function Create(): JSX.Element {
                                         onChange={changeMainProperties}
                                         className="createproduct-input"
                                         value={mainProperties.currency}
-                                        options={[{ value: "USD" }, { value: "RUB" }]}
+                                        options={[
+                                            { value: "USD", label: "Dollar" },
+                                            { value: "RUB", label: "Ruble" },
+                                        ]}
                                         borderRadius="3px"
                                         borderColor="#f1f1f1"
                                         bgColor="#fff"
                                         border={true}
-                                        width={220 + 30}
+                                        width={windowWidth / 8.4 + 40}
                                         height={40}
                                         name="currency"
                                         placeholder="Currency"
@@ -292,12 +308,13 @@ export default function Create(): JSX.Element {
                                     <div className="createproduct-secondtitle">Your Custom Attributes</div>
                                     {attributes && attributes.length > 0
                                         ? attributes.map((attribute: any, i: number) => (
-                                              <div key={i}>
+                                              <div className="secondary-attribute" key={i}>
                                                   <AdminInput
                                                       id={i}
                                                       attribute={attribute}
                                                       onChangeInputField={onChangeInputField}
                                                       val={fields[i]}
+                                                      width={windowWidth / 8.4}
                                                   />
                                                   {errors.length > 0
                                                       ? errors.map((error: any, index: number) => {
@@ -320,7 +337,15 @@ export default function Create(): JSX.Element {
                                 customStyleObject={{ alignSelf: "center", marginTop: "20px", marginBottom: "20px" }}
                             />
                         </form>
-                        <div className="success">{success}</div>
+                        <div
+                            style={{
+                                textAlign: "center",
+                                marginBottom: "20px",
+                                color: success === "Success" ? "green" : "red",
+                            }}
+                        >
+                            {success}
+                        </div>
                     </>
                 ) : (
                     <div className="admin-title">Create at least one category before creating product</div>

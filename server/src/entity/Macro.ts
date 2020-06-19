@@ -4,7 +4,6 @@ import { Options } from "./Options"
 
 @Entity()
 export class Macro {
-
     @PrimaryGeneratedColumn()
     public id: number
 
@@ -19,7 +18,10 @@ export class Macro {
 
     @Column()
     public validatorsList: string
-    
+
+    @Column({ default: false })
+    public selectable: boolean
+
     @Column()
     public type: string
 

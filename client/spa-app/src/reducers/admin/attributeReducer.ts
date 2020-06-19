@@ -44,7 +44,7 @@ export const attributeSlice = createSlice({
         },
 
         macrosChange(state, { payload }) {
-            const { name, value, id }: { name: string; value: string; id: number } = payload
+            const { name, value, id, checked }: { name: string; value: string; id: number; checked: boolean } = payload
 
             if (name === "type") {
                 state.macros[id].type = value
@@ -54,14 +54,7 @@ export const attributeSlice = createSlice({
                     state.macros[id].validatorsList = ["min", "max", "required"]
                 }
                 if (value === "string") {
-                    state.macros[id].validatorsList = [
-                        "minLength",
-                        "maxLength",
-                        "pattern",
-                        "pattern-description",
-                        "mask",
-                        "required",
-                    ]
+                    state.macros[id].validatorsList = ["minLength", "maxLength", "required"]
                 }
 
                 if (value === "enum") {
@@ -70,10 +63,13 @@ export const attributeSlice = createSlice({
             }
 
             if (name === "name") {
-                state.macros[id].name = value
+                state.macros[id].name = value.toLowerCase().split(" ").join("_").trim()
             }
             if (name === "label") {
                 state.macros[id].label = value
+            }
+            if (name === "selectable") {
+                state.macros[id].selectable = checked
             }
         },
 
@@ -86,7 +82,7 @@ export const attributeSlice = createSlice({
             }: { name: string; value: string; id: number; className: number } = payload
 
             if (name === "name") {
-                state.macros[className].options[id].name = value
+                state.macros[className].options[id].name = value.toLowerCase().split(" ").join("_").trim()
             }
             if (name === "label") {
                 state.macros[className].options[id].label = value
@@ -109,7 +105,7 @@ export const attributeSlice = createSlice({
                 state.attributes[id].label = value
             }
             if (name === "name") {
-                state.attributes[id].name = value.toLowerCase().split(" ").join("_")
+                state.attributes[id].name = value.toLowerCase().split(" ").join("_").trim()
             }
             if (name === "type") {
                 console.log(value)

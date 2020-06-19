@@ -5,6 +5,7 @@ import * as express from "express"
 import * as cors from "cors"
 import "reflect-metadata"
 
+import { ProductAttributesController } from "./controller/ProductAttributesController"
 import { CategoryController } from "./controller/CategoryController"
 import { ProductController } from "./controller/ProductController"
 import { OrderController } from "./controller/OrderController"
@@ -26,6 +27,7 @@ export class App extends Server {
     }
 
     private setupControllers(): void {
+        const productAttributesController = new ProductAttributesController()
         const categoryController = new CategoryController()
         const productController = new ProductController()
         const orderController = new OrderController()
@@ -33,6 +35,7 @@ export class App extends Server {
 
         super.addControllers(
             [
+                productAttributesController,
                 categoryController,
                 productController,
                 orderController,

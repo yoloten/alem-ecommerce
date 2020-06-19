@@ -6,6 +6,7 @@ import { RootState } from "reducers"
 import { v4 } from "uuid"
 import axios from "axios"
 
+import * as Icons from "../../../../../common-components/icons"
 import * as UI from "../../../../../common-components/src"
 
 export default function AdminNewAttributes({ macroConfig, windowWidth }: any): JSX.Element {
@@ -68,20 +69,23 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                                       bgColor="#f3f3f3"
                                       macros={macros}
                                       border={false}
-                                      width={120}
+                                      width={windowWidth / 10.5}
                                       height={40}
                                       name="type"
                                       placeholder="Type"
                                       required={true}
+                                      icon={<Icons.Diagram />}
                                   />
                                   <UI.Input
                                       onChange={onChangeAttribute}
+                                      icon={<Icons.Pencil />}
+                                      className="attribute-input"
                                       id={index.toString()}
                                       placeholder="Name"
                                       borderRadius="6px"
                                       bgColor="#f3f3f3"
                                       border={false}
-                                      width={120}
+                                      width={windowWidth / 12.5}
                                       height={31}
                                       type="text"
                                       name="name"
@@ -90,27 +94,29 @@ export default function AdminNewAttributes({ macroConfig, windowWidth }: any): J
                                   />
                                   <UI.Input
                                       onChange={onChangeAttribute}
+                                      icon={<Icons.Blank />}
+                                      className="attribute-input"
                                       id={index.toString()}
                                       placeholder="Label"
                                       borderRadius="6px"
                                       bgColor="#f3f3f3"
                                       border={false}
-                                      width={120}
+                                      width={windowWidth / 12.5}
                                       height={31}
                                       name="label"
                                       type="text"
                                       value={val.label}
                                       required={true}
                                   />
-                                  <div className="checkbox attribute-input-checkbox">
+                                  <div className="attribute-input-checkbox">
                                       <div>Allow Filter:</div>
                                       <UI.Checkbox
                                           name="allowFilter"
                                           id={index.toString()}
                                           onChange={onChangeAttribute}
                                           checked={val.allowFilter}
-                                          width="26px"
-                                          height="26px"
+                                          width="20px"
+                                          height="20px"
                                       />
                                   </div>
                               </div>

@@ -38,7 +38,6 @@ interface UserInterface {
 
 @Controller("api/user")
 export class UserController {
-
     @Get("getuseraddresses/")
     @Middleware(jwtVerify)
     public async getUserAddress(req: any, res: Response): Promise<void> {
@@ -50,17 +49,17 @@ export class UserController {
                 .getRepository(Address)
                 .createQueryBuilder("address")
                 .select([
-                    "address.address", 
-                    "address.id", 
-                    "address.city", 
-                    "address.postalcode", 
+                    "address.address",
+                    "address.id",
+                    "address.city",
+                    "address.postalcode",
                     "address.phone",
                     "address.selected",
                 ])
                 .where("address.user = :user", { user: decoded.primaryKey })
                 .orderBy("address.createdAt", "DESC")
                 .getMany()
-            
+
             res.status(200).json(addresses)
         } catch (error) {
             console.log(error)
@@ -77,23 +76,19 @@ export class UserController {
             const { fields } = req.body
             const { email, name, password }: UserInterface = JSON.parse(fields)
             const photo = req.file
-            
+
             if (typeof email !== "string" || !validator.isEmail(email)) {
                 res.status(400).json({ success: "Not email" })
-            }
-
-            else if (typeof name !== "string" || !name) {
+            } else if (typeof name !== "string" || !name) {
                 res.status(400).json({ success: "No name provided" })
-            }
-
-            else if (typeof name !== "string" || password.length < 6) {
+            } else if (typeof name !== "string" || password.length < 6) {
                 res.status(400).json({ success: "Minimum password length is 6 characters" })
             } else {
                 const user = await connection
-                .getRepository(User)
-                .createQueryBuilder("user")
-                .where("user.email = :email", { email })
-                .getOne()
+                    .getRepository(User)
+                    .createQueryBuilder("user")
+                    .where("user.email = :email", { email })
+                    .getOne()
 
                 if (user) {
                     res.status(400).json({ success: "This email already exists" })
@@ -101,7 +96,7 @@ export class UserController {
                     const hash = await bcrypt.hash(password, saltRounds)
                     const hashedPassword = hash
                     const generatedName = "user_avatar_" + v4() + ".jpeg"
-                    
+
                     await sharp(photo.buffer)
                         .resize(900)
                         .toFormat("jpeg")
@@ -120,12 +115,12 @@ export class UserController {
                         email,
                         name,
                     }
-    
+
                     const newUser = new User()
                     Object.assign(newUser, userProps)
 
                     await connection.manager.save(newUser)
-        
+
                     res.status(200).json({ success: "Success" })
                 }
             }
@@ -157,7 +152,7 @@ export class UserController {
                         email: user.email,
                         primaryKey: user.primaryKey,
                         photo: user.photo,
-                        role: user.role
+                        role: user.role,
                     }
 
                     const token = jwt.sign(payload, secret.secretOrKey, { expiresIn: 3600 * 24 })
@@ -167,7 +162,6 @@ export class UserController {
                     res.status(400).json({ msg: "Invalid password or email" })
                 }
             }
-
         } catch (error) {
             console.log(error)
         }
@@ -182,20 +176,20 @@ export class UserController {
         try {
             const { postalcode, address, city, phone, id } = req.body
 
-            const selectedItem: any = await connection.getRepository(Address).findOne({selected: true})
-            
+            const selectedItem: any = await connection.getRepository(Address).findOne({ selected: true })
+
             if (selectedItem) {
                 selectedItem.selected = false
                 await connection.manager.save(selectedItem)
             }
-            
-            const existedAddress = await connection.getRepository(Address).findOne({id})
+
+            const existedAddress = await connection.getRepository(Address).findOne({ id })
             const user: any = await connection
                 .getRepository(User)
                 .createQueryBuilder("user")
                 .where("user.email = :email", { email: decoded.email })
                 .getOne()
-        
+
             if (!existedAddress) {
                 const addressProps = {
                     selected: true,
@@ -208,7 +202,7 @@ export class UserController {
 
                 const newAddress = new Address()
                 Object.assign(newAddress, addressProps)
-                
+
                 await connection.manager.save(newAddress)
             } else {
                 existedAddress.postalcode = postalcode
@@ -217,13 +211,13 @@ export class UserController {
                 existedAddress.selected = true
                 existedAddress.phone = phone
                 existedAddress.city = city
-            
+
                 await connection.manager.save(existedAddress)
             }
-            
+
             res.json({ success: true })
         } catch (error) {
             console.log(error)
         }
     }
-} 
+}

@@ -28,7 +28,9 @@ export default function AdminSidebar(): JSX.Element {
                         className="admin-sidebar-item"
                         href="/admin/product/attributes"
                     >
-                        <div className="sidebar-icon">ico</div>
+                        <div className="sidebar-icon">
+                            <Icons.Document />
+                        </div>
                         <div>Edit Attributes</div>
                     </Link>
 
@@ -37,7 +39,9 @@ export default function AdminSidebar(): JSX.Element {
                         className="admin-sidebar-item"
                         href="/admin/product/create"
                     >
-                        <div className="sidebar-icon">ico</div>
+                        <div className="sidebar-icon">
+                            <Icons.Add />
+                        </div>
                         <div>Create product</div>
                     </Link>
 
@@ -46,7 +50,9 @@ export default function AdminSidebar(): JSX.Element {
                         className="admin-sidebar-item"
                         href="/admin/product/category"
                     >
-                        <div className="sidebar-icon">ico</div>
+                        <div className="sidebar-icon">
+                            <Icons.Category />
+                        </div>
                         <div>Create category</div>
                     </Link>
                 </>

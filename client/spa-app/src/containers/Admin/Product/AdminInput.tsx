@@ -1,21 +1,23 @@
 import { Options } from "actions/admin/product/attributes"
 import React, { useState, useEffect } from "react"
+import InputMask from "react-input-mask"
 import axios from "axios"
 
 import * as UI from "../../../../../common-components/src"
 
 // TODO: ADD MASKS, WRITE NORMAL VALIDATIONS AND DEAL WITH ENUMS
 
-export default function AdminInput({ attribute, onChangeInputField, id, val }: any): JSX.Element {
+export default function AdminInput({ attribute, onChangeInputField, id, val, width }: any): JSX.Element {
     const [macro, setState]: any = useState({})
 
     useEffect(() => {
         const getMacro = async () => {
-            const macroFromServer = await axios.get("http://localhost:8000/api/product/macro", {
+            const macroFromServer = await axios.get("http://localhost:8000/api/product/attributes/macro", {
                 params: { name: attribute.type },
             })
-
-            setState(macroFromServer.data)
+            if (macroFromServer.data) {
+                setState(macroFromServer.data)
+            }
         }
 
         if (attribute.type !== "String" || attribute.type !== "number") {
@@ -45,13 +47,6 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                 }
                 if (value.length > parseInt(validators.maxLength, 10)) {
                     error = `Write less than ${validators.minLength} characters`
-                }
-                if (validators.pattern) {
-                    const newRegExp = new RegExp(validators.pattern)
-
-                    if (!newRegExp.test(value)) {
-                        error = "Please follow the pattern"
-                    }
                 }
                 if (validators.required && !value) {
                     error = "This field is required"
@@ -97,7 +92,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                     borderRadius="3px"
                     bgColor="#fff"
                     border={true}
-                    width={210}
+                    width={width}
                     height={31}
                     id={id}
                 />
@@ -106,42 +101,40 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
 
         if (macro) {
             if (macro.type === "enum") {
-                return macro.options.map((option: Options, i: number) => {
-                    return (
-                        <div className="filters-name" key={option.uuid} style={{ marginLeft: "20px" }}>
-                            <UI.Checkbox
-                                id={id}
-                                className={option.name}
-                                name={attribute.name}
-                                value={option.value}
-                                checked={val && val[macro.name] && val[macro.name].includes(option.name) ? true : false}
-                                onChange={changeInput}
-                                width="20px"
-                                height="20px"
-                            />
-                            <div className="filters-childname">{option.label}</div>
+                return (
+                    <>
+                        <div>{attribute.label}</div>
+                        <div className="secondary-checkboxes">
+                            {macro.options.map((option: Options, i: number) => {
+                                return (
+                                    <div
+                                        className="secondary-checkbox"
+                                        key={option.uuid}
+                                        style={{ marginRight: "20px" }}
+                                    >
+                                        <UI.Checkbox
+                                            id={id}
+                                            className={option.name}
+                                            name={attribute.name}
+                                            value={option.value}
+                                            checked={
+                                                val && val[macro.name] && val[macro.name].includes(option.name)
+                                                    ? true
+                                                    : false
+                                            }
+                                            onChange={changeInput}
+                                            width="20px"
+                                            height="20px"
+                                        />
+                                        <div className="secondary-checkbox-name">{option.label}</div>
+                                    </div>
+                                )
+                            })}
                         </div>
-                    )
-                })
-                // return (
-                //     <UI.Dropdown
-                //         onChange={changeInput}
-                //         className="createproduct-input"
-                //         value={val && Object.keys(val).length > 0 ? val[macro.name] : ""}
-                //         options={macro.options}
-                //         borderRadius="3px"
-                //         borderColor="#f1f1f1"
-                //         bgColor="#fff"
-                //         border={true}
-                //         width={220 + 30}
-                //         height={40}
-                //         name={attribute.name}
-                //         id={id}
-                //         placeholder={attribute.label}
-                //         required={true}
-                //     />
-                // )
+                    </>
+                )
             }
+
             if (macro.type === "string") {
                 return (
                     <UI.Input
@@ -152,11 +145,11 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                         borderRadius="3px"
                         bgColor="#fff"
                         border={true}
-                        width={220}
+                        width={width}
                         height={31}
                         type="text"
                         onChange={changeInput}
-                        placeholder={macro.validators.mask ? macro.validators.mask : attribute.label}
+                        placeholder={attribute.label}
                         id={id}
                     />
                 )
@@ -170,7 +163,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val }: a
                         borderRadius="3px"
                         bgColor="#fff"
                         border={true}
-                        width={210}
+                        width={width}
                         height={31}
                         required={macro.validators.required}
                         type="number"

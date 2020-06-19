@@ -3,6 +3,7 @@ import * as Icons from "../icons"
 
 export interface Props {
     onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
+    icon?: React.ReactNode
     stringValues?: boolean
     borderRadius?: string
     borderColor?: string
@@ -74,26 +75,37 @@ export function Dropdown(props: Props): JSX.Element {
                         ? "1px solid " + `${props.borderColor ? props.borderColor : "#d9d9d9"}`
                         : "none",
                     borderRadius: props.borderRadius ? props.borderRadius : "50px",
-                    minHeight: props.height ? props.height + "px" : "40px",
+                    height: props.height ? props.height + "px" : "40px",
                     background: props.bgColor ? props.bgColor : "#fff",
                     width: props.width - 40 + "px",
                     cursor: "pointer",
                 }}
             >
-                <div className="dropdown-text">
-                    <div className="placeholder">
-                        {props.placeholder && props.required ? props.placeholder + "*" : ""}
-                    </div>
-                    <div className="val">
-                        {props.name === "category"
-                            ? props.options.map((opt: any, i: number) => {
-                                  if (opt.uuid === props.value) {
-                                      return opt.name
-                                  }
-                              })
-                            : props.value}
+                <div className="dropdown-content">
+                    {props.icon && (
+                        <div
+                            className="dropdown-input-icon"
+                            style={{ height: props.height ? props.height + "px" : "45px" }}
+                        >
+                            {props.icon}
+                        </div>
+                    )}
+                    <div className="dropdown-text">
+                        <div className="dropdown-placeholder">
+                            {props.placeholder && props.required ? props.placeholder + "*" : ""}
+                        </div>
+                        <div className="dropdown-val">
+                            {props.name === "category"
+                                ? props.options.map((opt: any, i: number) => {
+                                      if (opt.uuid === props.value) {
+                                          return opt.name
+                                      }
+                                  })
+                                : props.value.slice(0, props.width / 10) + (props.value && "...")}
+                        </div>
                     </div>
                 </div>
+
                 <div className="dropdown-icon">{open ? <Icons.ArrowUp /> : <Icons.ArrowDown />}</div>
             </div>
         </div>

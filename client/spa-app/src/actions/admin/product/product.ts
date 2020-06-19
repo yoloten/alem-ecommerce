@@ -16,7 +16,7 @@ export const createProduct = createAsyncThunk<any, any, any>(
 
             return "Something went wrong"
         } catch (err) {
-            return rejectWithValue(err)
+            return err.response.data.msg
         }
     },
 )

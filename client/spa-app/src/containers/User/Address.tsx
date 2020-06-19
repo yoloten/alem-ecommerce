@@ -222,7 +222,7 @@ export default function Address(): JSX.Element {
                     </div>
 
                     <div className="address-actions">
-                        <Link className="address-back" href="/cart">
+                        <Link className="address-back" href="/user/cart">
                             Back
                         </Link>
                         <div className="msg">{msg}</div>

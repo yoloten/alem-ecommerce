@@ -13,7 +13,6 @@
     "license": "ISC",
     "dependencies": {
         "@types/lodash": "^4.14.151",
-        "@types/react-input-mask": "^2.0.5",
         "@webdeb/next-styles": "^1.0.7",
         "axios": "^0.19.1",
         "js-cookie": "^2.2.1",
@@ -27,7 +26,6 @@
         "react-dropzone": "^11.0.1",
         "react-input-mask": "^2.0.4",
         "react-range": "^1.4.9",
-        "react-stripe-elements": "^6.0.1",
         "uuid": "^3.4.0"
     },
     "devDependencies": {
@@ -37,7 +35,6 @@
         "@types/next-redux-wrapper": "^3.0.0",
         "@types/node": "^13.1.4",
         "@types/react-burger-menu": "^2.6.0",
-        "@types/react-stripe-elements": "^6.0.3",
         "@types/uuid": "^3.4.6",
         "typescript": "^3.7.4",
         "@typescript-eslint/eslint-plugin": "^3.1.0",

@@ -2,16 +2,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import jwt_decode from "jwt-decode"
 import axios from "axios"
 
-// export interface Decoded {
-//     primaryKey: string
-//     email: string
-//     phone: string
-//     photo: string
-//     name: string
-//     role: string
-//     id: string
-//     exp?: any
-// }
+export interface CreditCard {
+    number: string
+    exp: string
+    cvc: string
+}
+
+export interface OrderData {
+    orderDetails: any
+    card: CreditCard
+}
 
 export const getOrderDetails = createAsyncThunk("user/getOrderDetails", async () => {
     try {
@@ -22,6 +22,20 @@ export const getOrderDetails = createAsyncThunk("user/getOrderDetails", async ()
         })
 
         return result.data
+    } catch (err) {
+        return err.response.data.success
+    }
+})
+
+export const createOrder = createAsyncThunk("user/createOrder", async (orderData: OrderData) => {
+    try {
+        const token = localStorage.getItem("jwtToken")
+
+        const result = await axios.post("http://localhost:8000/api/order/create", orderData, {
+            headers: { Authorization: token },
+        })
+
+        return result.data.success
     } catch (err) {
         return err.response.data.success
     }

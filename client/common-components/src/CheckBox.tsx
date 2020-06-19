@@ -20,7 +20,7 @@ export interface Props {
 export function Checkbox({
     type = "checkbox",
     name,
-    checked = false,
+    checked,
     onChange,
     id,
     width,
@@ -54,7 +54,7 @@ export function Checkbox({
                 }}
                 className="checkbox"
             >
-                {checked && click % 2 ? <Icons.CheckMark width={width} height={height} /> : ""}
+                {checked ? <Icons.CheckMark width={width} height={height} /> : ""}
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import { createOrUpdateAddress, AddressInterface, getUserAddresses } from "actions/user/address"
 import { register, login, Decoded, setAuthToken } from "actions/user/auth"
-import { getOrderDetails } from "actions/user/order"
+import { getOrderDetails, createOrder } from "actions/user/order"
 import { createOrUpdateCart } from "actions/user/cart"
 import { createSlice } from "@reduxjs/toolkit"
 
@@ -64,6 +64,9 @@ export const userSlice = createSlice({
         })
         builder.addCase(getOrderDetails.fulfilled, (state, { payload }) => {
             state.orderDetails = payload
+        })
+        builder.addCase(createOrder.fulfilled, (state, { payload }) => {
+            state.msg = "Success"
         })
     },
 })

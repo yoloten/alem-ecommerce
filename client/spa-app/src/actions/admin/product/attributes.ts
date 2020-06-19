@@ -13,6 +13,7 @@ export interface Options {
 export interface Macro {
     validators: Record<string, string | number>
     validatorsList: string[]
+    selectable: boolean
     options: Options[]
     label: string
     name: string
@@ -31,7 +32,7 @@ export interface Attribute {
 // MACROS
 export const getAllMacros = createAsyncThunk("product/getAllMacros", async () => {
     try {
-        const result = await axios.get("http://localhost:8000/api/product/allmacros")
+        const result = await axios.get("http://localhost:8000/api/product/attributes/allmacros")
         const macros: Macro[] = result.data
 
         return macros
@@ -42,7 +43,7 @@ export const getAllMacros = createAsyncThunk("product/getAllMacros", async () =>
 
 export const createMacros = createAsyncThunk("product/createMacros", async (macros: Macro[]) => {
     try {
-        const result = await axios.post("http://localhost:8000/api/product/createmacro", macros)
+        const result = await axios.post("http://localhost:8000/api/product/attributes/createmacro", macros)
 
         return result.data.success
     } catch (err) {
@@ -53,7 +54,7 @@ export const createMacros = createAsyncThunk("product/createMacros", async (macr
 // ATTRIBUTES
 export const getAllAttributes = createAsyncThunk("product/getAllAttributes", async () => {
     try {
-        const result = await axios.get("http://localhost:8000/api/product/schema", {
+        const result = await axios.get("http://localhost:8000/api/product/attributes/schema", {
             params: { table: "product" },
         })
         if (result.data && result.data.msg !== "no schema") {
@@ -72,7 +73,10 @@ export const createAttribute = createAsyncThunk(
     "product/createAttribute",
     async ({ table, attributes }: { table: string; attributes: Attribute[] }) => {
         try {
-            const result = await axios.post("http://localhost:8000/api/product/createschema", { table, attributes })
+            const result = await axios.post("http://localhost:8000/api/product/attributes/createschema", {
+                table,
+                attributes,
+            })
 
             return result.data.success
         } catch (err) {

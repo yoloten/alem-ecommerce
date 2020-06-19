@@ -13,6 +13,7 @@ import { RootState } from "reducers"
 import axios from "axios"
 import { v4 } from "uuid"
 
+import * as Icons from "../../../../../common-components/icons"
 import * as UI from "../../../../../common-components/src"
 
 export default function AdminMacro(props: any): JSX.Element {
@@ -32,9 +33,9 @@ export default function AdminMacro(props: any): JSX.Element {
     }, [success])
 
     const changeMacroProperties = (e: any) => {
-        const { name, value, id } = e.target
+        const { name, value, id, checked } = e.target
 
-        dispatch(macrosChange({ name, value, id: parseInt(id, 10) }))
+        dispatch(macrosChange({ name, value, id: parseInt(id, 10), checked }))
     }
 
     const changeOption = (e: any) => {
@@ -45,13 +46,14 @@ export default function AdminMacro(props: any): JSX.Element {
 
     const addMacro = () => {
         const newMacro: Macro = {
+            validatorsList: [],
+            selectable: false,
+            validators: {},
+            options: [],
+            uuid: v4(),
             label: "",
             name: "",
             type: "",
-            validators: {},
-            options: [],
-            validatorsList: [],
-            uuid: v4(),
         }
 
         dispatch(addNewMacro(newMacro))
@@ -60,11 +62,11 @@ export default function AdminMacro(props: any): JSX.Element {
     const addOption = (e: any) => {
         e.preventDefault()
         const option = {
-            name: "",
+            uuid: v4(),
             label: "",
             value: "",
             meta: {},
-            uuid: v4(),
+            name: "",
         }
 
         dispatch(addNewOption({ id: parseInt(e.target.id, 10), option }))
@@ -95,7 +97,7 @@ export default function AdminMacro(props: any): JSX.Element {
                 Here you can create and edit various macros, including enumerations
             </div>
             <form action="submit" onSubmit={submit}>
-                {macros.map((macro: any, macroIndex: number) => {
+                {macros.map((macro, macroIndex: number) => {
                     return (
                         <>
                             <div className="admin-macro-list">
@@ -114,43 +116,71 @@ export default function AdminMacro(props: any): JSX.Element {
                                             borderRadius="6px"
                                             bgColor="#f3f3f3"
                                             border={false}
-                                            width={120}
+                                            width={
+                                                macro.type === "enum"
+                                                    ? props.windowWidth / 10.5
+                                                    : props.windowWidth / 8.5
+                                            }
                                             height={40}
+                                            icon={<Icons.Diagram />}
                                             name="type"
                                             placeholder="Type"
                                             value={macro.type ? macro.type : ""}
                                             required={true}
                                         />
                                         <UI.Input
-                                            id={macroIndex.toString()}
-                                            className="attribute-input"
+                                            value={macro.name ? macro.name : ""}
                                             onChange={changeMacroProperties}
+                                            className="attribute-input"
+                                            id={macroIndex.toString()}
+                                            icon={<Icons.Pencil />}
                                             placeholder="Name"
                                             borderRadius="6px"
                                             bgColor="#f3f3f3"
+                                            required={true}
                                             border={false}
-                                            width={120}
+                                            width={
+                                                macro.type === "enum"
+                                                    ? props.windowWidth / 12.5
+                                                    : props.windowWidth / 10.5
+                                            }
                                             height={31}
                                             type="text"
                                             name="name"
-                                            required={true}
-                                            value={macro.name ? macro.name : ""}
                                         />
                                         <UI.Input
-                                            id={macroIndex.toString()}
+                                            value={macro.label ? macro.label : ""}
                                             className="attribute-input last"
                                             onChange={changeMacroProperties}
+                                            id={macroIndex.toString()}
+                                            icon={<Icons.Blank />}
                                             placeholder="Label"
                                             borderRadius="6px"
                                             bgColor="#f3f3f3"
+                                            required={true}
                                             border={false}
-                                            width={120}
+                                            width={
+                                                macro.type === "enum"
+                                                    ? props.windowWidth / 12.5
+                                                    : props.windowWidth / 10.5
+                                            }
                                             height={31}
                                             type="text"
                                             name="label"
-                                            required={true}
-                                            value={macro.label ? macro.label : ""}
                                         />
+                                        {macro.type === "enum" && (
+                                            <div className="macro-selectable">
+                                                <div className="attribute-checkbox-label">Selectable:</div>
+                                                <UI.Checkbox
+                                                    checked={macro.selectable ? true : false}
+                                                    onChange={changeMacroProperties}
+                                                    id={macroIndex.toString()}
+                                                    name="selectable"
+                                                    height="20px"
+                                                    width="20px"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                     {macro.type === "enum" ? (
                                         <div className="attributes-new-secondtitle">Options</div>
@@ -159,7 +189,7 @@ export default function AdminMacro(props: any): JSX.Element {
                                     )}
                                     <div className="attribute-enum-options">
                                         {macro.type === "enum" && macro.options && macro.options.length > 0
-                                            ? macro.options.map((val: any, index: number) => {
+                                            ? macro.options.map((val, index: number) => {
                                                   return (
                                                       <div
                                                           key={`option-${index}`}
@@ -171,11 +201,12 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               name="name"
                                                               placeholder="Name"
                                                               onChange={changeOption}
-                                                              width={100}
+                                                              width={props.windowWidth / 11}
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
                                                               className={`${macroIndex}`}
+                                                              icon={<Icons.Pencil />}
                                                               required={true}
                                                               value={val.name}
                                                           />
@@ -185,11 +216,12 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               name="label"
                                                               placeholder="Label"
                                                               onChange={changeOption}
-                                                              width={100}
+                                                              width={props.windowWidth / 11}
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
                                                               className={`${macroIndex}`}
+                                                              icon={<Icons.Blank />}
                                                               required={true}
                                                               value={val.label}
                                                           />
@@ -199,15 +231,18 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               id={index.toString()}
                                                               placeholder="Value"
                                                               onChange={changeOption}
-                                                              width={100}
+                                                              width={props.windowWidth / 11}
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
                                                               className={`${macroIndex}`}
                                                               required={true}
                                                               value={val.value}
+                                                              icon={<Icons.Diagram />}
                                                           />
-                                                          <div className="delete-option">del</div>
+                                                          <div className="delete-option">
+                                                              <Icons.Trash />
+                                                          </div>
                                                       </div>
                                                   )
                                               })
@@ -234,7 +269,7 @@ export default function AdminMacro(props: any): JSX.Element {
                                     <div className="attribute-validators">
                                         <div className="attributes-validators-list">
                                             {macro.validatorsList
-                                                ? macro.validatorsList.slice(0, 3).map((item: any, i: number) => {
+                                                ? macro.validatorsList.slice(0, 3).map((item, i: number) => {
                                                       if (item === "required") {
                                                           return (
                                                               <div
@@ -251,8 +286,8 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                       name="required"
                                                                       id={macroIndex.toString()}
                                                                       onChange={onValidatorChange}
-                                                                      width="26px"
-                                                                      height="26px"
+                                                                      width="20px"
+                                                                      height="20px"
                                                                       checked={macro.validators.required ? true : false}
                                                                   />
                                                               </div>
@@ -321,14 +356,14 @@ export default function AdminMacro(props: any): JSX.Element {
                                         </div>
                                         <div className="attributes-validators-list">
                                             {macro.type === "string" && macro.validatorsList
-                                                ? macro.validatorsList.slice(3, 6).map((item: any, i: number) => {
+                                                ? macro.validatorsList.slice(3, 6).map((item, i: number) => {
                                                       if (item === "required") {
                                                           return (
                                                               <div
                                                                   key={i}
                                                                   className="attrbute-checkbox-div"
                                                                   style={{
-                                                                      width: "135px",
+                                                                      width: "150px",
                                                                   }}
                                                               >
                                                                   <div className="attribute-checkbox-label">
@@ -339,8 +374,8 @@ export default function AdminMacro(props: any): JSX.Element {
                                                                       name="required"
                                                                       id={macroIndex.toString()}
                                                                       onChange={onValidatorChange}
-                                                                      width="26px"
-                                                                      height="26px"
+                                                                      width="20px"
+                                                                      height="20px"
                                                                       checked={macro.validators.required ? true : false}
                                                                   />
                                                               </div>
