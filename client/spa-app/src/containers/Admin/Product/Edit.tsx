@@ -1,4 +1,4 @@
-import { getOneById } from "actions/admin/product/product"
+import { getOneById, updateProduct } from "actions/admin/product/product"
 import { getLastLevelCategories } from "actions/admin/product/category"
 import { getAllAttributes } from "actions/admin/product/attributes"
 import { useDispatch, useSelector } from "react-redux"
@@ -15,10 +15,9 @@ import * as UI from "../../../../../common-components/src"
 import AdminMainContent from "../UI/AdminMainContent"
 import AdminInput from "./AdminInput"
 
-export default function CreateProduct(): JSX.Element {
+export default function EditProduct(): JSX.Element {
     const [fields, setFields]: any = useState([])
     const [errors, setErrors]: any = useState([])
-    const [disabledBtn, setDisabledBtn]: any = useState(true)
     const [photos, setPhotos]: any = useState([])
     const [mainProperties, setMainProperites] = useState({
         name: "",
@@ -49,8 +48,16 @@ export default function CreateProduct(): JSX.Element {
         dispatch(getLastLevelCategories())
         dispatch(getAllAttributes())
 
-        if (query.id) {
+        if (pathname === "/admin/product/edit" && query.id) {
             dispatch(getOneById({ id: query.id }))
+        } else {
+            navigation.navigate("/admin/product/list")
+        }
+    }, [])
+
+    useEffect(() => {
+        if (Object.keys(oneProduct).length > 0 && pathname === "/admin/product/edit" && query.id) {
+            const newFields: any = []
 
             if (oneProduct.photos && oneProduct.photos.length > 0) {
                 const photosArr: any = []
@@ -59,53 +66,52 @@ export default function CreateProduct(): JSX.Element {
                     const content = "image/jpeg"
                     const blob = b64toBlob(oneProduct.photos[i].image, content)
                     const file = new File([blob], oneProduct.photos[i].name, { type: content })
-
                     photosArr.push(file)
                 }
-
                 setPhotos(photosArr)
             }
 
-            if (oneProduct) {
-                const newFields = [...fields]
+            if (attributes.length > 0) {
+                attributes.map((attr: any, i: number) => {
+                    newFields.push({})
 
-                if (attributes && attributes.length > 0) {
-                    attributes.map((attr: any, i: number) => {
-                        return Object.keys(oneProduct).map((key: string) => {
-                            const obj: any = {}
+                    Object.keys(oneProduct).map((key: string) => {
+                        const obj: any = {}
 
-                            if (key === attr.name + "_name") {
-                                obj[attr.name] = oneProduct[attr.name + "_name"]
-                                obj.type = attr.type
-                                newFields.push(obj)
-                            } else if (key === attr.name) {
-                                obj[attr.name] = oneProduct[attr.name]
-                                obj.type = attr.type
-                                newFields.push(obj)
-                            }
-                        })
+                        if (key === attr.name + "_enum") {
+                            obj[attr.name] = [...oneProduct[attr.name + "_enum"]]
+                            obj.type = attr.type
+
+                            newFields[i] = obj
+                        } else if (key === attr.name) {
+                            obj[attr.name] = oneProduct[attr.name]
+                            obj.type = attr.type
+                            newFields[i] = obj
+                        } else if (key === attr.name + "_name") {
+                            obj[attr.name] = oneProduct[attr.name + "_name"]
+                            obj.type = attr.type
+                            newFields[i] = obj
+                        }
                     })
-                }
-
-                setFields(newFields)
-                setMainProperites((state: any) => ({
-                    ...state,
-                    ...{
-                        name: oneProduct.name,
-                        description: oneProduct.description,
-                        price: oneProduct.price,
-                        count: oneProduct.count,
-                        discount: oneProduct.discount,
-                        currency: oneProduct.currency,
-                        category: oneProduct.category_uuid,
-                        id: oneProduct.id,
-                    },
-                }))
+                })
             }
-        } else {
-            navigation.navigate("/admin/product/list")
+
+            setFields(newFields)
+            setMainProperites((state: any) => ({
+                ...state,
+                ...{
+                    name: oneProduct.name,
+                    description: oneProduct.description,
+                    price: oneProduct.price,
+                    count: oneProduct.count,
+                    discount: oneProduct.discount,
+                    currency: oneProduct.currency,
+                    category: oneProduct.category_uuid,
+                    id: oneProduct.id,
+                },
+            }))
         }
-    }, [])
+    }, [oneProduct])
 
     const deletePhoto = async (index: number) => {
         const newPhotos = [...photos]
@@ -128,16 +134,19 @@ export default function CreateProduct(): JSX.Element {
     const onChangeInputField = (field: any, err: any, type: any) => {
         const newFields = [...fields]
         const newErrors = [...errors]
-        const { value, id, name, attributeType } = field
+        const { value, id, name, attributeType, className } = field
 
         if (type === "enum") {
-            const arr: any = [...[newFields[parseInt(id, 10)][name]]]
+            const index = newFields[parseInt(id, 10)][name].indexOf(className)
 
-            arr.push(value)
-
-            newFields[parseInt(id, 10)][name] = arr.flat().filter((a: any) => {
-                return a != null || a !== undefined
-            })
+            if (index === -1 && value !== "") {
+                console.log(index, "push")
+                newFields[parseInt(id, 10)][name].push(value)
+            } else {
+                console.log(index, "splice", value)
+                newFields[parseInt(id, 10)][name].splice(index, 1)
+            }
+            console.log(newFields[parseInt(id, 10)][name])
             newFields[parseInt(id, 10)].type = attributeType
         } else {
             newFields[parseInt(id, 10)][name] = value
@@ -148,12 +157,6 @@ export default function CreateProduct(): JSX.Element {
 
         setFields([...newFields])
         setErrors([...newErrors])
-
-        if (newErrors.filter((e) => e !== "")[0]) {
-            setDisabledBtn(true)
-        } else {
-            setDisabledBtn(false)
-        }
     }
 
     const submit = async (e: any) => {
@@ -169,15 +172,7 @@ export default function CreateProduct(): JSX.Element {
         formData.append("fields", JSON.stringify(fields))
         formData.append("mainProperties", JSON.stringify(mainProperties))
 
-        if (pathname === "/admin/editproduct" && query.id) {
-            await axios.put("http://localhost:8000/api/product/update", formData)
-        } else {
-            const created = await axios.post("http://localhost:8000/api/product/create", { table: "product" })
-
-            if (created.data.success) {
-                await axios.post("http://localhost:8000/api/product/insert", formData)
-            }
-        }
+        dispatch(updateProduct(formData))
     }
 
     return (
@@ -221,122 +216,129 @@ export default function CreateProduct(): JSX.Element {
                                     )}
                                 </div>
                             </div>
-                            <UI.Input
-                                className="createproduct-input"
-                                onChange={changeMainProperties}
-                                placeholder="Name"
-                                borderRadius="3px"
-                                bgColor="#fff"
-                                border={true}
-                                width={220}
-                                height={31}
-                                type="text"
-                                name="name"
-                                value={mainProperties.name}
-                                required={true}
-                                id="input"
-                            />
-                            <UI.Dropdown
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                value={mainProperties.category}
-                                options={lastLevelCategories}
-                                borderRadius="3px"
-                                borderColor="#f1f1f1"
-                                bgColor="#fff"
-                                border={true}
-                                width={220 + 30}
-                                height={40}
-                                name="category"
-                                placeholder="Category"
-                                required={true}
-                                id="dropdown"
-                            />
-                            <UI.Input
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                placeholder="Description"
-                                borderRadius="3px"
-                                bgColor="#fff"
-                                border={true}
-                                width={220}
-                                height={31}
-                                type="text"
-                                name="description"
-                                value={mainProperties.description}
-                                required={true}
-                                id="input"
-                            />
-                            <UI.Input
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                placeholder="Count"
-                                borderRadius="3px"
-                                bgColor="#fff"
-                                border={true}
-                                width={210}
-                                height={31}
-                                type="number"
-                                name="count"
-                                min="0"
-                                value={mainProperties.count}
-                                required={true}
-                                id="input"
-                            />
-                            <UI.Input
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                placeholder="Price"
-                                borderRadius="3px"
-                                bgColor="#fff"
-                                border={true}
-                                width={210}
-                                height={31}
-                                type="number"
-                                name="price"
-                                min="0"
-                                step="0.01"
-                                value={mainProperties.price}
-                                required={true}
-                                id="input"
-                            />
-                            <UI.Input
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                placeholder="Discount"
-                                borderRadius="3px"
-                                bgColor="#fff"
-                                border={true}
-                                width={210}
-                                height={31}
-                                type="number"
-                                name="discount"
-                                min="0"
-                                step="0.01"
-                                value={mainProperties.discount}
-                                required={true}
-                                id="input"
-                            />
-                            <UI.Dropdown
-                                onChange={changeMainProperties}
-                                className="createproduct-input"
-                                value={mainProperties.currency}
-                                options={[{ value: "USD" }, { value: "RUB" }]}
-                                borderRadius="3px"
-                                borderColor="#f1f1f1"
-                                bgColor="#fff"
-                                border={true}
-                                width={220 + 30}
-                                height={40}
-                                name="currency"
-                                placeholder="Currency"
-                                required={true}
-                                id="dropdown"
-                            />
+                            {oneProduct && (
+                                <>
+                                    <UI.Input
+                                        className="createproduct-input"
+                                        onChange={changeMainProperties}
+                                        placeholder="Name"
+                                        borderRadius="3px"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={220}
+                                        height={31}
+                                        type="text"
+                                        name="name"
+                                        value={mainProperties.name}
+                                        required={true}
+                                        id="input"
+                                    />
+                                    <UI.Dropdown
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        value={mainProperties.category}
+                                        options={lastLevelCategories}
+                                        borderRadius="3px"
+                                        borderColor="#f1f1f1"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={220 + 30}
+                                        height={40}
+                                        name="category"
+                                        placeholder="Category"
+                                        required={true}
+                                        id="dropdown"
+                                    />
+                                    <UI.Input
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        placeholder="Description"
+                                        borderRadius="3px"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={220}
+                                        height={31}
+                                        type="text"
+                                        name="description"
+                                        value={mainProperties.description}
+                                        required={true}
+                                        id="input"
+                                    />
+                                    <UI.Input
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        placeholder="Count"
+                                        borderRadius="3px"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={210}
+                                        height={31}
+                                        type="number"
+                                        name="count"
+                                        min="0"
+                                        value={mainProperties.count}
+                                        required={true}
+                                        id="input"
+                                    />
+                                    <UI.Input
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        placeholder="Price"
+                                        borderRadius="3px"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={210}
+                                        height={31}
+                                        type="number"
+                                        name="price"
+                                        min="0"
+                                        step="0.01"
+                                        value={mainProperties.price}
+                                        required={true}
+                                        id="input"
+                                    />
+                                    <UI.Input
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        placeholder="Discount"
+                                        borderRadius="3px"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={210}
+                                        height={31}
+                                        type="number"
+                                        name="discount"
+                                        min="0"
+                                        step="0.01"
+                                        value={mainProperties.discount}
+                                        required={true}
+                                        id="input"
+                                    />
+                                    <UI.Dropdown
+                                        onChange={changeMainProperties}
+                                        className="createproduct-input"
+                                        value={mainProperties.currency}
+                                        options={[
+                                            { value: "USD", label: "Dollar" },
+                                            { value: "RUB", label: "Ruble" },
+                                        ]}
+                                        borderRadius="3px"
+                                        borderColor="#f1f1f1"
+                                        bgColor="#fff"
+                                        border={true}
+                                        width={220 + 30}
+                                        height={40}
+                                        name="currency"
+                                        placeholder="Currency"
+                                        required={true}
+                                        id="dropdown"
+                                    />
+                                </>
+                            )}
                         </div>
                         <div className="secondary-attributes">
                             <div className="createproduct-secondtitle">Your Custom Attributes</div>
-                            {attributes && attributes.length > 0
+                            {attributes.length > 0
                                 ? attributes.map((attribute: any, i: number) => (
                                       <>
                                           <AdminInput

@@ -1,3 +1,4 @@
+import { getOneById } from "actions/admin/product/product"
 import { getLastLevelCategories } from "actions/admin/product/category"
 import { getAllAttributes } from "actions/admin/product/attributes"
 import { deleteSuccessMsg } from "reducers/admin/productReducer"
@@ -6,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { useCurrentRoute } from "react-navi"
+import { b64toBlob } from "utils/b64ToBlob"
 import { RootState } from "reducers"
 import axios from "axios"
 
@@ -40,11 +42,7 @@ export default function Create(): JSX.Element {
     const { product, category, attribute } = useSelector((state: RootState) => state)
     const { lastLevelCategories } = category
     const { attributes } = attribute
-    const { success } = product
-
-    useEffect(() => {
-        setWindowWidth(window.innerWidth)
-    }, [])
+    const { success, oneProduct } = product
 
     useEffect(() => {
         window.addEventListener("resize", updateDimensions)
@@ -65,6 +63,7 @@ export default function Create(): JSX.Element {
     useEffect(() => {
         dispatch(getLastLevelCategories())
         dispatch(getAllAttributes())
+        setWindowWidth(window.innerWidth)
     }, [])
 
     const updateDimensions = () => setWindowWidth(window.innerWidth)

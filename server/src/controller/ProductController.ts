@@ -101,14 +101,17 @@ export class ProductController {
                 for (let i = 0; i < attributes.length; i++) {
                     const attribute = attributes[i]
 
-                    const hasColumn = await queryRunner.hasColumn(
-                        "product",
-                        attribute.type === "Number" || attribute.type === "String"
-                            ? attribute.name
-                            : attribute.name + "_product_id",
-                    )
+                    const hasColumn = await connection.query(`
+                        SELECT column_name
+                        FROM information_schema.columns
+                        WHERE table_name='product' and column_name='${
+                            attribute.type === "Number" || attribute.type === "String"
+                                ? attribute.name
+                                : attribute.name + "_product_id"
+                        }';
+                    `)
 
-                    if (hasColumn) {
+                    if (hasColumn.length > 0) {
                         if (attribute.type !== "Number" && attribute.type !== "String") {
                             selects.push(`${attribute.name}_product.${attribute.name}_name`)
                             joins.push(
@@ -116,7 +119,12 @@ export class ProductController {
                             )
                         }
                     }
-                    if (!hasColumn) {
+
+                    if (attribute.type === "Number" || attribute.type === "String") {
+                        if (hasColumn.length > 0) {
+                            selects.push(`product.${attribute.name}`)
+                        }
+                    } else if (hasColumn.length === 0) {
                         const enums = await connection.query(`
                             SELECT ${attribute.name}_name
                             FROM ${attribute.name}_product
@@ -126,9 +134,6 @@ export class ProductController {
                         additionalEnums[attribute.name + "_enum"] = enums.map(
                             (item: any) => item[attribute.name + "_name"],
                         )
-                    }
-                    if (attribute.type === "Number" || attribute.type === "String") {
-                        selects.push(`product.${attribute.name}`)
                     }
                 }
             }
@@ -255,7 +260,6 @@ export class ProductController {
     @Post("create/")
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { table } = req.body
@@ -427,12 +431,9 @@ export class ProductController {
             const enums: any = []
 
             // CATEGORY
-            const getCategory = await connection.query(
-                `
-                SELECT id FROM category WHERE category.uuid = $1
-                `,
-                [primaryProperties.category],
-            )
+            const getCategory = await connection.query(`SELECT id FROM category WHERE category.uuid = $1`, [
+                primaryProperties.category,
+            ])
 
             names.push("category_id")
             values.push(getCategory[0].id)
@@ -546,7 +547,7 @@ export class ProductController {
         const connection = getConnection()
 
         try {
-            const { table, fields, mainProperties } = req.body
+            const { fields, mainProperties } = req.body
             const primaryProperties = JSON.parse(mainProperties)
             const parsedFields = JSON.parse(fields)
             const photos: any = req.files
@@ -560,94 +561,129 @@ export class ProductController {
                         .findOne({ name: parsedFields[i].type })
 
                     if (existedMacroTable) {
-                        const id = await connection.query(
-                            `
-                            INSERT INTO ${parsedFields[i].type + "_product"} (${parsedFields[i].type + "_name"}, type)
-                            VALUES
-                                ($1, $2)
-                            Returning id;
-                        `,
-                            [Array.isArray(key) ? key[0] : key, parsedFields[i].type],
-                        )
-
-                        fieldsSetStrings.push(`${parsedFields[i].type + "_product_id = " + id[0].id}`)
-                    } else {
-                        if (parsedFields[i].type === "string" || parsedFields[i].type === "String") {
-                            fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = '${key}'`)
-                        } else {
-                            fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = ${key}`)
+                        if (existedMacroTable.type === "enum") {
+                            const existedMacro = await connection.query(`
+                                SELECT id, ${parsedFields[i].type + "_name"}
+                                FROM ${parsedFields[i].type + "_product"}
+                                WHERE product_id = ${primaryProperties.id}
+                            `)
+                            console.log("_______________")
+                            for (let index = 0; index < key.length; index++) {
+                                console.log(key[index], existedMacro[index])
+                            }
+                            // await connection.query(
+                            //     `
+                            //         UPDATE ${parsedFields[i].type + "_product"}
+                            //         SET
+                            //         ${parsedFields[i].type}_name = '${parsedFields[i][parsedFields[i].type]}'
+                            //         WHERE id = $6
+                            //     `)
                         }
                     }
+
+                    // if (existedMacroTable) {
+                    //     if (existedMacroTable.type === "enum") {
+                    //         await connection.query(
+                    //             `INSERT INTO ${parsedFields[i].type + "_product"} (${
+                    //                 parsedFields[i].type + "_name"
+                    //             }, type, product_id)
+                    //             VALUES
+                    //                 ($1, $2, $3)
+                    //         `,
+                    //             [Array.isArray(key) ? key[0] : key, parsedFields[i].type, primaryProperties.id],
+                    //         )
+                    //     } else {
+                    //         const id = await connection.query(
+                    //             `
+                    //             INSERT INTO ${parsedFields[i].type + "_product"} (${
+                    //                 parsedFields[i].type + "_name"
+                    //             }, type)
+                    //             VALUES
+                    //                 ($1, $2)
+                    //             Returning id;
+                    //         `,
+                    //             [Array.isArray(key) ? key[0] : key, parsedFields[i].type],
+                    //         )
+
+                    //         fieldsSetStrings.push(`${parsedFields[i].type + "_product_id = " + id[0].id}`)
+                    //     }
+                    // } else {
+                    //     if (parsedFields[i].type === "string" || parsedFields[i].type === "String") {
+                    //         fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = '${key}'`)
+                    //     } else {
+                    //         fieldsSetStrings.push(`${Object.keys(parsedFields[i])[0]} = ${key}`)
+                    //     }
+                    // }
                 }
             }
 
-            const category = await connection.query(
-                `
-                SELECT id 
-                FROM category 
-                WHERE category.uuid = $1
-            `,
-                [primaryProperties.category],
-            )
+            // const category = await connection.query(
+            //     `
+            //     SELECT id
+            //     FROM category
+            //     WHERE category.uuid = $1
+            // `,
+            //     [primaryProperties.category],
+            // )
 
-            const newPrice = await connection.query(
-                `
-                INSERT INTO pricing (price, discount, currency)
-                VALUES
-                    ($1, $2, $3)
-                RETURNING id;
-            `,
-                [primaryProperties.price, primaryProperties.discount, primaryProperties.currency],
-            )
+            // const newPrice = await connection.query(
+            //     `
+            //     INSERT INTO pricing (price, discount, currency)
+            //     VALUES
+            //         ($1, $2, $3)
+            //     RETURNING id;
+            // `,
+            //     [primaryProperties.price, primaryProperties.discount, primaryProperties.currency],
+            // )
 
-            await connection.query(
-                `
-                UPDATE product
-                SET 
-                    name = $1,
-                    description = $2,
-                    count = $3,
-                    price_id = $4,
-                    category_id = $5,
-                    ${fieldsSetStrings.join(", ")}
-                WHERE id = $6
-            `,
-                [
-                    primaryProperties.name,
-                    primaryProperties.description,
-                    primaryProperties.count,
-                    newPrice[0].id,
-                    category[0].id,
-                    primaryProperties.id,
-                ],
-            )
+            // await connection.query(
+            //     `
+            //     UPDATE product
+            //     SET
+            //         name = $1,
+            //         description = $2,
+            //         count = $3,
+            //         price_id = $4,
+            //         category_id = $5,
+            //         ${fieldsSetStrings.join(", ")}
+            //     WHERE id = $6
+            // `,
+            //     [
+            //         primaryProperties.name,
+            //         primaryProperties.description,
+            //         primaryProperties.count,
+            //         newPrice[0].id,
+            //         category[0].id,
+            //         primaryProperties.id,
+            //     ],
+            // )
 
-            for (let i = 0; i < photos.length; i++) {
-                const photo = await connection.query(`
-                    SELECT filename
-                    FROM photo
-                    WHERE filename = '${photos[i].originalname}'
-                `)
+            // for (let i = 0; i < photos.length; i++) {
+            //     const photo = await connection.query(`
+            //         SELECT filename
+            //         FROM photo
+            //         WHERE filename = '${photos[i].originalname}'
+            //     `)
 
-                if (photo.length === 0) {
-                    const generated = "product_image_" + v4() + ".jpeg"
+            //     if (photo.length === 0) {
+            //         const generated = "product_image_" + v4() + ".jpeg"
 
-                    await sharp(photos[i].buffer)
-                        .resize(1500)
-                        .toFormat("jpeg")
-                        .jpeg({ quality: 75 })
-                        .toFile(`public/${generated}`)
+            //         await sharp(photos[i].buffer)
+            //             .resize(1500)
+            //             .toFormat("jpeg")
+            //             .jpeg({ quality: 75 })
+            //             .toFile(`public/${generated}`)
 
-                    await connection.query(
-                        `
-                            INSERT INTO photo(filename, extension, path, product_id)
-                            VALUES 
-                                ($1, $2, $3, $4);
-                        `,
-                        [generated, "jpeg", `public/${generated}`, primaryProperties.id],
-                    )
-                }
-            }
+            //         await connection.query(
+            //             `
+            //                 INSERT INTO photo(filename, extension, path, product_id)
+            //                 VALUES
+            //                     ($1, $2, $3, $4);
+            //             `,
+            //             [generated, "jpeg", `public/${generated}`, primaryProperties.id],
+            //         )
+            //     }
+            // }
 
             res.json({ success: true })
         } catch (error) {

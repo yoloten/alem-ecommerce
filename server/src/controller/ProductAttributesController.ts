@@ -13,7 +13,6 @@ export class ProductAttributesController {
     @Get("schema/")
     public async getSchema(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
         const table: any = req.query.table
 
         try {
@@ -36,7 +35,7 @@ export class ProductAttributesController {
 
         try {
             const macro = await connection.getRepository(Macro).findOne({ name }, { relations: ["options"] })
-            console.log(macro)
+
             res.json(macro)
         } catch (error) {
             res.status(400).json(error)
@@ -93,7 +92,6 @@ export class ProductAttributesController {
     @Post("createmacro/")
     public async createMacro(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             for (let i = 0; i < req.body.length; i++) {
@@ -217,16 +215,16 @@ export class ProductAttributesController {
     @Post("createschema/")
     public async createAttribute(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { table, attributes } = req.body
             const existedSchema = await connection.getRepository(Schema).findOne({ table })
+            const stringifiedAttributes: any = JSON.stringify(attributes)
 
             if (!existedSchema) {
                 const schemaProps = {
                     table,
-                    attributes: JSON.stringify(attributes),
+                    attributes: stringifiedAttributes,
                 }
 
                 const schema = new Schema()
@@ -237,7 +235,7 @@ export class ProductAttributesController {
                 await getConnection()
                     .createQueryBuilder()
                     .update(Schema)
-                    .set({ attributes })
+                    .set({ attributes: stringifiedAttributes })
                     .where("table = :table", { table })
                     .execute()
             }

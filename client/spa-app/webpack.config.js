@@ -56,7 +56,7 @@ const commonConfig = {
             actions: srcPaths("src/actions"),
             // models: srcPaths("src/models"),
             store: srcPaths("src/store"),
-            // utils: srcPaths("src/utils"),
+            utils: srcPaths("src/utils"),
             // api: srcPaths("src/api"),
         },
     },

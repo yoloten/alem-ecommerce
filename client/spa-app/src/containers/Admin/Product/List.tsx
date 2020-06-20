@@ -56,6 +56,7 @@ export default function ProductsList(): JSX.Element {
 
     const filtersChange = (e: any) => {
         e.persist()
+        console.log(e.target.value)
         setFilters((state: any) => ({ ...state, [e.target.name]: e.target.value }))
     }
 
@@ -71,7 +72,7 @@ export default function ProductsList(): JSX.Element {
             setFilters((state: any) => ({ ...state, limit: filters.limit + 5 }))
         }
     }
-    console.log(productsList)
+
     return (
         <div>
             <AdminMainContent>

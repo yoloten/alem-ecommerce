@@ -1,9 +1,15 @@
-import { deleteAdminItemFromList, getAdminProductsList, getOneById, createProduct } from "actions/admin/product/product"
 import { createSlice } from "@reduxjs/toolkit"
+import {
+    deleteAdminItemFromList,
+    getAdminProductsList,
+    getOneById,
+    createProduct,
+    updateProduct,
+} from "actions/admin/product/product"
 
 export interface ProductState {
     productsList: Record<string, unknown>[]
-    oneProduct: Record<string, any>
+    oneProduct: any
     success: string
 }
 
@@ -26,6 +32,9 @@ export const productSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(createProduct.fulfilled, (state, action) => {
+            state.success = action.payload
+        })
+        builder.addCase(updateProduct.fulfilled, (state, action) => {
             state.success = action.payload
         })
 

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 
-// PRODUCT
 export const createProduct = createAsyncThunk<any, any, any>(
     "product/createProduct",
     async (formData: FormData, { rejectWithValue }) => {
@@ -10,6 +9,26 @@ export const createProduct = createAsyncThunk<any, any, any>(
 
             if (created.data.success) {
                 await axios.post("http://localhost:8000/api/product/insert", formData)
+
+                return "Success"
+            }
+
+            return "Something went wrong"
+        } catch (err) {
+            return err.response.data.msg
+        }
+    },
+)
+
+export const updateProduct = createAsyncThunk<any, any, any>(
+    "product/updateProduct",
+    async (formData: FormData, { rejectWithValue }) => {
+        try {
+            // In case new custom fields we should create that field in product table
+            const created = await axios.post("http://localhost:8000/api/product/create", { table: "product" })
+
+            if (created.data.success) {
+                await axios.put("http://localhost:8000/api/product/update", formData)
 
                 return "Success"
             }
