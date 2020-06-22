@@ -39,9 +39,10 @@ export default function AdminMacro(props: any): JSX.Element {
     }
 
     const changeOption = (e: any) => {
-        const { id, className, value, name } = e.target
+        const { id, value, name } = e.target
+        const idArr = id.split(",")
 
-        dispatch(optionsChange({ id: parseInt(id, 10), className: parseInt(className, 10), value, name }))
+        dispatch(optionsChange({ id: parseInt(idArr[0], 10), macroID: parseInt(idArr[1], 10), value, name }))
     }
 
     const addMacro = () => {
@@ -196,7 +197,7 @@ export default function AdminMacro(props: any): JSX.Element {
                                                           className="attributes-validators-list"
                                                       >
                                                           <UI.Input
-                                                              id={index.toString()}
+                                                              id={`${index}, ${macroIndex}`}
                                                               type="text"
                                                               name="name"
                                                               placeholder="Name"
@@ -205,13 +206,12 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
-                                                              className={`${macroIndex}`}
                                                               icon={<Icons.Pencil />}
                                                               required={true}
                                                               value={val.name}
                                                           />
                                                           <UI.Input
-                                                              id={index.toString()}
+                                                              id={`${index}, ${macroIndex}`}
                                                               type="text"
                                                               name="label"
                                                               placeholder="Label"
@@ -220,7 +220,6 @@ export default function AdminMacro(props: any): JSX.Element {
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
-                                                              className={`${macroIndex}`}
                                                               icon={<Icons.Blank />}
                                                               required={true}
                                                               value={val.label}
@@ -228,14 +227,13 @@ export default function AdminMacro(props: any): JSX.Element {
                                                           <UI.Input
                                                               type="text"
                                                               name="value"
-                                                              id={index.toString()}
+                                                              id={`${index}, ${macroIndex}`}
                                                               placeholder="Value"
                                                               onChange={changeOption}
                                                               width={props.windowWidth / 11}
                                                               height={31}
                                                               border={true}
                                                               borderRadius="0px"
-                                                              className={`${macroIndex}`}
                                                               required={true}
                                                               value={val.value}
                                                               icon={<Icons.Diagram />}

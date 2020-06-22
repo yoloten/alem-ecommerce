@@ -1,5 +1,6 @@
 import { getAdminProductsList, deleteAdminItemFromList } from "actions/admin/product/product"
 import { getLastLevelCategories } from "actions/admin/product/category"
+import { clearList } from "reducers/admin/productReducer"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { useDispatch, useSelector } from "react-redux"
 import React, { useEffect, useState } from "react"
@@ -30,11 +31,11 @@ export default function ProductsList(): JSX.Element {
         search: "",
         sortBy: "",
         category: "",
-        limit: 12,
+        offset: 0,
     })
 
     const { product, category } = useSelector((state: RootState) => state)
-    const { productsList } = product
+    const { productsList, productListChunksLength } = product
     const { lastLevelCategories } = category
 
     const dispatch = useDispatch()
@@ -49,29 +50,31 @@ export default function ProductsList(): JSX.Element {
                 category: filters.category,
                 search: filters.search,
                 sortBy: filters.sortBy,
-                limit: filters.limit,
+                offset: filters.offset,
             }),
         )
     }, [filters])
 
+    useEffect(() => {
+        return () => {
+            dispatch(clearList())
+        }
+    }, [])
+
     const filtersChange = (e: any) => {
         e.persist()
-        console.log(e.target.value)
-        setFilters((state: any) => ({ ...state, [e.target.name]: e.target.value }))
+
+        dispatch(clearList())
+        setFilters((state: any) => ({ ...state, [e.target.name]: e.target.value, offset: 0 }))
     }
 
     const deleteItem = async (e: any) => {
         const { id } = e.target
+
         dispatch(deleteAdminItemFromList(parseInt(id, 10)))
     }
 
-    const fetchMore = () => {
-        if (productsList.length < filters.limit) {
-            setHasMore(false)
-        } else {
-            setFilters((state: any) => ({ ...state, limit: filters.limit + 5 }))
-        }
-    }
+    const fetchMore = () => setFilters((state: any) => ({ ...state, offset: filters.offset + 12 }))
 
     return (
         <div>
@@ -156,67 +159,68 @@ export default function ProductsList(): JSX.Element {
                             <InfiniteScroll
                                 loader="loading..."
                                 next={fetchMore}
-                                hasMore={hasMore}
+                                hasMore={productListChunksLength < filters.offset + 1 ? false : true}
                                 dataLength={productsList.length}
                             >
-                                {productsList.length > 0 &&
-                                    productsList.map((product: any, i: number) => {
-                                        if (product) {
-                                            return (
-                                                <div key={i} className="table-product">
-                                                    <div className="table-product-name">{product.name}</div>
-                                                    <div className="table-product-attribute">
-                                                        {product.category_name}
-                                                    </div>
-                                                    <div className="table-product-attribute">
-                                                        {`${product.price} ${product.currency}`}
-                                                    </div>
-                                                    <div className="table-product-attribute">
-                                                        {(parseFloat(product.discount) * 100).toFixed(2) + "%"}
-                                                    </div>
-                                                    <div className="table-product-attribute">{product.count}</div>
-                                                    <div className="table-product-attribute">{product.sold}</div>
-                                                    <div className="table-product-attribute">
-                                                        {dayjs(product.created_at).format("DD.MM.YY HH:MM")}
-                                                    </div>
-                                                    <div className="table-product-attribute">
-                                                        {dayjs(product.updated_at).format("DD.MM.YY HH:MM")}
-                                                    </div>
-                                                    <Link
-                                                        style={{ marginTop: "4px" }}
-                                                        href={{
-                                                            pathname: "/admin/product/edit",
-                                                            query: {
-                                                                id: product.id,
-                                                            },
-                                                        }}
-                                                    >
-                                                        <Icons.Edit />
-                                                    </Link>
-                                                    <UI.Button
-                                                        id={product.id}
-                                                        onClick={deleteItem}
-                                                        backgroundColor="transparent"
-                                                        borderColor="#eee"
-                                                        width="30px"
-                                                        customStyleObject={{
-                                                            zIndex: "10",
-                                                            position: "relative",
-                                                        }}
-                                                        content={
-                                                            <Icons.Trash
-                                                                style={{
-                                                                    zIndex: "-1",
-                                                                    position: "relative",
-                                                                    marginLeft: "1px",
-                                                                }}
-                                                            />
-                                                        }
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    })}
+                                {productsList.length > 0
+                                    ? productsList.map((product: any, i: number) => {
+                                          if (product) {
+                                              return (
+                                                  <div key={i} className="table-product">
+                                                      <div className="table-product-name">{product.name}</div>
+                                                      <div className="table-product-attribute">
+                                                          {product.category_name}
+                                                      </div>
+                                                      <div className="table-product-attribute">
+                                                          {`${product.price} ${product.currency}`}
+                                                      </div>
+                                                      <div className="table-product-attribute">
+                                                          {(parseFloat(product.discount) * 100).toFixed(1) + "%"}
+                                                      </div>
+                                                      <div className="table-product-attribute">{product.count}</div>
+                                                      <div className="table-product-attribute">{product.sold}</div>
+                                                      <div className="table-product-attribute">
+                                                          {dayjs(product.created_at).format("DD.MM.YY HH:mm")}
+                                                      </div>
+                                                      <div className="table-product-attribute">
+                                                          {dayjs(product.updated_at).format("DD.MM.YY HH:mm")}
+                                                      </div>
+                                                      <Link
+                                                          style={{ marginTop: "4px" }}
+                                                          href={{
+                                                              pathname: "/admin/product/edit",
+                                                              query: {
+                                                                  id: product.id,
+                                                              },
+                                                          }}
+                                                      >
+                                                          <Icons.Edit />
+                                                      </Link>
+                                                      <UI.Button
+                                                          id={product.id}
+                                                          onClick={deleteItem}
+                                                          backgroundColor="transparent"
+                                                          borderColor="#eee"
+                                                          width="30px"
+                                                          customStyleObject={{
+                                                              zIndex: "10",
+                                                              position: "relative",
+                                                          }}
+                                                          content={
+                                                              <Icons.Trash
+                                                                  style={{
+                                                                      zIndex: "-1",
+                                                                      position: "relative",
+                                                                      marginLeft: "1px",
+                                                                  }}
+                                                              />
+                                                          }
+                                                      />
+                                                  </div>
+                                              )
+                                          }
+                                      })
+                                    : "No products found"}
                             </InfiniteScroll>
                         </div>
                     </div>

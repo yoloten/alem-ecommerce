@@ -114,7 +114,7 @@ export default function AdminInput({ attribute, onChangeInputField, id, val, wid
                                     >
                                         <UI.Checkbox
                                             id={id}
-                                            className={option.name}
+                                            className={option.value}
                                             name={attribute.name}
                                             value={option.value}
                                             checked={

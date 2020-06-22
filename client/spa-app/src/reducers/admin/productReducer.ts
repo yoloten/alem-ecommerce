@@ -8,12 +8,14 @@ import {
 } from "actions/admin/product/product"
 
 export interface ProductState {
+    productListChunksLength: number
     productsList: Record<string, unknown>[]
     oneProduct: any
     success: string
 }
 
 const initialState: ProductState = {
+    productListChunksLength: 0,
     productsList: [],
     oneProduct: {},
     success: "",
@@ -29,6 +31,9 @@ export const productSlice = createSlice({
         deleteProduct(state) {
             state.oneProduct = {}
         },
+        clearList(state) {
+            state.productsList = []
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(createProduct.fulfilled, (state, action) => {
@@ -39,7 +44,8 @@ export const productSlice = createSlice({
         })
 
         builder.addCase(getAdminProductsList.fulfilled, (state, action) => {
-            state.productsList = action.payload
+            state.productsList = [...state.productsList, ...action.payload]
+            state.productListChunksLength = action.payload.length
         })
 
         builder.addCase(getOneById.fulfilled, (state, action) => {
@@ -56,5 +62,5 @@ export const productSlice = createSlice({
     },
 })
 
-export const { deleteSuccessMsg, deleteProduct } = productSlice.actions
+export const { deleteSuccessMsg, deleteProduct, clearList } = productSlice.actions
 export default productSlice.reducer

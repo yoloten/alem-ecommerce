@@ -139,14 +139,12 @@ export default function EditProduct(): JSX.Element {
         if (type === "enum") {
             const index = newFields[parseInt(id, 10)][name].indexOf(className)
 
-            if (index === -1 && value !== "") {
-                console.log(index, "push")
-                newFields[parseInt(id, 10)][name].push(value)
-            } else {
-                console.log(index, "splice", value)
+            if (index === -1 && className !== "") {
+                newFields[parseInt(id, 10)][name].push(className)
+            } else if (index >= 0 && className !== "") {
                 newFields[parseInt(id, 10)][name].splice(index, 1)
             }
-            console.log(newFields[parseInt(id, 10)][name])
+
             newFields[parseInt(id, 10)].type = attributeType
         } else {
             newFields[parseInt(id, 10)][name] = value

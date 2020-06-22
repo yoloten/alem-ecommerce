@@ -74,21 +74,16 @@ export const attributeSlice = createSlice({
         },
 
         optionsChange(state, { payload }) {
-            const {
-                id,
-                className,
-                value,
-                name,
-            }: { name: string; value: string; id: number; className: number } = payload
+            const { id, value, name, macroID }: { name: string; value: string; id: number; macroID: number } = payload
 
             if (name === "name") {
-                state.macros[className].options[id].name = value.toLowerCase().split(" ").join("_").trim()
+                state.macros[macroID].options[id].name = value.toLowerCase().split(" ").join("_").trim()
             }
             if (name === "label") {
-                state.macros[className].options[id].label = value
+                state.macros[macroID].options[id].label = value
             }
             if (name === "value") {
-                state.macros[className].options[id].value = value
+                state.macros[macroID].options[id].value = value
             }
         },
 
