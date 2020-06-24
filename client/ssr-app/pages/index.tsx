@@ -1,5 +1,6 @@
 import { login } from "../utils/auth"
 import nextCookie from "next-cookies"
+import cookie from "js-cookie"
 import axios from "axios"
 import React from "react"
 
@@ -19,7 +20,7 @@ function index({ token }: any): JSX.Element {
         <>
             <div>
                 <div className="landing-header">
-                    <Navbar token={token} landing={true} />
+                    <Navbar token={cookie.get("token")} landing={true} />
                     <div className="landing-header-main">
                         <div className="landing-title">Brand new January Collection</div>
                         <Button
@@ -47,19 +48,17 @@ function index({ token }: any): JSX.Element {
     )
 }
 
-index.getInitialProps = (ctx: any) => {
-    let token
-
-    if (process.env.NODE_ENV === "development") {
-        if (ctx.query.data && ctx.pathname === "/") {
-            token = ctx.query.data
-            login(ctx.query.data)
-        }
-    } else {
-        token = { token } = nextCookie(ctx)
-    }
-
-    return { token }
-}
+// index.getInitialProps = (ctx: any) => {
+//     // const token = cookie.get("token")
+//     // // if (process.env.NODE_ENV === "development") {
+//     // //     if (ctx.query.data && ctx.pathname === "/") {
+//     // //         token = ctx.query.data
+//     // //         login(ctx.query.data)
+//     // //     }
+//     // // } else {
+//     // //     token = { token } = nextCookie(ctx)
+//     // // }
+//     // return { token }
+// }
 
 export default index

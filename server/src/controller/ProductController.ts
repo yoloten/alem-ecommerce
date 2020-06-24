@@ -85,7 +85,6 @@ export class ProductController {
     @Get("onebyid/")
     public async getOneById(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { id, edit } = req.query

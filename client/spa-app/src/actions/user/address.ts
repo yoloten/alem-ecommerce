@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import jwt_decode from "jwt-decode"
+import cookie from "js-cookie"
 import axios from "axios"
 
 export interface AddressInterface {
@@ -15,7 +16,7 @@ export const createOrUpdateAddress = createAsyncThunk(
     "user/createOrUpdateAddress",
     async (address: AddressInterface) => {
         try {
-            const token = localStorage.getItem("jwtToken")
+            const token = cookie.get("token")
 
             const result = await axios.post("http://localhost:8000/api/user/createaddress", address, {
                 headers: { Authorization: token },
@@ -30,7 +31,7 @@ export const createOrUpdateAddress = createAsyncThunk(
 
 export const getUserAddresses = createAsyncThunk("user/getUserAddresses", async () => {
     try {
-        const token = localStorage.getItem("jwtToken")
+        const token = cookie.get("token")
 
         const result = await axios.get("http://localhost:8000/api/user/getuseraddresses", {
             headers: { Authorization: token },

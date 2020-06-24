@@ -2,15 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import CardGrid from "./CardGrid"
 
-namespace Paginate {
-    export interface Props {
-        itemsPerPage: number
-        fromFilters: boolean
-        items: any[]
-    }
-}
-
-export default function Pagination({ itemsPerPage, items, fromFilters }: Paginate.Props) {
+export default function Pagination({ itemsPerPage, items, fromFilters, getLastIndex }: any): JSX.Element {
     const [currentPage, setCurrentPage] = useState(1)
     const [upperPageBound, setUpperPageBound] = useState(3)
     const [lowerPageBound, setLowerPageBound] = useState(0)
@@ -36,7 +28,13 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
                 setIsPrevActive(false)
             }
         }
-    }, [currentPage])
+
+        const indexOfLastTodo = currentPage * itemsPerPage
+
+        if (currentPage + 1 === upperPageBound) {
+            getLastIndex(items.length)
+        }
+    }, [currentPage, items])
 
     const handleClick = (e: any) => {
         setCurrentPage(parseInt(e.target.id, 10))
@@ -64,7 +62,7 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
     }
 
     const next = () => {
-        if ((currentPage + 1) > upperPageBound) {
+        if (currentPage + 1 > upperPageBound) {
             setUpperPageBound(upperPageBound + pageBound)
             setLowerPageBound(lowerPageBound + pageBound)
         }
@@ -94,7 +92,7 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
                             <div
                                 style={{
                                     marginRight: "3px",
-                                    color: currentPage === number ? "red" : "#000"
+                                    color: currentPage === number ? "red" : "#000",
                                 }}
                                 id={`${number}`}
                                 onClick={handleClick}
@@ -103,14 +101,13 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
                                 {number}
                             </div>
                         )
-                    }
-                    else if ((number < upperPageBound + 1) && number > lowerPageBound) {
+                    } else if (number < upperPageBound + 1 && number > lowerPageBound) {
                         return (
                             <div
                                 className="number"
                                 style={{
                                     marginRight: "3px",
-                                    color: currentPage === number ? "red" : "#000"
+                                    color: currentPage === number ? "red" : "#000",
                                 }}
                                 id={`${number}`}
                                 onClick={handleClick}
@@ -121,21 +118,37 @@ export default function Pagination({ itemsPerPage, items, fromFilters }: Paginat
                         )
                     }
                 })}
-                {pageNumbers.length > upperPageBound ? <div className="decrement" onClick={increment}>...</div> : ""}
-            </>)
+                {pageNumbers.length > upperPageBound ? (
+                    <div className="decrement" onClick={increment}>
+                        ...
+                    </div>
+                ) : (
+                    ""
+                )}
+            </>
+        )
     }
 
     return (
         <div>
             {renderItems()}
             <div className="page-numbers">
-                <div className="prev" onClick={prev}>{isPrevActive ? "Prev" : ""}</div>
-                <div className="numbers">
-                    {lowerPageBound >= 1 ? <div className="decrement" onClick={decrement}>...</div> : ""}
-                    {renderPageNumbers()}
-
+                <div className="prev" onClick={prev}>
+                    {isPrevActive ? "Prev" : ""}
                 </div>
-                <div className="prev" onClick={next}>{isNextActive ? "Next" : ""}</div>
+                <div className="numbers">
+                    {lowerPageBound >= 1 ? (
+                        <div className="decrement" onClick={decrement}>
+                            ...
+                        </div>
+                    ) : (
+                        ""
+                    )}
+                    {renderPageNumbers()}
+                </div>
+                <div className="prev" onClick={next}>
+                    {isNextActive ? "Next" : ""}
+                </div>
             </div>
         </div>
     )

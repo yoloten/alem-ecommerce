@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { navigation } from "containers/Navigation"
 import React, { useState, useEffect } from "react"
 import { useCurrentRoute } from "react-navi"
+import { RootState } from "reducers"
 import jwtDecode from "jwt-decode"
 import { v4 } from "uuid"
 import axios from "axios"
@@ -19,6 +20,7 @@ export default function index(): JSX.Element {
     const [forNavbar, setForNavbar]: any = useState("")
     const [cartID, setCartID] = useState("")
 
+    const { user } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
     const route = useCurrentRoute()
 
@@ -86,7 +88,7 @@ export default function index(): JSX.Element {
     }, [amount])
 
     useEffect(() => {
-        if (storageData.length > 0) {
+        if (storageData.length > 0 && user.name) {
             dispatch(createOrUpdateCart(storageData))
         }
 
@@ -112,7 +114,7 @@ export default function index(): JSX.Element {
     }, [storageData])
 
     const removeItem = (e: any) => {
-        sessionStorage.removeItem(e.target.id)
+        localStorage.removeItem(e.target.id)
         setAmount(amount - 1)
         setForNavbar(v4())
     }
@@ -156,7 +158,7 @@ export default function index(): JSX.Element {
                                     const discount = parseFloat(product.discount)
                                     const quantity = parseFloat(product.quantity)
                                     return (
-                                        <div className="table-product">
+                                        <div key={product.name + i} className="table-product">
                                             <div className="table-product-name">
                                                 <div
                                                     style={{
@@ -178,7 +180,7 @@ export default function index(): JSX.Element {
                                                 .map((key) => {
                                                     if (key !== "photo" && key !== "name" && key !== "key") {
                                                         return (
-                                                            <div className="table-product">
+                                                            <div key={key} className="table-product">
                                                                 <div className="table-product-attribute">
                                                                     {product[key]}
                                                                 </div>

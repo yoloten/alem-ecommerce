@@ -27,11 +27,7 @@ export default function Login(): JSX.Element {
 
     useEffect(() => {
         if (user.role === "customer") {
-            if (process.env.NODE_ENV === "development") {
-                window.location.href = `http://localhost:3000?data=${localStorage.getItem("jwtToken")}`
-            } else {
-                navigation.navigate("/")
-            }
+            navigation.navigate("/user/cart")
         }
         if (user.role === "admin" || user.role === "superadmin") {
             navigation.navigate("/admin/product/list")
@@ -57,14 +53,6 @@ export default function Login(): JSX.Element {
         })
 
         dispatch(login(state))
-        // dispatch(createOrUpdateCart(storageData))
-        // if (localStorage.getItem("jwtToken")) {
-        //     navigation.navigate("/admin/product/list")
-        // }
-        // const res = await axios.post("http://localhost:8000/api/user/login", { email, password })
-        // const token = res.data.token
-
-        // login(token, props.toAddress)
     }
 
     return (
@@ -72,7 +60,7 @@ export default function Login(): JSX.Element {
             <Navbar />
             <div className="auth">
                 <div className="title">Sign in</div>
-                <div className="sub-title">Please fill all forms</div>
+                <div className="sub-title">Please fill all fields</div>
                 <form onSubmit={openLogin} action="submit" className="auth-inputs">
                     <UI.Input
                         name="email"
@@ -81,6 +69,7 @@ export default function Login(): JSX.Element {
                         type="email"
                         onChange={inputChange}
                         placeholder="Email"
+                        required={true}
                     />
                     <UI.Input
                         name="password"
@@ -89,6 +78,7 @@ export default function Login(): JSX.Element {
                         type="password"
                         onChange={inputChange}
                         placeholder="Password"
+                        required={true}
                     />
                     <UI.Button
                         content="Sign In"

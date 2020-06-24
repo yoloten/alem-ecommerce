@@ -11,7 +11,7 @@ class MyDocument extends Document {
         return (
             <Html>
                 <Head>
-                    <script src="https://js.stripe.com/v3/"></script>
+                    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet" />
                 </Head>
                 <body>
                     <Main />

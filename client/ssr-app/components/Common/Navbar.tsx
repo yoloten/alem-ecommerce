@@ -186,7 +186,6 @@ export default function Navbar(props: Props) {
                     text-decoration: none;
                     color: #000;
                     font-size: 40px;
-                    font-family: TimeBurner;
                 }
                 a {
                     text-decoration: none;

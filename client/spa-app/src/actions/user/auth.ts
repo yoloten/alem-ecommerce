@@ -37,7 +37,6 @@ export const login = createAsyncThunk("user/login", async (user: User) => {
         const decoded: Decoded = jwt_decode(token)
 
         cookie.set("token", token)
-        localStorage.setItem("jwtToken", token)
         setAuthToken(token)
 
         return decoded

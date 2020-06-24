@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import jwt_decode from "jwt-decode"
+import cookie from "js-cookie"
 import axios from "axios"
 
 export interface Decoded {
@@ -15,12 +16,12 @@ export interface Decoded {
 
 export const createOrUpdateCart = createAsyncThunk("user/createOrUpdateCart", async (storageData: any[]) => {
     try {
-        const token = localStorage.getItem("jwtToken")
+        const token = cookie.get("token")
 
         const result = await axios.post(
             "http://localhost:8000/api/order/createcart",
             {
-                cartItems: storageData.filter((i) => i !== undefined),
+                cartItems: storageData.filter(Boolean),
                 id: localStorage.getItem("id"),
             },
             {

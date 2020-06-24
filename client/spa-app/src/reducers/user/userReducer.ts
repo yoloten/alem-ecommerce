@@ -3,6 +3,7 @@ import { register, login, Decoded, setAuthToken } from "actions/user/auth"
 import { getOrderDetails, createOrder } from "actions/user/order"
 import { createOrUpdateCart } from "actions/user/cart"
 import { createSlice } from "@reduxjs/toolkit"
+import cookie from "js-cookie"
 
 export interface UserState {
     user: Decoded | Record<string, any>
@@ -31,7 +32,7 @@ export const userSlice = createSlice({
             state.msg = payload
         },
         logout(state) {
-            localStorage.removeItem("jwtToken")
+            cookie.remove("token")
             setAuthToken("")
             state.isLoggedIn = false
             state.user = {}
@@ -54,7 +55,7 @@ export const userSlice = createSlice({
             }
         })
         builder.addCase(createOrUpdateCart.fulfilled, (state, { payload }) => {
-            console.log(payload)
+            state.msg = "Success"
         })
         builder.addCase(createOrUpdateAddress.fulfilled, (state, { payload }) => {
             state.msg = "Success"

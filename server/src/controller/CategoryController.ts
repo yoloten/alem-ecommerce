@@ -165,10 +165,9 @@ export class CategoryController {
     @Get("subcategoriesandallproducts/")
     public async subCategories(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
-            const { parent } = req.query
+            const { parent, offset } = req.query
             const children: any = []
             const products: any = []
 
@@ -200,9 +199,9 @@ export class CategoryController {
                     WHERE ('${category[0].uuid}')=ANY(category.parents);
                 `)
 
-            const existedTable = await queryRunner.getTable("product")
+            const existedTable = await connection.query(`SELECT to_regclass('product');`)
 
-            if (childrenForAllProducts.length > 0 && existedTable) {
+            if (childrenForAllProducts.length > 0 && existedTable[0].to_regclass) {
                 const productWithCategory = await connection.query(`
                         SELECT 
                             product.name, 
@@ -214,7 +213,8 @@ export class CategoryController {
                         LEFT JOIN pricing ON product.price_id = pricing.id
                         WHERE product.category_id IN (${childrenForAllProducts
                             .map((subCategory: any) => subCategory.id)
-                            .join(", ")});
+                            .join(", ")})
+                        LIMIT 12 OFFSET ${offset}
                     `)
 
                 if (productWithCategory && productWithCategory.length > 0) {
