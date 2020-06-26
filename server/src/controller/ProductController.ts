@@ -11,6 +11,7 @@ import * as fs from "fs"
 import { Options } from "../entity/Options"
 import { Schema } from "../entity/Schema"
 import { Macro } from "../entity/Macro"
+import e = require("express")
 
 function getImgFromDir(fileName: string) {
     return new Promise((resolve, reject) => {
@@ -209,7 +210,7 @@ export class ProductController {
             }
 
             joins.push(`LEFT JOIN pricing ON product.price_id = pricing.id`)
-            wheres.push(price.length > 0 ? `(price BETWEEN ${price[0]} AND ${price[1]})` : "")
+            wheres.push(price.length > 0 ? `(price BETWEEN ${price[0]} AND ${10000000})` : "")
 
             if (fields && fields.length > 0) {
                 for (let i = 0; i < fields.length; i++) {
@@ -242,23 +243,24 @@ export class ProductController {
                                     .join(", ")})
                                     ORDER BY product_id DESC
                                 `)
-                                console.log("____________________-")
 
-                                // if (ids.length !== 0 && productIDsFromEnums.length < ids.length) {
-                                ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
-                                const newids = ids.filter((e: any, i: any, a: any) => a.indexOf(e) !== i)
-                                // //}
-                                if (newids.length !== 0) {
-                                    ids = newids
+                                if (productIDsFromEnums.length !== 0) {
+                                    ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
+                                    const newids = ids.filter((e: any, i: any, a: any) => a.indexOf(e) !== i)
+
+                                    if (newids.length !== 0) {
+                                        ids = newids
+                                    }
+                                } else {
+                                    ids = []
                                 }
-
-                                // console.log(productIDsFromEnums)
                             }
                         }
                     }
                 }
+
+                wheres.push(`product.id IN (${ids.length > 0 ? ids.join(", ") : -1})`)
             }
-            console.log(ids)
 
             const products = await connection.query(`
                     SELECT * FROM product

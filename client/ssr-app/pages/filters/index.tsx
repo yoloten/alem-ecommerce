@@ -23,7 +23,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
         products: dataFromProduct,
         filters: allFilters,
     })
-    // console.log(state.products)
+    console.log(state.products)
     useEffect(() => {
         setWindowWidth(window.innerWidth)
         setDidMount(true)
