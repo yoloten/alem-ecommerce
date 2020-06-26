@@ -36,13 +36,11 @@ export default function Create(): JSX.Element {
             setPhotos([...photos, acceptedFiles])
         },
     })
-    const route = useCurrentRoute()
-    const { pathname, query } = route.url
 
     const { product, category, attribute } = useSelector((state: RootState) => state)
     const { lastLevelCategories } = category
     const { attributes } = attribute
-    const { success, oneProduct } = product
+    const { success } = product
 
     useEffect(() => {
         window.addEventListener("resize", updateDimensions)

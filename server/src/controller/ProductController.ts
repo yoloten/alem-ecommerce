@@ -1,5 +1,4 @@
 import { Controller, Post, Get, Delete, Middleware, Put } from "@overnightjs/core"
-import { findDuplicates } from "../utils/findDuplicates"
 import { getConnection, TableColumn, TableForeignKey } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
@@ -197,12 +196,12 @@ export class ProductController {
     @Post("filters/")
     public async filters(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { fields, limit, category, price, sort } = req.body
             const joins: any[] = []
             const wheres: any[] = []
+            let ids: any = []
             const filteredCategory = category.filter((i: any) => i !== "")
 
             if (filteredCategory.length > 0) {
@@ -210,7 +209,7 @@ export class ProductController {
             }
 
             joins.push(`LEFT JOIN pricing ON product.price_id = pricing.id`)
-            wheres.push(`(price BETWEEN ${price[0]} AND ${price[1]})`)
+            wheres.push(price.length > 0 ? `(price BETWEEN ${price[0]} AND ${price[1]})` : "")
 
             if (fields && fields.length > 0) {
                 for (let i = 0; i < fields.length; i++) {
@@ -218,43 +217,68 @@ export class ProductController {
                     const key = Object.keys(fields[i])[0]
 
                     if (key) {
-                        const hasColumn = await queryRunner.hasColumn("product", `${key}_product_id`)
+                        const hasColumn = await connection.query(`
+                            SELECT column_name
+                            FROM information_schema.columns
+                            WHERE table_name='product' and column_name='${key}_product_id';
+                        `)
 
-                        if (hasColumn) {
+                        if (hasColumn.length > 0) {
                             if (keyAndVal[1]) {
                                 joins.push(`LEFT JOIN ${key}_product ON ${key}_product.id = product.${key}_product_id`)
                                 wheres.push(`${keyAndVal[0]}_name = '${keyAndVal[1]}'`)
                             }
                         }
+
+                        const exists = await connection.query(`SELECT to_regclass('${key.slice(0, -5)}_product');`)
+
+                        if (exists[0].to_regclass) {
+                            if (Array.isArray(fields[i][key]) && fields[i][key].length > 0) {
+                                const productIDsFromEnums = await connection.query(`
+                                    SELECT DISTINCT product_id 
+                                    FROM ${key.slice(0, -5)}_product
+                                    WHERE ${key.slice(0, -5)}_name IN (${fields[i][key]
+                                    .map((item: any) => `'${item}'`)
+                                    .join(", ")})
+                                    ORDER BY product_id DESC
+                                `)
+                                console.log("____________________-")
+
+                                // if (ids.length !== 0 && productIDsFromEnums.length < ids.length) {
+                                ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
+                                const newids = ids.filter((e: any, i: any, a: any) => a.indexOf(e) !== i)
+                                // //}
+                                if (newids.length !== 0) {
+                                    ids = newids
+                                }
+
+                                // console.log(productIDsFromEnums)
+                            }
+                        }
                     }
                 }
             }
+            console.log(ids)
 
-            try {
-                const products = await connection.query(`
+            const products = await connection.query(`
                     SELECT * FROM product
                     ${joins.join(" ")}
-                    ${wheres.length > 0 ? "WHERE" : ""} ${wheres.join(" AND ")}
-                    ORDER BY ${sort}
+                    ${wheres.length > 0 ? "WHERE" : ""} ${wheres.filter((a) => a !== "").join(" AND ")}
                     LIMIT ${limit};
                 `)
 
-                // console.log(products.length)
-                res.json(products)
-            } catch (error) {
-                console.log(error)
+            for (let i = 0; i < products.length; i++) {
+                const photos = await connection.query(`
+                    SELECT *
+                    FROM photo
+                    WHERE photo.product_id = ${products[i].id}
+                    limit 1;
+                `)
+
+                products[i].photos = photos
             }
 
-            // for (let i = 0; i < products.length; i++) {
-            //     const photos = await connection.query(`
-            //         SELECT *
-            //         FROM photo
-            //         WHERE photo.product_id = ${products[i].id}
-            //         limit 1;
-            //     `)
-
-            //     products[i].photos = photos
-            // }
+            res.json(products)
         } catch (error) {
             res.status(400).json(error)
         }
@@ -422,7 +446,6 @@ export class ProductController {
     @Middleware(upload.array("photos[]", 8))
     public async insert(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { table, fields, mainProperties } = req.body

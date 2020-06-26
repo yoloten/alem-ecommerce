@@ -1,64 +1,61 @@
 import * as Icons from "../../public/icons/_compiled"
 import React, { useState, useEffect } from "react"
 
-// namespace Check {
-//     export interface Props {
-//         onMouseEnter?: () => void
-//         onMouseLeave?: () => void
-//         [propName: string]: any
-//         onClick?: () => void
-//         onChange?: () => void
-//         className?: string
-//         content?: any
-//         checked?: boolean
-//     }
-// }
-
-const Checkbox = ({ type = "checkbox", name, checked = false, onChange, id, width, height, value }: any) => {
-
-
-    return (
-        <>
-            <input
-                type={type}
-                value={value}
-                name={name}
-                onChange={onChange}
-                id={id}
-            />
-            <div className="styled">
-                {checked ? <Icons.CheckMark /> : ""}
-            </div>
-            <style jsx>{`
-                input[type=checkbox]{
-                    opacity: 0;
-                    margin-left: 3px ;
-                    width: ${ width ? width : "42px"};
-                    height: ${ height ? height : "42px"};
-                    cursor: pointer;
-                }
-                .styled{
-                    margin-left: ${ width ? "-" + width : "-44px"};
-                    width: ${ width ? width : "42px"};
-                    height: ${ height ? height : "42px"};
-                    border: ${"1px solid #d9d9d9"};
-                    z-index: -1;
-                    dispay: flex;
-                    justify-content: center;
-                    align-items: center 
-                }
-                .name{
-                    margin-left: 10px
-                }
-                .color{
-                    width: 20px;
-                    height: 2px;
-                    background: ${name}
-                }
-            `}</style>
-        </>
-
-    )
+export interface Props {
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onMouseEnter?: () => void
+    onMouseLeave?: () => void
+    [propName: string]: any
+    onClick?: () => void
+    className?: string
+    checked?: boolean
+    type?: "checkbox"
+    height?: string
+    value?: string
+    width?: string
+    name?: string
+    id?: string
 }
 
-export default Checkbox
+export default function Checkbox({
+    type = "checkbox",
+    name,
+    checked,
+    onChange,
+    id,
+    width,
+    height,
+    value,
+    className,
+}: Props): JSX.Element {
+    const [click, setClick] = useState(0)
+
+    const counter = () => {
+        setClick(click + 1)
+    }
+
+    return (
+        <div className="checkbox-main">
+            <input
+                className={className}
+                style={{ width: width ? width : "26px", height: height ? height : "26px" }}
+                value={click % 2 === 0 ? value : ""}
+                onChange={onChange}
+                onClick={counter}
+                name={name}
+                type={type}
+                id={id}
+            />
+            <div
+                style={{
+                    marginLeft: width ? "-" + width : "-44px",
+                    height: height ? height : "26px",
+                    width: width ? width : "26px",
+                }}
+                className="checkbox"
+            >
+                {checked ? <Icons.CheckMark width={width} height={height} /> : ""}
+            </div>
+        </div>
+    )
+}

@@ -7,13 +7,10 @@ import Navbar from "../../components/Common/Navbar"
 
 function index({ dataFromCategory, dataFromProduct, query }: any): JSX.Element {
     const [products, setProducts] = useState(dataFromCategory.products)
-    const [showSub, setShowSub] = useState("")
     const [index, setIndex] = useState(0)
 
-    const getLastIndex = (i: number) => {
-        setIndex(i)
-    }
-    console.log(products)
+    const getLastIndex = (i: number) => setIndex(i)
+
     useEffect(() => {
         if (index > 0) {
             const getNewChunksOfData = async () => {
@@ -58,6 +55,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any): JSX.Element {
                                                 href={{
                                                     pathname: "/filters",
                                                     query: {
+                                                        category: sub.name,
                                                         id: sub.id,
                                                     },
                                                 }}

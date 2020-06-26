@@ -1,5 +1,4 @@
 import { Controller, Post, Get, Delete, Middleware, Put } from "@overnightjs/core"
-import { findDuplicates } from "../utils/findDuplicates"
 import { getConnection } from "typeorm"
 // import { jwtVerify } from "../utils/jwtVerify"
 import { Request, Response } from "express"
@@ -48,18 +47,18 @@ export class ProductAttributesController {
 
         try {
             const schema: any = await connection.getRepository(Schema).findOne({ table: "product" })
+            const parsedAttributes = JSON.parse(schema.attributes)
             const allowedToFilter = []
 
-            for (let i = 0; i < schema.attributes.length; i++) {
-                if (schema.attributes[i].allowFilter) {
-                    if (schema.attributes[i].type === "Number" || schema.attributes[i].type === "String") {
-                        allowedToFilter.push(schema.attributes[i])
+            for (let i = 0; i < parsedAttributes.length; i++) {
+                if (parsedAttributes[i].allowFilter) {
+                    if (parsedAttributes[i].type === "Number" || parsedAttributes[i].type === "String") {
+                        allowedToFilter.push(parsedAttributes[i])
                     } else {
                         const fromQuery = await connection.getRepository(Macro).find({
                             relations: ["options"],
-                            where: { name: schema.attributes[i].type },
+                            where: { name: parsedAttributes[i].type },
                         })
-
                         allowedToFilter.push(fromQuery[0])
                     }
                 }

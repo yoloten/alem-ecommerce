@@ -265,7 +265,6 @@ export class CategoryController {
     @Post("create/")
     public async create(req: Request, res: Response): Promise<void> {
         const connection = getConnection()
-        const queryRunner = connection.createQueryRunner()
 
         try {
             const { tree } = req.body
