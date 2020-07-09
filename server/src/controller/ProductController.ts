@@ -210,7 +210,7 @@ export class ProductController {
             }
 
             joins.push(`LEFT JOIN pricing ON product.price_id = pricing.id`)
-            wheres.push(price.length > 0 ? `(price BETWEEN ${price[0]} AND ${10000000})` : "")
+            wheres.push(price.length > 0 ? `(price BETWEEN ${price[0]} AND ${price[1]})` : "")
 
             if (fields && fields.length > 0) {
                 for (let i = 0; i < fields.length; i++) {
@@ -231,35 +231,38 @@ export class ProductController {
                             }
                         }
 
-                        const exists = await connection.query(`SELECT to_regclass('${key.slice(0, -5)}_product');`)
+                        if (keyAndVal[1].length > 0) {
+                            const exists = await connection.query(`SELECT to_regclass('${key.slice(0, -5)}_product');`)
+                            console.log(exists, keyAndVal[1])
+                            if (exists[0].to_regclass) {
+                                if (Array.isArray(fields[i][key]) && fields[i][key].length > 0) {
+                                    const productIDsFromEnums = await connection.query(`
+                                        SELECT DISTINCT product_id 
+                                        FROM ${key.slice(0, -5)}_product
+                                        WHERE ${key.slice(0, -5)}_name IN (${fields[i][key]
+                                        .map((item: any) => `'${item}'`)
+                                        .join(", ")})
+                                        ORDER BY product_id DESC
+                                    `)
 
-                        if (exists[0].to_regclass) {
-                            if (Array.isArray(fields[i][key]) && fields[i][key].length > 0) {
-                                const productIDsFromEnums = await connection.query(`
-                                    SELECT DISTINCT product_id 
-                                    FROM ${key.slice(0, -5)}_product
-                                    WHERE ${key.slice(0, -5)}_name IN (${fields[i][key]
-                                    .map((item: any) => `'${item}'`)
-                                    .join(", ")})
-                                    ORDER BY product_id DESC
-                                `)
+                                    if (productIDsFromEnums.length !== 0) {
+                                        ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
+                                        const newids = ids.filter((e: any, i: any, a: any) => a.indexOf(e) !== i)
 
-                                if (productIDsFromEnums.length !== 0) {
-                                    ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
-                                    const newids = ids.filter((e: any, i: any, a: any) => a.indexOf(e) !== i)
-
-                                    if (newids.length !== 0) {
-                                        ids = newids
+                                        if (newids.length !== 0) {
+                                            ids = newids
+                                        }
+                                    } else {
+                                        ids = [-1]
                                     }
-                                } else {
-                                    ids = []
                                 }
                             }
                         }
                     }
                 }
-
-                wheres.push(`product.id IN (${ids.length > 0 ? ids.join(", ") : -1})`)
+                if (ids.length > 0) {
+                    wheres.push(`product.id IN (${ids.join(", ")})`)
+                }
             }
 
             const products = await connection.query(`
