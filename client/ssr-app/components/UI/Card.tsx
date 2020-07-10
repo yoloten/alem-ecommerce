@@ -3,7 +3,7 @@ import Button from "./Button"
 
 namespace CardNamespace {
     export interface Props {
-        textPosition?: "center" | "left" | "right",
+        textPosition?: "center" | "left" | "right"
         subTitle?: string | React.ReactNode
         actionButton?: React.ReactNode
         customStyleObject?: object
@@ -60,7 +60,7 @@ export default function Card(props: CardNamespace.Props) {
         marginTop: "30px",
         alignSelf: props.textPosition ? btnPosition(props.textPosition) : "center",
     }
-   
+
     const titleStyle = {
         ...commonTextStyle,
         marginTop: "30px",
@@ -74,7 +74,7 @@ export default function Card(props: CardNamespace.Props) {
         marginTop: "10px",
         fontSize: props.fontSize ? props.fontSize : "14px",
         color: "#bababa",
-        marginRight: "10px"
+        marginRight: "10px",
     }
 
     const btnStyle = {
@@ -96,11 +96,11 @@ export default function Card(props: CardNamespace.Props) {
         height: props.height ? props.height : "",
         width: props.width ? props.width : "200px",
         border: props.border ? `1px solid ${props.borderColor ? props.borderColor : "#d9d9d9"}` : "none",
-        backgroundImage: props.bgImage ? "url(" + props.bgImage + ")" : "",
+        background: props.bgImage ? "url(" + props.bgImage + ")" : "",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
+        backgroundColor: props.backgroundColor ? props.backgroundColor : "grey",
         borderRadius: props.borderRadius ? props.borderRadius : "3px",
         paddingBottom: "10px",
         display: "flex",
@@ -109,15 +109,15 @@ export default function Card(props: CardNamespace.Props) {
     return (
         <div
             ref={cardRef}
-            style={{...cardStyle, flexDirection: "column", ...props.customStyleObject}}
+            style={{ ...cardStyle, flexDirection: "column", ...props.customStyleObject }}
             onClick={props.onClick}
             onMouseEnter={props.onMouseEnter}
             onMouseLeave={props.onMouseLeave}
-        >   
+        >
             {props.header ? <div style={headerStyle}>{props.header}</div> : ""}
             {props.title ? <div style={titleStyle}>{props.title}</div> : ""}
             {props.subTitle ? <div style={subTitleStyle}>{props.subTitle}</div> : ""}
-            <div >{props.body ? props.body : ""}</div>
+            <div>{props.body ? props.body : ""}</div>
             {props.actionButton ? <div style={btnStyle}>{props.actionButton}</div> : ""}
         </div>
     )

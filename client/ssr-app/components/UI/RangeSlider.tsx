@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react"
 
 const STEP = 1
 const MIN = 0
-const MAX = 500
+const MAX = 2500
 
-function TwoThumbs({values, onChange, windowWidth, currency, min, max}: any) {
-
+function TwoThumbs({ values, onChange, windowWidth, currency, min, max }: any) {
     return (
         <div
             style={{
@@ -106,12 +105,9 @@ function TwoThumbs({values, onChange, windowWidth, currency, min, max}: any) {
                             alignItems: "center",
                             border: "2px solid #000",
                         }}
-                    >
-
-                    </div>
+                    ></div>
                 )}
             />
-
         </div>
     )
 }

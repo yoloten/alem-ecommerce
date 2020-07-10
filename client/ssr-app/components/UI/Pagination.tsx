@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import CardGrid from "./CardGrid"
 
-export default function Pagination({ itemsPerPage, items, fromFilters, getLastIndex }: any): JSX.Element {
+export default function Pagination({ itemsPerPage, items, fromFilters, getLastIndex, toFirst }: any): JSX.Element {
     const [currentPage, setCurrentPage] = useState(1)
     const [upperPageBound, setUpperPageBound] = useState(3)
     const [lowerPageBound, setLowerPageBound] = useState(0)
@@ -29,45 +29,36 @@ export default function Pagination({ itemsPerPage, items, fromFilters, getLastIn
             }
         }
 
-        const indexOfLastTodo = currentPage * itemsPerPage
+        if (items.length === 0) {
+            setIsNextActive(false)
+        }
 
-        if (currentPage + 1 === upperPageBound) {
-            getLastIndex(items.length)
+        if (toFirst) {
+            setCurrentPage(1)
         }
     }, [currentPage, items])
 
-    const handleClick = (e: any) => {
-        setCurrentPage(parseInt(e.target.id, 10))
-    }
-
-    const increment = () => {
-        setUpperPageBound(upperPageBound + pageBound)
-        setLowerPageBound(lowerPageBound + pageBound)
-        setCurrentPage(upperPageBound + 1)
-    }
-
-    const decrement = () => {
-        setUpperPageBound(upperPageBound - pageBound)
-        setLowerPageBound(lowerPageBound - pageBound)
-        setCurrentPage(upperPageBound - pageBound)
-    }
-
     const prev = () => {
-        if ((currentPage - 1) % pageBound === 0) {
-            setUpperPageBound(upperPageBound - pageBound)
-            setLowerPageBound(lowerPageBound - pageBound)
-        }
+        if (isPrevActive) {
+            if ((currentPage - 1) % pageBound === 0) {
+                setUpperPageBound(upperPageBound - pageBound)
+                setLowerPageBound(lowerPageBound - pageBound)
+            }
 
-        setCurrentPage(currentPage - 1)
+            setCurrentPage(currentPage - 1)
+        }
     }
 
     const next = () => {
-        if (currentPage + 1 > upperPageBound) {
-            setUpperPageBound(upperPageBound + pageBound)
-            setLowerPageBound(lowerPageBound + pageBound)
-        }
+        if (isNextActive) {
+            if (currentPage + 1 > upperPageBound) {
+                setUpperPageBound(upperPageBound + pageBound)
+                setLowerPageBound(lowerPageBound + pageBound)
+            }
 
-        setCurrentPage(currentPage + 1)
+            getLastIndex(12)
+            setCurrentPage(currentPage + 1)
+        }
     }
 
     const renderItems = () => {
@@ -78,76 +69,15 @@ export default function Pagination({ itemsPerPage, items, fromFilters, getLastIn
         return <CardGrid content={currentItems} fromFilters={fromFilters} />
     }
 
-    const renderPageNumbers = () => {
-        const pageNumbers = []
-        for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
-            pageNumbers.push(i)
-        }
-
-        return (
-            <>
-                {pageNumbers.map((number) => {
-                    if (number === 1 && currentPage === 1) {
-                        return (
-                            <div
-                                style={{
-                                    marginRight: "3px",
-                                    color: currentPage === number ? "red" : "#000",
-                                }}
-                                id={`${number}`}
-                                onClick={handleClick}
-                                key={number}
-                            >
-                                {number}
-                            </div>
-                        )
-                    } else if (number < upperPageBound + 1 && number > lowerPageBound) {
-                        return (
-                            <div
-                                className="number"
-                                style={{
-                                    marginRight: "3px",
-                                    color: currentPage === number ? "red" : "#000",
-                                }}
-                                id={`${number}`}
-                                onClick={handleClick}
-                                key={number}
-                            >
-                                {number}
-                            </div>
-                        )
-                    }
-                })}
-                {pageNumbers.length > upperPageBound ? (
-                    <div className="decrement" onClick={increment}>
-                        ...
-                    </div>
-                ) : (
-                    ""
-                )}
-            </>
-        )
-    }
-
     return (
         <div>
             {renderItems()}
             <div className="page-numbers">
-                <div className="prev" onClick={prev}>
-                    {isPrevActive ? "Prev" : ""}
+                <div className={`${!isPrevActive ? "closed" : ""} prev`} onClick={prev}>
+                    Previous
                 </div>
-                <div className="numbers">
-                    {lowerPageBound >= 1 ? (
-                        <div className="decrement" onClick={decrement}>
-                            ...
-                        </div>
-                    ) : (
-                        ""
-                    )}
-                    {renderPageNumbers()}
-                </div>
-                <div className="prev" onClick={next}>
-                    {isNextActive ? "Next" : ""}
+                <div className={`${!isNextActive ? "closed" : ""} prev`} onClick={next}>
+                    Next
                 </div>
             </div>
         </div>

@@ -199,7 +199,7 @@ export class ProductController {
         const connection = getConnection()
 
         try {
-            const { fields, limit, category, price, sort } = req.body
+            const { fields, limit, category, price, offset } = req.body
             const joins: any[] = []
             const wheres: any[] = []
             let ids: any = []
@@ -218,32 +218,52 @@ export class ProductController {
                     const key = Object.keys(fields[i])[0]
 
                     if (key) {
-                        const hasColumn = await connection.query(`
-                            SELECT column_name
-                            FROM information_schema.columns
-                            WHERE table_name='product' and column_name='${key}_product_id';
-                        `)
+                        const hasIDColumn = await connection.query(`
+                                SELECT column_name
+                                FROM information_schema.columns
+                                WHERE table_name='product' and column_name='${key}_product_id';
+                            `)
 
-                        if (hasColumn.length > 0) {
+                        const hasOwnColumn = await connection.query(`
+                                SELECT column_name
+                                FROM information_schema.columns
+                                WHERE table_name='product' and column_name='${key}';
+                            `)
+
+                        if (hasIDColumn.length > 0) {
                             if (keyAndVal[1]) {
                                 joins.push(`LEFT JOIN ${key}_product ON ${key}_product.id = product.${key}_product_id`)
-                                wheres.push(`${keyAndVal[0]}_name = '${keyAndVal[1]}'`)
+                                wheres.push(
+                                    typeof keyAndVal[1] === "number"
+                                        ? `${key}_product.${key}_name = ${keyAndVal[1]}`
+                                        : `${key}_product.${key}_name ILIKE '%${keyAndVal[1]}%'`,
+                                )
                             }
                         }
 
-                        if (keyAndVal[1].length > 0) {
+                        if (hasOwnColumn.length > 0) {
+                            if (keyAndVal[1]) {
+                                wheres.push(
+                                    typeof keyAndVal[1] === "number"
+                                        ? `product.${key} = ${keyAndVal[1]}`
+                                        : `product.${key} ILIKE '%${keyAndVal[1]}%'`,
+                                )
+                            }
+                        }
+
+                        if (Array.isArray(keyAndVal[1]) && keyAndVal[1].length > 0) {
                             const exists = await connection.query(`SELECT to_regclass('${key.slice(0, -5)}_product');`)
-                            console.log(exists, keyAndVal[1])
+
                             if (exists[0].to_regclass) {
                                 if (Array.isArray(fields[i][key]) && fields[i][key].length > 0) {
                                     const productIDsFromEnums = await connection.query(`
-                                        SELECT DISTINCT product_id 
-                                        FROM ${key.slice(0, -5)}_product
-                                        WHERE ${key.slice(0, -5)}_name IN (${fields[i][key]
+                                            SELECT DISTINCT product_id 
+                                            FROM ${key.slice(0, -5)}_product
+                                            WHERE ${key.slice(0, -5)}_name IN (${fields[i][key]
                                         .map((item: any) => `'${item}'`)
                                         .join(", ")})
-                                        ORDER BY product_id DESC
-                                    `)
+                                            ORDER BY product_id DESC
+                                        `)
 
                                     if (productIDsFromEnums.length !== 0) {
                                         ids = ids.concat(productIDsFromEnums.map((id: any) => id.product_id))
@@ -260,6 +280,7 @@ export class ProductController {
                         }
                     }
                 }
+
                 if (ids.length > 0) {
                     wheres.push(`product.id IN (${ids.join(", ")})`)
                 }
@@ -269,7 +290,7 @@ export class ProductController {
                     SELECT * FROM product
                     ${joins.join(" ")}
                     ${wheres.length > 0 ? "WHERE" : ""} ${wheres.filter((a) => a !== "").join(" AND ")}
-                    LIMIT ${limit};
+                    LIMIT ${limit} OFFSET ${offset};
                 `)
 
             for (let i = 0; i < products.length; i++) {
@@ -277,12 +298,13 @@ export class ProductController {
                     SELECT *
                     FROM photo
                     WHERE photo.product_id = ${products[i].id}
-                    limit 1;
+                    LIMIT 1;
                 `)
 
                 products[i].photos = photos
             }
-
+            // console.log(offset)
+            console.log(products, offset)
             res.json(products)
         } catch (error) {
             res.status(400).json(error)

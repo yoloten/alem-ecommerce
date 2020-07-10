@@ -13,17 +13,18 @@ import Dropdown from "../../components/UI/Dropdown"
 import Input from "../../components/UI/Input"
 
 function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): JSX.Element {
+    const [toFirstPage, setToFirstPage] = useState(false)
     const [index, setIndex] = useState(0)
     const [didMount, setDidMount] = useState(false)
     const [windowWidth, setWindowWidth] = useState(0)
     const [fields, setField]: any = useState(allFilters.map(() => ({})))
     const [category, setCategories]: any = useState(dataFromCategory.children.map(() => ""))
-    const [price, setPrice]: any = useState([0, 500])
+    const [price, setPrice]: any = useState([0, 2500])
     const [state, setState] = useState({
         products: dataFromProduct,
         filters: allFilters,
     })
-    console.log(state.products)
+    // console.log(state.products)
     useEffect(() => {
         setWindowWidth(window.innerWidth)
         setDidMount(true)
@@ -31,16 +32,19 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
 
     useEffect(() => {
         const postFilter = async () => {
-            const newCategory = [...category].filter((i: any) => i !== "")
+            const newCategory = category.filter((i: any) => i !== "")
+
             if (newCategory.length === 0) {
                 dataFromCategory.children.map((child: any) => newCategory.push(child.id))
             }
+
             try {
                 const productsFromFilters = await axios.post("http://localhost:8000/api/product/filters", {
                     fields,
-                    limit: 20,
+                    limit: 12,
                     category: newCategory,
                     price,
+                    offset: 0,
                 })
 
                 setState((prev) => ({ ...prev, products: productsFromFilters.data }))
@@ -51,6 +55,8 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
 
         if (didMount) {
             postFilter()
+            setToFirstPage(true)
+            setIndex(0)
         }
     }, [fields, price, category])
 
@@ -62,17 +68,40 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
         }
     }, [])
 
-    const getLastIndex = (i: number) => setIndex(i)
+    const getLastIndex = async (i: number) => {
+        setIndex(index + i)
+        setToFirstPage(false)
+        console.log(index, i)
+        try {
+            const newCategory = category.filter((i: any) => i !== "")
+
+            if (newCategory.length === 0) {
+                dataFromCategory.children.map((child: any) => newCategory.push(child.id))
+            }
+
+            const productsFromFilters = await axios.post("http://localhost:8000/api/product/filters", {
+                fields,
+                limit: 12,
+                category: newCategory,
+                price,
+                offset: index + i,
+            })
+
+            setState((prev) => ({ ...prev, products: [...state.products, ...productsFromFilters.data] }))
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     const onInput = (e: any) => {
         const newFields: any = [...fields]
-        const { value, name, id } = e.target
+        const { value, name, id, type } = e.target
 
         if (name.slice(-5) === "_enum") {
             const enumID = id.split(", ")
-            // console.log(enumID)
+
             if (!newFields[parseInt(id, 10)][name]) {
                 newFields[parseInt(id, 10)][name] = []
             }
@@ -85,7 +114,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                 newFields[parseInt(enumID[0], 10)][name].splice(index, 1)
             }
         } else {
-            newFields[parseInt(id, 10)][name] = value
+            newFields[parseInt(id, 10)][name] = type === "number" ? parseInt(value, 10) : value
         }
 
         setField([...newFields])
@@ -105,10 +134,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                 <div className="filters-categories-header">Product Type</div>
                 <div className="filters-name" style={{ marginLeft: "20px" }}>
                     <div className="filters-name">
-                        {dataFromCategory.category[0].name.slice(0, 1).toUpperCase() +
-                            dataFromCategory.category[0].name.slice(1) +
-                            " "}
-                        (
+                        {dataFromCategory.category[0].name.toUpperCase() + " "}(
                         {dataFromCategory.productCount.length > 1
                             ? dataFromCategory.productCount
                                   .map((a: any) => parseInt(a.count, 10))
@@ -129,7 +155,9 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                                   width="26px"
                                   height="26px"
                               />
-                              <div className="filters-childname">{child.name + " (" + child.count + ")"}</div>
+                              <div className="filters-childname">
+                                  {child.name.toUpperCase() + " (" + child.count + ")"}
+                              </div>
                           </div>
                       ))}
             </div>
@@ -258,6 +286,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                             fromFilters={false}
                             items={state.products}
                             itemsPerPage={6}
+                            toFirst={toFirstPage}
                         />
                     </div>
                 </div>
@@ -276,9 +305,10 @@ index.getInitialProps = async ({ query }: any) => {
     if (resFromCategory.data.children.length > 0) {
         products = await axios.post("http://localhost:8000/api/product/filters", {
             fields: [],
-            limit: 20,
+            limit: 12,
             category: resFromCategory.data.children.map((item: any) => item.id),
             price: [],
+            offset: 0,
         })
     }
 
