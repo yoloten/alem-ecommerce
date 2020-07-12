@@ -1,36 +1,37 @@
-.filters-main
-    border-top: 1px solid $base-grey
-    padding-left: 170px
-    padding-right: 170px
 
-.content
-    display: flex
-    margin-top: 40px
+.filters
+    border-top: 1px solid transparent
+    padding-left: 200px
+    padding-right: 200px
+    background: #fafafa
 
-.items
-    width: 100%
-    padding-left: 40px
+    &-sidebar
+        min-width: 310px
 
-.header
-    display: flex
-    justify-content: space-between
+    &-content
+        display: flex
+        margin-top: 30px
 
-.title
-    font-size: 29px
-    margin-left: 2.8vw
+    &-items
+        width: 100%
+        padding-left: 40px
 
-.navigation
-    text-decoration: none
-    color: #000
+    &-title
+        font-size: 29px
+        margin-left: 2&-8vw
 
-.routes
-    margin-top: 10px
+    &-navigation
+        text-decoration: none
+        color: #000
 
-.sort
-    display: flex
-    justify-content: space-between
-    flex-direction: row
-    max-width: 520px
+    &-routes
+        margin-top: 30px
+
+    &-sort
+        display: flex
+        justify-content: space-between
+        flex-direction: row
+        max-width: 520px
 
     &-item
         margin-left: 20px
@@ -38,56 +39,50 @@
         align-items: center
 
     &-header
-        margin-right: 5px
-
-.filters
-    min-width: 310px
+        padding-top: 20px
+        font-size: 14px
+        font-weight: 500
+        display: flex
+        align-items: center
+        justify-content: space-between
+        cursor: pointer
+        margin: 0 20px 10px 20px
 
     &-categories
-        border: 1px solid $base-grey
-
-        &-header
-            margin-left: 20px
-            margin-top: 20px
-            margin-bottom: 10px
-            font-size: 18px
-            font-weight: 700
+        border-radius: 4px
+        background-color: #fff
+        padding-bottom: 10px
+        margin-bottom: 40px
 
     &-name
         display: flex
         cursor: pointer
         align-items: center
-        margin-right: 3px
-        margin-bottom: 10px
         font-weight: 400
+        margin: 20px 3px 10px 15px
 
     &-childname
-        margin-left: 20px
-    &-sizes
-        border: 1px solid $base-grey
-        margin-top: 40px
+        margin-left: 10px
+        font-size: 14px
 
-        &-items
-            display: flex
-            align-items: center
-            flex-wrap: wrap
-            margin-left: 20px
+@media (max-width: 1500px)
+    .filters
+        padding-left: 100px
+        padding-right: 100px
 
 @media (max-width: 1371px)
-    .filters
+    .filters-sidebar
         min-width: 220px
     .filters-sizes-items
         width: 200px
 
 @media (max-width: 1200px)
-    .filters-main
-        border-top: 1px solid $base-grey
+    .filters
         padding-left: 60px
         padding-right: 60px
 
 @media (max-width: 1000px)
-    .filters-main
-        border-top: 1px solid $base-grey
+    .filters
         padding-left: 30px
         padding-right: 30px
 
@@ -102,8 +97,7 @@
             margin-bottom: 10px
 
 @media (max-width: 700px)
-    .filters-main
-        border-top: 1px solid $base-grey
+    .filters
         padding-left: 15px
         padding-right: 15px
 

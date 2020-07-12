@@ -38,7 +38,10 @@ export default function Checkbox({
         <div className="checkbox-main">
             <input
                 className={className}
-                style={{ width: width ? width : "26px", height: height ? height : "26px" }}
+                style={{
+                    width: width ? width : "26px",
+                    height: height ? height : "26px",
+                }}
                 value={click % 2 === 0 ? value : ""}
                 onChange={onChange}
                 onClick={counter}
@@ -51,10 +54,11 @@ export default function Checkbox({
                     marginLeft: width ? "-" + width : "-44px",
                     height: height ? height : "26px",
                     width: width ? width : "26px",
+                    background: click % 2 === 0 ? "transparent" : "#000",
                 }}
                 className="checkbox"
             >
-                {checked ? <Icons.CheckMark width={width} height={height} /> : ""}
+                {checked ? <Icons.CheckMark width="19px" height="19px" /> : ""}
             </div>
         </div>
     )

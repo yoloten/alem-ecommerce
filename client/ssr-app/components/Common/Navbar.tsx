@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import jwtDecode from "jwt-decode"
 import Router from "next/router"
+import cookie from "js-cookie"
 import Link from "next/link"
 import axios from "axios"
 
@@ -10,7 +11,6 @@ export interface Props {
     landing?: boolean
     data?: string
     removeData?: string
-    token?: any
 }
 
 export default function Navbar(props: Props) {
@@ -19,7 +19,8 @@ export default function Navbar(props: Props) {
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
-        const decoded: any = typeof props.token === "string" && jwtDecode(props.token)
+        const token = cookie.get("token")
+        const decoded: any = typeof token === "string" && jwtDecode(token)
         setUser(decoded)
 
         const getCategories = async () => {
@@ -87,9 +88,12 @@ export default function Navbar(props: Props) {
                             <Link
                                 key={category.name}
                                 href={{
-                                    pathname: `/[categories]?id=${category.id}`,
+                                    pathname: "/categories",
+                                    query: {
+                                        name: category.name,
+                                        id: category.id,
+                                    },
                                 }}
-                                as={`/${category.name}?id=${category.id}`}
                             >
                                 <a className="men">
                                     {category.name.slice(0, 1).toUpperCase() + category.name.slice(1).toLowerCase()}
@@ -153,9 +157,8 @@ export default function Navbar(props: Props) {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-left: 170px;
-                    margin-right: 170px;
-                    padding-top: ${props.landing ? "40px" : "10px"};
+                    height: 60px;
+                    border-bottom: 1px solid #00000010;
                 }
                 .cart {
                     cursor: pointer;
@@ -174,6 +177,7 @@ export default function Navbar(props: Props) {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    margin-right: 200px;
                 }
                 .search {
                     cursor: pointer;
@@ -185,7 +189,8 @@ export default function Navbar(props: Props) {
                 .logo-nav {
                     text-decoration: none;
                     color: #000;
-                    font-size: 40px;
+                    font-size: 28px;
+                    margin-left: 200px;
                 }
                 a {
                     text-decoration: none;
@@ -207,14 +212,21 @@ export default function Navbar(props: Props) {
                     z-index: 10;
                 }
 
+                @media (max-width: 1500px) {
+                    .logo-nav {
+                        margin-left: 100px;
+                    }
+                    .actions {
+                        margin-right: 100px;
+                    }
+                }
+
                 @media (max-width: 1200px) {
-                    .navbar {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
+                    .logo-nav {
                         margin-left: 60px;
+                    }
+                    .actions {
                         margin-right: 60px;
-                        padding-top: ${props.landing ? "40px" : "10px"};
                     }
                     .logo {
                         text-decoration: none;
@@ -225,19 +237,11 @@ export default function Navbar(props: Props) {
                 }
 
                 @media (max-width: 1000px) {
-                    .navbar {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
+                    .logo-nav {
                         margin-left: 30px;
-                        margin-right: 30px;
-                        padding-top: ${props.landing ? "40px" : "10px"};
                     }
-                    .logo {
-                        text-decoration: none;
-                        color: #000;
-                        font-size: 22px;
-                        font-family: TimeBurner;
+                    .actions {
+                        margin-right: 30px;
                     }
                     .actions {
                         display: flex;
@@ -252,23 +256,19 @@ export default function Navbar(props: Props) {
                     }
                 }
                 @media (max-width: 700px) {
-                    .navbar {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
+                    .logo-nav {
                         margin-left: 15px;
+                    }
+                    .actions {
                         margin-right: 15px;
-                        padding-top: ${props.landing ? "40px" : "10px"};
                     }
                 }
                 @media (max-width: 370px) {
-                    .navbar {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin-left: 5px;
-                        margin-right: 5px;
-                        padding-top: ${props.landing ? "40px" : "10px"};
+                    .logo-nav {
+                        margin-left: 15px;
+                    }
+                    .actions {
+                        margin-right: 15px;
                     }
                 }
             `}</style>

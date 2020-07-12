@@ -34,7 +34,10 @@ export default function CardGrid(props: Props) {
     const updateDimensions = () => setWindowWidth(window.innerWidth)
 
     return (
-        <div className="grid">
+        <div
+            className="grid"
+            // style={{ justifyContent: props.content && props.content.length < 4 ? "flex-start" : "space-between" }}
+        >
             {props.content && props.content.length > 0 ? (
                 props.content.map((product: any, index: number) => {
                     const discount = parseFloat(product.discount)
@@ -44,16 +47,15 @@ export default function CardGrid(props: Props) {
 
                     return (
                         <Link href={`/product?id=${id}`} key={index}>
-                            <div className="grid-card">
+                            <div style={{ alignSelf: "flex-start" }} className="grid-card">
                                 <Card
                                     bgImage={
                                         "http://localhost:8000/" +
                                         (product.photos && product.photos.length > 0 && product.photos[0].path)
                                     }
-                                    height={windowWidth < 1560 ? "220px" : "300px"}
-                                    width={windowWidth < 1560 ? "220px" : "300px"}
+                                    windowWidth={windowWidth}
                                     key={id}
-                                    borderRadius="0px"
+                                    borderRadius="4px"
                                 />
                                 <div className="grid-name">{product.name}</div>
                                 <div>
@@ -65,7 +67,12 @@ export default function CardGrid(props: Props) {
                                                         " " +
                                                         currency}
                                                 </div>
-                                                <div className="grid-oldprice">{price + " " + currency}</div>
+                                                <div
+                                                    style={{ textDecoration: discount > 0 ? "line-through" : "none" }}
+                                                    className="grid-oldprice"
+                                                >
+                                                    {price + " " + currency}
+                                                </div>
                                             </>
                                         ) : (
                                             <div className="grid-oldprice">{price + " " + currency}</div>

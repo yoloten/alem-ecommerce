@@ -1,8 +1,9 @@
-import { logout, setUserFromLocalStorage } from "reducers/user/userReducer"
+import { logout, setUserFromCookie } from "reducers/user/userReducer"
 import { mount, route, redirect, lazy, Matcher } from "navi"
 import { setAuthToken, Decoded } from "actions/user/auth"
 import jwt_decode from "jwt-decode"
 import { Router } from "react-navi"
+import cookie from "js-cookie"
 import * as React from "react"
 import store from "store"
 
@@ -23,12 +24,13 @@ interface returningInterface {
     loggedIn: Matcher<any, any>
 }
 
-if (localStorage.jwtToken) {
-    setAuthToken(localStorage.jwtToken)
-    const decoded: Decoded = jwt_decode(localStorage.jwtToken)
+if (cookie.get("token")) {
+    const token: any = cookie.get("token")
+    const decoded: Decoded = jwt_decode(token)
     const currentTime = Date.now() / 1000
 
-    store.dispatch(setUserFromLocalStorage(decoded))
+    setAuthToken(token)
+    store.dispatch(setUserFromCookie(decoded))
 
     if (decoded.exp < currentTime) {
         store.dispatch(logout())

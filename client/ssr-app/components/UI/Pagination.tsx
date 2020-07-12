@@ -70,13 +70,13 @@ export default function Pagination({ itemsPerPage, items, fromFilters, getLastIn
     }
 
     return (
-        <div>
+        <div className="pagination">
             {renderItems()}
             <div className="page-numbers">
-                <div className={`${!isPrevActive ? "closed" : ""} prev`} onClick={prev}>
+                <div className={`${!isPrevActive ? "closed" : ""} pagination-btn prev`} onClick={prev}>
                     Previous
                 </div>
-                <div className={`${!isNextActive ? "closed" : ""} prev`} onClick={next}>
+                <div className={`${!isNextActive ? "closed" : ""} pagination-btn next`} onClick={next}>
                     Next
                 </div>
             </div>

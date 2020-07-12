@@ -28,7 +28,6 @@ function TwoThumbs({ values, onChange, windowWidth, currency, min, max }: any) {
             >
                 <div
                     style={{
-                        background: "#d9d9d9",
                         height: "27px",
                         paddingLeft: "10px",
                         paddingRight: "10px",
@@ -42,7 +41,6 @@ function TwoThumbs({ values, onChange, windowWidth, currency, min, max }: any) {
                 </div>
                 <div
                     style={{
-                        background: "#d9d9d9",
                         height: "25px",
                         display: "flex",
                         alignItems: "center",
@@ -69,7 +67,7 @@ function TwoThumbs({ values, onChange, windowWidth, currency, min, max }: any) {
                             ...props.style,
                             height: "36px",
                             display: "flex",
-                            width: windowWidth < 1370 ? "120px" : "200px",
+                            width: windowWidth < 1370 ? "120px" : "220px",
                         }}
                     >
                         <div
@@ -96,8 +94,8 @@ function TwoThumbs({ values, onChange, windowWidth, currency, min, max }: any) {
                         {...props}
                         style={{
                             ...props.style,
-                            height: "22px",
-                            width: "22px",
+                            height: "10px",
+                            width: "10px",
                             borderRadius: "100px",
                             backgroundColor: "#FFF",
                             display: "flex",

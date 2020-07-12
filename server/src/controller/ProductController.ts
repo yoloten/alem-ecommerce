@@ -303,8 +303,7 @@ export class ProductController {
 
                 products[i].photos = photos
             }
-            // console.log(offset)
-            console.log(products, offset)
+
             res.json(products)
         } catch (error) {
             res.status(400).json(error)

@@ -38,8 +38,19 @@ function index({ dataFromCategory, dataFromProduct, query }: any): JSX.Element {
             <Navbar />
             <div className="category">
                 <div className="category-routes">
-                    <Link href="/p/[category]" as={`/p/${query.categories}`}>
-                        <a className="category-navigation">{query.categories + "/"}</a>
+                    <Link href="/">
+                        <a className="category-navigation">Home/</a>
+                    </Link>
+                    <Link
+                        href={{
+                            pathname: "/categories",
+                            query: {
+                                name: query.name,
+                                id: query.id,
+                            },
+                        }}
+                    >
+                        <a className="category-navigation">{query.name + "/"}</a>
                     </Link>
                 </div>
                 <div className="category-content">
@@ -55,6 +66,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any): JSX.Element {
                                                 href={{
                                                     pathname: "/filters",
                                                     query: {
+                                                        base: query.name + "-" + query.id,
                                                         category: sub.name,
                                                         id: sub.id,
                                                     },
@@ -72,7 +84,7 @@ function index({ dataFromCategory, dataFromProduct, query }: any): JSX.Element {
                     </div>
                     <div className="category-grid">
                         <div className="category-title">All</div>
-                        <Pagination getLastIndex={getLastIndex} fromFilters={false} items={products} itemsPerPage={6} />
+                        <Pagination getLastIndex={getLastIndex} fromFilters={false} items={products} itemsPerPage={8} />
                     </div>
                 </div>
             </div>

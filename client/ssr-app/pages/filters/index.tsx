@@ -13,6 +13,7 @@ import Dropdown from "../../components/UI/Dropdown"
 import Input from "../../components/UI/Input"
 
 function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): JSX.Element {
+    const [isOpen, setIsOpen]: any = useState({})
     const [toFirstPage, setToFirstPage] = useState(false)
     const [index, setIndex] = useState(0)
     const [didMount, setDidMount] = useState(false)
@@ -71,7 +72,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
     const getLastIndex = async (i: number) => {
         setIndex(index + i)
         setToFirstPage(false)
-        console.log(index, i)
+
         try {
             const newCategory = category.filter((i: any) => i !== "")
 
@@ -128,79 +129,95 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
         setCategories(newCategory)
     }
 
+    const onOpen = (e: any) => {
+        const { id } = e.target
+        const newIsOpen = { ...isOpen }
+
+        if (!newIsOpen[id]) {
+            newIsOpen[id] = true
+        } else {
+            newIsOpen[id] = false
+        }
+
+        setIsOpen(newIsOpen)
+    }
+
     const showFilters = (
-        <div className="filters">
+        <div className="filters-sidebar">
             <div className="filters-categories">
-                <div className="filters-categories-header">Product Type</div>
-                <div className="filters-name" style={{ marginLeft: "20px" }}>
-                    <div className="filters-name">
-                        {dataFromCategory.category[0].name.toUpperCase() + " "}(
-                        {dataFromCategory.productCount.length > 1
-                            ? dataFromCategory.productCount
-                                  .map((a: any) => parseInt(a.count, 10))
-                                  .reduce((a: any, c: any) => a + c)
-                            : dataFromCategory.productCount[0].count}
-                        )
-                    </div>
+                <div className="filters-header" onClick={onOpen} id="PRODUCT TYPE">
+                    PRODUCT TYPE
+                    {isOpen["PRODUCT TYPE"] ? <Icons.ArrowDown /> : <Icons.ArrowRight />}
                 </div>
-                {dataFromCategory.children && dataFromCategory.children < 1
-                    ? ""
-                    : dataFromCategory.children.map((child: any, i: number) => (
-                          <div className="filters-name" key={child.uuid} style={{ marginLeft: "20px" }}>
+                {dataFromCategory.children.length > 0 && isOpen["PRODUCT TYPE"]
+                    ? dataFromCategory.children.map((child: any, i: number) => (
+                          <div className="filters-name" key={child.uuid}>
                               <CheckBox
                                   id={i.toString()}
                                   value={child.id}
                                   checked={parseInt(category[i], 10) === child.id ? true : false}
                                   onChange={onCategory}
-                                  width="26px"
-                                  height="26px"
+                                  width="20px"
+                                  height="20px"
                               />
                               <div className="filters-childname">
-                                  {child.name.toUpperCase() + " (" + child.count + ")"}
+                                  {child.name.slice(0, 1).toUpperCase() +
+                                      child.name.slice(1).toLowerCase() +
+                                      " (" +
+                                      child.count +
+                                      ")"}
                               </div>
                           </div>
-                      ))}
+                      ))
+                    : ""}
             </div>
 
-            <div className="filters-sizes">
-                <div className="filters-categories-header">Price</div>
-                <RangeSlider currency="USD" values={price} onChange={(value: any) => setPrice(value)} />
+            <div className="filters-categories">
+                <div className="filters-header" onClick={onOpen} id="PRICE">
+                    PRICE RANGE
+                    {isOpen["PRICE"] ? <Icons.ArrowDown /> : <Icons.ArrowRight />}
+                </div>
+                {isOpen["PRICE"] && (
+                    <RangeSlider currency="USD" values={price} onChange={(value: any) => setPrice(value)} />
+                )}
             </div>
 
             {state.filters.map((filter: any, i: number) => {
                 if (filter.type === "enum") {
                     return (
-                        <div className="filters-sizes" key={filter.uuid}>
-                            <div className="filters-categories-header">
-                                {filter.name.slice(0, 1).toUpperCase() + filter.name.slice(1)}
+                        <div className="filters-categories" key={filter.uuid}>
+                            <div className="filters-header" onClick={onOpen} id={filter.name}>
+                                {filter.name.toUpperCase()}
+                                {isOpen[filter.name] ? <Icons.ArrowDown /> : <Icons.ArrowRight />}
                             </div>
-                            {filter.options.map((option: any) => {
-                                return (
-                                    <div className="filters-name" key={option.uuid} style={{ marginLeft: "20px" }}>
-                                        <CheckBox
-                                            id={i.toString() + ", " + option.value}
-                                            name={filter.name + "_enum"}
-                                            value={option.value}
-                                            checked={
-                                                Array.isArray(fields[i][filter.name + "_enum"]) &&
-                                                fields[i][filter.name + "_enum"].includes(option.value)
-                                                    ? true
-                                                    : false
-                                            }
-                                            onChange={onInput}
-                                            width="26px"
-                                            height="26px"
-                                        />
-                                        <div className="filters-childname">{option.label}</div>
-                                    </div>
-                                )
-                            })}
+                            {isOpen[filter.name] &&
+                                filter.options.map((option: any) => {
+                                    return (
+                                        <div className="filters-name" key={option.uuid}>
+                                            <CheckBox
+                                                id={i.toString() + ", " + option.value}
+                                                name={filter.name + "_enum"}
+                                                value={option.value}
+                                                checked={
+                                                    Array.isArray(fields[i][filter.name + "_enum"]) &&
+                                                    fields[i][filter.name + "_enum"].includes(option.value)
+                                                        ? true
+                                                        : false
+                                                }
+                                                onChange={onInput}
+                                                width="20px"
+                                                height="20px"
+                                            />
+                                            <div className="filters-childname">{option.label}</div>
+                                        </div>
+                                    )
+                                })}
                         </div>
                     )
                 }
                 if (filter.type.toLowerCase() === "number") {
                     return (
-                        <div key={filter.name + i} className="filters-sizes">
+                        <div key={filter.name + i} className="filters-categories">
                             <Input
                                 type="number"
                                 name={filter.name}
@@ -209,7 +226,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                                 onChange={onInput}
                                 borderRadius="1px"
                                 height={40}
-                                width={windowWidth < 1371 ? 160 : 250}
+                                width={windowWidth <= 1370 ? 160 : 260}
                                 bgColor="#fff"
                                 border={false}
                                 min={filter.validators && filter.validators.min ? filter.validators.min : undefined}
@@ -220,18 +237,19 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                 }
                 if (filter.type.toLowerCase() === "string") {
                     return (
-                        <div key={filter.name + i} className="filters-sizes">
+                        <div key={filter.name + i} className="filters-categories">
                             <Input
                                 key={i}
                                 name={filter.name}
                                 id={i.toString()}
                                 type="text"
                                 placeholder={filter.label}
+                                borderRadius="1px"
                                 onChange={onInput}
                                 bgColor="#fff"
                                 border={false}
                                 height={40}
-                                width={windowWidth < 1371 ? 160 : 250}
+                                width={windowWidth < 1371 ? 170 : 270}
                             />
                         </div>
                     )
@@ -239,23 +257,37 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
             })}
         </div>
     )
-
+    console.log(windowWidth)
     return (
         <div>
             <Navbar />
-            <div className="filters-main">
-                <div className="routes">
-                    <Link href="/p/[category]" as={`/p/${query.category}`}>
-                        <a className="navigation">{query.category + "/"}</a>
+            <div className="filters">
+                <div className="filters-routes">
+                    <Link href="/">
+                        <a className="filters-navigation">Home/</a>
                     </Link>
-                    <Link href="/p/[category]/[filters]" as={`/p/${query.category}/${query.filters}`}>
-                        <a className="navigation">{query.filters}</a>
+                    <Link
+                        href={{
+                            pathname: "/categories",
+                            query: {
+                                name: query.base.split("-")[0],
+                                id: query.base.split("-")[1],
+                            },
+                        }}
+                    >
+                        <a className="category-navigation">{query.base.split("-")[0] + "/"}</a>
                     </Link>
+                    <Link href="/filters" as={`/${query.category}`}>
+                        <a className="filters-navigation">{query.category + "/"}</a>
+                    </Link>
+                    {/* <Link href="/p/[category]/[filters]" as={`/p/${query.category}/${query.filters}`}>
+                        <a className="filters-navigation">{query.filters}</a>
+                    </Link> */}
                 </div>
-                <div className="content">
+                <div className="filters-content">
                     {windowWidth < 571 ? (
                         <Menu
-                            className="menu"
+                            className="filters-menu"
                             width="280px"
                             pageWrapId={"hidden"}
                             right
@@ -266,7 +298,7 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                                     bmBurgerButton: {
                                         position: "fixed",
                                         left: windowWidth - 45 + "px",
-                                        top: "130px",
+                                        top: "80px",
                                     },
                                 },
                                 ...styles,
@@ -277,18 +309,14 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                     ) : (
                         showFilters
                     )}
-                    <div className="content-main">
-                        <div className="header">
-                            <div className="title">Men's Top</div>
-                        </div>
-                        <Pagination
-                            getLastIndex={getLastIndex}
-                            fromFilters={false}
-                            items={state.products}
-                            itemsPerPage={6}
-                            toFirst={toFirstPage}
-                        />
-                    </div>
+
+                    <Pagination
+                        getLastIndex={getLastIndex}
+                        fromFilters={false}
+                        items={state.products}
+                        itemsPerPage={8}
+                        toFirst={toFirstPage}
+                    />
                 </div>
             </div>
         </div>
@@ -312,14 +340,12 @@ index.getInitialProps = async ({ query }: any) => {
         })
     }
 
-    // const allColors = await axios.get("http://localhost:8000/api/color/all")
     const allFilters = await axios.get("http://localhost:8000/api/product/attributes/allfilters")
 
     return {
         dataFromCategory: resFromCategory.data.length === 0 ? [] : resFromCategory.data,
         dataFromProduct: products.data.length === 0 ? [] : products.data,
         allFilters: allFilters.data.length === 0 ? [] : allFilters.data,
-        // allColors: allColors.data,
         query,
     }
 }
@@ -342,7 +368,7 @@ const styles = {
         background: "#bdc3c7",
     },
     bmMenuWrap: {
-        marginTop: "-110px",
+        marginTop: "-130px",
         position: "fixed",
         height: "100%",
         background: "#fff",
@@ -353,10 +379,10 @@ const styles = {
     },
     bmItemList: {
         // color: "#b8b7ad",
-        padding: "20px",
     },
     bmItem: {
         display: "inline-block",
+        outline: "none",
     },
     bmOverlay: {
         background: "transparent",

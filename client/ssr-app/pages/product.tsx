@@ -10,8 +10,8 @@ import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
 import Button from "../components/UI/Button"
 
-function index({ dataFromProduct, query }: any) {
-    const [photo, setPhoto] = useState(dataFromProduct.photos[0].path)
+function index({ product, query }: any): JSX.Element {
+    const [photo, setPhoto] = useState(product.photos[0].path)
     const [checkedEnum, setCheckedEnum]: any = useState({})
     const [amount, setAmount]: any = useState(1)
     const [alert, setAlert]: any = useState("")
@@ -38,20 +38,21 @@ function index({ dataFromProduct, query }: any) {
         }
     }
 
-    const addToCart = () => {
+    const addToCart = async () => {
         let ifAllChosen = false
+
         const toCart = {
-            discount: dataFromProduct.discount,
-            currency: dataFromProduct.currency,
-            product_id: dataFromProduct.id,
-            price: dataFromProduct.price,
-            name: dataFromProduct.name,
+            discount: product.discount,
+            currency: product.currency,
+            product_id: product.id,
+            price: product.price,
+            name: product.name,
             quantity: amount,
             ...checkedEnum,
             photo,
         }
 
-        const enumsFromProduct = Object.keys(dataFromProduct).filter((i) => i.slice(-5) === "_enum")
+        const enumsFromProduct = Object.keys(product).filter((i) => i.slice(-5) === "_enum")
         const enumsFromChecked = Object.keys(checkedEnum).map((i) => i)
 
         enumsFromProduct.map((i) => {
@@ -70,7 +71,9 @@ function index({ dataFromProduct, query }: any) {
             if (!id) {
                 localStorage.setItem("id", v4())
             }
+
             setForNavbar(v4())
+            setAlert("Added to cart!")
         }
     }
 
@@ -81,7 +84,7 @@ function index({ dataFromProduct, query }: any) {
     }
 
     const incrementAmount = () => {
-        if (amount < dataFromProduct.count) {
+        if (amount < product.count) {
             setAmount(amount + 1)
         }
     }
@@ -93,26 +96,18 @@ function index({ dataFromProduct, query }: any) {
                 <div className="details-maininfo">
                     <div className="details-photos">
                         <div className="details-photo-list">
-                            {dataFromProduct
-                                ? dataFromProduct.photos.map((item: any) => (
-                                      <div
-                                          key={item.primaryKey}
-                                          id={item.path}
-                                          onClick={changePhoto}
-                                          style={{
-                                              backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
-                                              backgroundPosition: "center center",
-                                              backgroundRepeat: "no-repeat",
-                                              backgroundSize: "cover",
-                                              width: "100px",
-                                              height: "100px",
-                                              marginBottom: "10px",
-                                              marginRight: "10px",
-                                              cursor: "pointer",
-                                          }}
-                                      />
-                                  ))
-                                : "..."}
+                            {product &&
+                                product.photos.map((item: any) => (
+                                    <div
+                                        key={item.path}
+                                        id={item.path}
+                                        onClick={changePhoto}
+                                        className="details-photo-small"
+                                        style={{
+                                            backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
+                                        }}
+                                    />
+                                ))}
                         </div>
                         <div
                             className="details-first-photo"
@@ -122,84 +117,63 @@ function index({ dataFromProduct, query }: any) {
                         />
                     </div>
                     <div className="details-info">
-                        <div className="details-delivery">
-                            <div className="details-standard">
-                                <div className="details-icon">
-                                    <Icons.TruckEmpty />
-                                </div>
-                                <div className="details-shipping-info">
-                                    <div className="details-shipping-title">Standard shipment</div>
-                                    <div className="details-shipping-text">Free within 3-6 bussiness days</div>
-                                </div>
-                            </div>
-                            <div className="details-standard">
-                                <div className="details-icon">
-                                    <Icons.TruckFull />
-                                </div>
-                                <div className="details-shipping-info">
-                                    <div className="details-shipping-title">Express delivery</div>
-                                    <div className="details-shipping-text">$35 available</div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="details-product">
                             <div className="details-sale-id">
-                                <div className={`${parseFloat(dataFromProduct.discount) > 0 ? "sale" : ""}`}>
-                                    {parseFloat(dataFromProduct.discount) > 0 ? "SALE" : ""}
-                                </div>
-                                <div className="details-id">{`Product ID: ${dataFromProduct.id}`}</div>
+                                {parseFloat(product.discount) > 0 && (
+                                    <div className="details-sale">{parseFloat(product.discount) * 100}%</div>
+                                )}
+                                <div className="details-id">{`Product ID: ${product.id}`}</div>
                             </div>
 
-                            <div className="details-product-name">{dataFromProduct.name}</div>
+                            <div className="details-product-name">{product.name}</div>
                             <div className="details-price-brand">
-                                {parseFloat(dataFromProduct.discount) && parseFloat(dataFromProduct.discount) !== 0 ? (
+                                {parseFloat(product.discount) !== 0 ? (
                                     <div className="details-prices">
                                         <div className="details-price">
                                             {(
-                                                parseFloat(dataFromProduct.price) -
-                                                parseFloat(dataFromProduct.price) * parseFloat(dataFromProduct.discount)
+                                                parseFloat(product.price) -
+                                                parseFloat(product.price) * parseFloat(product.discount)
                                             ).toFixed(2)}
-                                            {dataFromProduct.currency}
+                                            {product.currency}
                                         </div>
                                         <div className="details-oldprice">
-                                            {parseFloat(dataFromProduct.price).toFixed(2) +
-                                                " " +
-                                                dataFromProduct.currency}
+                                            {parseFloat(product.price).toFixed(2) + " " + product.currency}
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="details-oldprice">
-                                        {parseFloat(dataFromProduct.price) + " " + dataFromProduct.currency}
+                                        {parseFloat(product.price) + " " + product.currency}
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         <div className="details-checkboxes">
-                            {Object.keys(dataFromProduct)
+                            {Object.keys(product)
                                 .filter((i: any) => i.includes("_name"))
                                 .map((item: any, i: any) => {
-                                    return (
-                                        <div key={i} className="details-colors">
-                                            <div className="details-colors-title">
-                                                {item.slice(0, 1).toUpperCase() + item.slice(1, -5)}
+                                    if (item.slice(0, 8) !== "category" && product[item]) {
+                                        return (
+                                            <div key={product[item] + i} className="details-colors">
+                                                <div className="details-colors-title">
+                                                    {item.slice(0, 1).toUpperCase() + item.slice(1, -5)}
+                                                </div>
+                                                <div className="details-name">
+                                                    <div>{product[item]}</div>
+                                                </div>
                                             </div>
-                                            <div className="details-name">
-                                                <div>{dataFromProduct[item]}</div>
-                                            </div>
-                                        </div>
-                                    )
+                                        )
+                                    }
                                 })}
                             <div className="details-checkboxes">
-                                {Object.keys(dataFromProduct).map((attr: any, i: number) => {
-                                    if (attr.includes("_enum")) {
+                                {Object.keys(product).map((attr: any, i: number) => {
+                                    if (attr.includes("_enum") && product[attr].length > 0) {
                                         return (
-                                            <div key={i} className="details-colors">
+                                            <div key={i + attr} className="details-colors">
                                                 <div className="details-colors-title">{attr}:</div>
                                                 <div className="details-name">
-                                                    {dataFromProduct[attr].map((opt: any) => (
-                                                        <>
+                                                    {product[attr].map((opt: any) => (
+                                                        <div key={opt + attr}>
                                                             <CheckBox
                                                                 checked={
                                                                     checkedEnum.hasOwnProperty(attr) &&
@@ -212,7 +186,7 @@ function index({ dataFromProduct, query }: any) {
                                                                 name={attr}
                                                             />
                                                             {opt}
-                                                        </>
+                                                        </div>
                                                     ))}
                                                 </div>
                                             </div>
@@ -249,7 +223,7 @@ function index({ dataFromProduct, query }: any) {
                 </div>
                 <div className="details-additional-main">
                     <div className="details-additional-title">DESCRIPTION</div>
-                    <div className="details-description-text">{dataFromProduct.description}</div>
+                    <div className="details-description-text">{product.description}</div>
                 </div>
                 <div className="details-carousel">
                     <WithCarousel />
@@ -266,7 +240,7 @@ index.getInitialProps = async ({ query }: any) => {
     })
 
     return {
-        dataFromProduct: resFromProduct.data,
+        product: resFromProduct.data,
         query,
     }
 }

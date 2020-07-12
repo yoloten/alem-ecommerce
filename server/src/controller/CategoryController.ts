@@ -12,7 +12,6 @@ export class CategoryController {
         try {
             const { id } = req.query
             let children: any = []
-            let productCount = [{ count: "0" }]
 
             const category = await connection.query(
                 `
@@ -23,40 +22,26 @@ export class CategoryController {
                 [parseInt(id, 10)],
             )
 
-            if (category[0].children.length === 0) {
-                productCount = await connection.query(
-                    `
-                        SELECT 
-                        COUNT(*) 
-                        FROM product 
-                        WHERE product.category_id = $1;
-                    `,
-                    [parseInt(id, 10)],
-                )
-            } else {
-                children = await connection.query(`
+            children = await connection.query(`
                         SELECT * 
                         FROM category 
                         WHERE category.uuid IN (${category[0].children.map((item: any) => `'${item}'`).join(", ")});
                     `)
 
-                for (let i = 0; i < children.length; i++) {
-                    const childrenProductCount = await connection.query(
-                        `
+            for (let i = 0; i < children.length; i++) {
+                const childrenProductCount = await connection.query(
+                    `
                             SELECT 
                             COUNT(*) 
                             FROM product 
                             WHERE product.category_id = $1;
                         `,
-                        [children[i].id],
-                    )
-
-                    productCount.push(childrenProductCount[0])
-                    children[i].count = childrenProductCount[0].count
-                }
+                    [children[i].id],
+                )
+                children[i].count = childrenProductCount[0].count
             }
 
-            res.json({ category, productCount, children })
+            res.json({ category, children })
         } catch (error) {
             res.status(400).json(error)
         }

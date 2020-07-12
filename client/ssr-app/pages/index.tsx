@@ -11,7 +11,7 @@ import Navbar from "../components/Common/Navbar"
 import Footer from "../components/Common/Footer"
 import Button from "../components/UI/Button"
 
-function index({ token }: any): JSX.Element {
+function index(): JSX.Element {
     const btnClick = (): void => {
         console.log("click")
     }
@@ -20,7 +20,7 @@ function index({ token }: any): JSX.Element {
         <>
             <div>
                 <div className="landing-header">
-                    <Navbar token={cookie.get("token")} landing={true} />
+                    <Navbar landing={true} />
                     <div className="landing-header-main">
                         <div className="landing-title">Brand new January Collection</div>
                         <Button

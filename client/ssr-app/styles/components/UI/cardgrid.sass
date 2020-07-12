@@ -1,38 +1,61 @@
 .grid
     display: flex
     flex-wrap: wrap
-    width: 100%
-    margin-top: 40px
 
     &-card
-        margin-bottom: 60px
-        margin-left: 2.84vw
+        margin-bottom: 20px
+        margin-left: 30px
         cursor: pointer
 
+        @media(max-width: 320px)
+            height: 220px
+            width: 280px
+            margin-left: 0px
+            margin-bottom: 40px
+
+        @media(min-width: 20rem)
+            margin-left: 10px
+            width: calc( 49.8% - 10px )
+            height: 220px
+            margin-bottom: 50px
+
+        @media(min-width: 40rem)
+            height: 320px
+            margin-left: 20px
+            width: calc( 49.8% - 20px )
+
+        @media(min-width: 56rem)
+            height: 360px
+            margin-left: 20px
+            width: calc( 25% - 20px )
+
     &-name
-        font-size: 14px
-        margin-top: 20px
+        font-size: 16px
+        margin-top: 10px
 
     &-prices
         display: flex
-        width: 200px
+        max-width: 300px
         font-size: 16px
-        justify-content: space-between
+        margin-top: 8px
 
     &-price
         color: red
 
     &-oldprice
         color: grey
+        margin-left: 10px
 
-@media (max-width: 1560px)
-    .grid-card
-        margin-bottom: 60px
-        margin-left: 20px
-        cursor: pointer
+// @media (max-width: 1200px)
+//     .grid-card
+//         height: 340px
 
-@media (max-width: 780px)
-    .grid-card
-        margin-bottom: 60px
-        margin-left: 2.84vw
-        cursor: pointer
+// @media screen and (max-width: 940px)
+//     .grid-card
+//         flex: 0 1 calc(50% - 1em)
+//         height: 300px
+
+// @media screen and (max-width: 740px)
+//     .grid-card
+//         flex: 0 1 calc(90% + 10px)
+//         height: 400px

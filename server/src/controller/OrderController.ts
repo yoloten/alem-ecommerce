@@ -215,7 +215,7 @@ export class OrderController {
                                     FROM information_schema.columns 
                                     WHERE table_name='cart_item' and column_name='${key}';
                                 `)
-
+                                console.log(existedColumn)
                                 if (existedColumn.length === 0) {
                                     await connection.query(`
                                         ALTER TABLE cart_item
@@ -289,6 +289,7 @@ export class OrderController {
                 )
 
                 if (existedCartItem.length === 0) {
+                    console.log(values, detailsID)
                     await connection.query(`
                         INSERT INTO cart_item(${names.join(", ")}, order_details_id)
                         VALUES 

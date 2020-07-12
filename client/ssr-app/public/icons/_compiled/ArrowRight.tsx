@@ -1,15 +1,17 @@
-import React from "react";
+import React from "react"
 
 function SvgArrowRight(props: any) {
-  return (
-    <svg width={24.943} height={21.679} {...props}>
-      <path
-        data-name="noun_Arrow right_2682937"
-        d="M10.837 0L1.8 9.044 0 10.845l1.8 1.8 9.036 9.032 1.8-1.8-7.761-7.758h20.068V9.572H4.875L12.638 1.8z"
-        fill="#fff"
-      />
-    </svg>
-  );
+    return (
+        <svg width={20} height={20} viewBox="0 0 20 20" fill="none" {...props}>
+            <path
+                d="M7.188 15.625L12.813 10 7.186 4.375"
+                stroke="#000"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity={0.87}
+            />
+        </svg>
+    )
 }
 
-export default SvgArrowRight;
+export default SvgArrowRight

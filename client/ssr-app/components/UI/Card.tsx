@@ -1,33 +1,30 @@
 import React, { ReactElement, useRef, useEffect, useState } from "react"
 import Button from "./Button"
 
-namespace CardNamespace {
-    export interface Props {
-        textPosition?: "center" | "left" | "right"
-        subTitle?: string | React.ReactNode
-        actionButton?: React.ReactNode
-        customStyleObject?: object
-        onMouseEnter?: () => void
-        onMouseLeave?: () => void
-        backgroundColor?: string
-        header?: React.ReactNode
-        [propName: string]: any
-        body?: React.ReactNode
-        borderRadius?: string
-        onClick?: () => void
-        borderColor?: string
-        className?: string
-        fontSize?: string
-        border?: boolean
-        bgImage?: string
-        height?: string
-        width?: string
-        title?: string
-        color?: string
-    }
+export interface Props {
+    textPosition?: "center" | "left" | "right"
+    subTitle?: string | React.ReactNode
+    actionButton?: React.ReactNode
+    customStyleObject?: object
+    onMouseEnter?: () => void
+    onMouseLeave?: () => void
+    backgroundColor?: string
+    header?: React.ReactNode
+    [propName: string]: any
+    body?: React.ReactNode
+    borderRadius?: string
+    windowWidth?: number
+    onClick?: () => void
+    borderColor?: string
+    className?: string
+    fontSize?: string
+    border?: boolean
+    bgImage?: string
+    title?: string
+    color?: string
 }
 
-export default function Card(props: CardNamespace.Props) {
+export default function Card(props: Props) {
     const cardRef: any = useRef()
     const [cardHeight, setHeight] = useState()
 
@@ -93,8 +90,8 @@ export default function Card(props: CardNamespace.Props) {
     }
 
     const cardStyle = {
-        height: props.height ? props.height : "",
-        width: props.width ? props.width : "200px",
+        height: "80%",
+        width: "100%",
         border: props.border ? `1px solid ${props.borderColor ? props.borderColor : "#d9d9d9"}` : "none",
         background: props.bgImage ? "url(" + props.bgImage + ")" : "",
         backgroundPosition: "center center",
@@ -108,8 +105,9 @@ export default function Card(props: CardNamespace.Props) {
 
     return (
         <div
+            className="card-item"
             ref={cardRef}
-            style={{ ...cardStyle, flexDirection: "column", ...props.customStyleObject }}
+            style={{ ...cardStyle, position: "relative", flexDirection: "column", ...props.customStyleObject }}
             onClick={props.onClick}
             onMouseEnter={props.onMouseEnter}
             onMouseLeave={props.onMouseLeave}

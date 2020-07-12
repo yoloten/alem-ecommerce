@@ -37,7 +37,7 @@ export const userSlice = createSlice({
             state.isLoggedIn = false
             state.user = {}
         },
-        setUserFromLocalStorage(state, { payload }) {
+        setUserFromCookie(state, { payload }) {
             state.user = payload
             state.isLoggedIn = true
         },
@@ -72,5 +72,5 @@ export const userSlice = createSlice({
     },
 })
 
-export const { deleteMsg, setMsg, logout, setUserFromLocalStorage } = userSlice.actions
+export const { deleteMsg, setMsg, logout, setUserFromCookie } = userSlice.actions
 export default userSlice.reducer
