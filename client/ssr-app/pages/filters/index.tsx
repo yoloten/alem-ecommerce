@@ -280,9 +280,6 @@ function index({ dataFromCategory, dataFromProduct, allFilters, query }: any): J
                     <Link href="/filters" as={`/${query.category}`}>
                         <a className="filters-navigation">{query.category + "/"}</a>
                     </Link>
-                    {/* <Link href="/p/[category]/[filters]" as={`/p/${query.category}/${query.filters}`}>
-                        <a className="filters-navigation">{query.filters}</a>
-                    </Link> */}
                 </div>
                 <div className="filters-content">
                     {windowWidth < 571 ? (

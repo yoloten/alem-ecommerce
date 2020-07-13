@@ -1,34 +1,33 @@
 import React from "react"
 
-namespace Btn {
-    export interface Props {
-        customStyleObject?: object
-        children?: React.ReactNode
-        onMouseEnter?: () => void
-        onMouseLeave?: () => void
-        backgroundColor?: string
-        [propName: string]: any
-        size?: "big" | "small"
-        borderRadius?: string
-        onClick?: any
-        borderColor?: string
-        focusable?: boolean
-        className?: string
-        fontSize?: string
-        content?: string | React.ReactNode
-        height?: string
-        color?: string
-        width?: string
-        border?: boolean
-        id?: string
-        type?: string
-    }
+export interface Props {
+    customStyleObject?: any
+    children?: React.ReactNode
+    onMouseEnter?: () => void
+    onMouseLeave?: () => void
+    backgroundColor?: string
+    [propName: string]: any
+    size?: "big" | "small"
+    borderRadius?: string
+    onClick?: any
+    borderColor?: string
+    focusable?: boolean
+    className?: string
+    fontSize?: string
+    content?: string | React.ReactNode
+    height?: string
+    color?: string
+    width?: string
+    border?: boolean
+    id?: string
+    type?: string
 }
 
-export default function Button(props: Btn.Props) {
-
+export default function Button(props: Props) {
     const btnStyle = {
-        backgroundColor: props.backgroundColor ? `${props.base ? "transaprent" : props.backgroundColor}` : `${props.base ? "transaprent" : "grey"}`,
+        backgroundColor: props.backgroundColor
+            ? `${props.base ? "transaprent" : props.backgroundColor}`
+            : `${props.base ? "transaprent" : "grey"}`,
         border: props.border ? `1px solid ${props.borderColor ? props.borderColor : "grey"}` : "none",
         borderRadius: props.borderRadius ? props.borderRadius : "4px",
         fontSize: props.fontSize ? props.fontSize : "14px",

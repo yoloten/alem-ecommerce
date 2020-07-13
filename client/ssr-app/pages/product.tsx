@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import React from "react"
 import axios from "axios"
 import { v4 } from "uuid"
@@ -8,7 +9,9 @@ import * as Icons from "../public/icons/_compiled"
 import Navbar from "../components/Common/Navbar"
 import Footer from "../components/Common/Footer"
 import CheckBox from "../components/UI/CheckBox"
+import Dropdown from "../components/UI/Dropdown"
 import Button from "../components/UI/Button"
+import { slice } from "lodash"
 
 function index({ product, query }: any): JSX.Element {
     const [photo, setPhoto] = useState(product.photos[0].path)
@@ -27,19 +30,21 @@ function index({ product, query }: any): JSX.Element {
         setPhoto(e.target.id)
     }
 
-    const changeCheckedEnum = (event: any) => {
-        if (checkedEnum[event.target.name] !== event.target.id) {
-            setCheckedEnum({ ...checkedEnum, [event.target.name]: event.target.id })
+    const changeEnum = (event: any) => {
+        const { name, id, value } = event.target
+
+        if (value) {
+            setCheckedEnum({ ...checkedEnum, [name]: value })
         } else {
             const newCheckedEnum = { ...checkedEnum }
 
-            delete newCheckedEnum[event.target.name]
+            delete newCheckedEnum[name]
             setCheckedEnum(newCheckedEnum)
         }
     }
 
     const addToCart = async () => {
-        let ifAllChosen = false
+        const ifAllChosen: boolean[] = []
 
         const toCart = {
             discount: product.discount,
@@ -57,14 +62,14 @@ function index({ product, query }: any): JSX.Element {
 
         enumsFromProduct.map((i) => {
             if (enumsFromChecked.indexOf(i) !== -1) {
-                ifAllChosen = true
+                ifAllChosen.push(true)
             } else {
-                ifAllChosen = false
+                ifAllChosen.push(false)
                 setAlert(`you did not choose ${i}`)
             }
         })
 
-        if (ifAllChosen) {
+        if (!ifAllChosen.includes(false)) {
             localStorage.setItem("product_item_" + v4(), JSON.stringify(toCart))
             const id = localStorage.getItem("id")
 
@@ -92,25 +97,46 @@ function index({ product, query }: any): JSX.Element {
     return (
         <div>
             <Navbar data={forNavbar} />
-            <div className="details-main">
+            <div className="details">
+                <div className="details-routes">
+                    <Link href="/">
+                        <a className="filters-navigation">Home/</a>
+                    </Link>
+                    {/* <Link
+                        href={{
+                            pathname: "/categories",
+                            // query: {
+                            //     name: query.base.split("-")[0],
+                            //     id: query.base.split("-")[1],
+                            // },
+                        }}
+                    >
+                        <a className="category-navigation">{query.base.split("-")[0] + "/"}</a>
+                    </Link>
+                    <Link href="/filters" as={`/${query.category}`}>
+                        <a className="filters-navigation">{query.category + "/"}</a>
+                    </Link> */}
+                </div>
                 <div className="details-maininfo">
                     <div className="details-photos">
-                        <div className="details-photo-list">
+                        <div className="details-photos-list">
                             {product &&
                                 product.photos.map((item: any) => (
                                     <div
                                         key={item.path}
                                         id={item.path}
                                         onClick={changePhoto}
-                                        className="details-photo-small"
+                                        className="details-photos-small"
                                         style={{
                                             backgroundImage: "url(" + "http://localhost:8000/" + item.path + ")",
                                         }}
-                                    />
+                                    >
+                                        <div className={item.path === photo ? "details-photos-selected" : ""}></div>
+                                    </div>
                                 ))}
                         </div>
                         <div
-                            className="details-first-photo"
+                            className="details-photos-first"
                             style={{
                                 backgroundImage: "url(" + "http://localhost:8000/" + photo + ")",
                             }}
@@ -118,28 +144,28 @@ function index({ product, query }: any): JSX.Element {
                     </div>
                     <div className="details-info">
                         <div className="details-product">
-                            <div className="details-sale-id">
+                            <div className="details-product-name">{product.name}</div>
+                            <div className="details-product-sale">
                                 {parseFloat(product.discount) > 0 && (
                                     <div className="details-sale">{parseFloat(product.discount) * 100}%</div>
                                 )}
-                                <div className="details-id">{`Product ID: ${product.id}`}</div>
+                                {/* <div className="details-id">{`Product ID: ${product.id}`}</div> */}
                             </div>
 
-                            <div className="details-product-name">{product.name}</div>
-                            <div className="details-price-brand">
+                            <div className="details-product-pricesbox">
                                 {parseFloat(product.discount) !== 0 ? (
-                                    <div className="details-prices">
-                                        <div className="details-price">
+                                    <>
+                                        <div className="details-product-pricesbox-price">
                                             {(
                                                 parseFloat(product.price) -
                                                 parseFloat(product.price) * parseFloat(product.discount)
                                             ).toFixed(2)}
                                             {product.currency}
                                         </div>
-                                        <div className="details-oldprice">
+                                        <div className="details-product-pricesbox-oldprice strike">
                                             {parseFloat(product.price).toFixed(2) + " " + product.currency}
                                         </div>
-                                    </div>
+                                    </>
                                 ) : (
                                     <div className="details-oldprice">
                                         {parseFloat(product.price) + " " + product.currency}
@@ -148,83 +174,92 @@ function index({ product, query }: any): JSX.Element {
                             </div>
                         </div>
 
-                        <div className="details-checkboxes">
+                        <div className="details-secondary">
                             {Object.keys(product)
-                                .filter((i: any) => i.includes("_name"))
+                                .filter((i: any) => i.includes("_name") || i.includes("_enum"))
                                 .map((item: any, i: any) => {
-                                    if (item.slice(0, 8) !== "category" && product[item]) {
+                                    if (item.slice(0, 8) !== "category" && product[item] && product[item].length > 0) {
                                         return (
-                                            <div key={product[item] + i} className="details-colors">
-                                                <div className="details-colors-title">
-                                                    {item.slice(0, 1).toUpperCase() + item.slice(1, -5)}
+                                            <div key={product[item] + i} className="details-secondary-item">
+                                                <div className="details-secondary-title">
+                                                    {item.slice(0, 1).toUpperCase() +
+                                                        item.slice(1).split("_").join(" ").slice(0, -5)}
+                                                    :
                                                 </div>
-                                                <div className="details-name">
-                                                    <div>{product[item]}</div>
+
+                                                <div>
+                                                    {Array.isArray(product[item])
+                                                        ? product[item].join(", ")
+                                                        : product[item]}
                                                 </div>
                                             </div>
                                         )
                                     }
                                 })}
+                            <div className="details-secondary-item">
+                                <div className="details-secondary-title">Brief description:</div>{" "}
+                                <div>{product.description}</div>
+                            </div>
                             <div className="details-checkboxes">
                                 {Object.keys(product).map((attr: any, i: number) => {
                                     if (attr.includes("_enum") && product[attr].length > 0) {
                                         return (
                                             <div key={i + attr} className="details-colors">
-                                                <div className="details-colors-title">{attr}:</div>
-                                                <div className="details-name">
-                                                    {product[attr].map((opt: any) => (
-                                                        <div key={opt + attr}>
-                                                            <CheckBox
-                                                                checked={
-                                                                    checkedEnum.hasOwnProperty(attr) &&
-                                                                    checkedEnum[attr] === opt
-                                                                        ? true
-                                                                        : false
-                                                                }
-                                                                onChange={changeCheckedEnum}
-                                                                id={opt}
-                                                                name={attr}
-                                                            />
-                                                            {opt}
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                <Dropdown
+                                                    required={true}
+                                                    placeholder={
+                                                        "Please select " + attr.split("_").join(" ").slice(0, -5)
+                                                    }
+                                                    bgColor="#2233690a"
+                                                    id={attr}
+                                                    name={attr}
+                                                    height={46}
+                                                    borderRadius="6px"
+                                                    width={210}
+                                                    value={checkedEnum[attr] ? checkedEnum[attr] : ""}
+                                                    onChange={changeEnum}
+                                                    options={product[attr].map((opt: any) => ({
+                                                        value: opt,
+                                                        label: opt.slice(0, 1).toUpperCase() + opt.slice(1),
+                                                    }))}
+                                                />
                                             </div>
                                         )
                                     }
                                 })}
                             </div>
                         </div>
-                        <div className="details-actions">
-                            <div className="details-quantity">
-                                <div className="details-quantity-title">Quantity:</div>
-                                <div className="details-quantity-box">
-                                    <div className="details-remove" onClick={decrementAmount}>
-                                        -
-                                    </div>
-                                    <div className="details-number">{amount}</div>
-                                    <div className="details-remove" onClick={incrementAmount}>
-                                        +
-                                    </div>
+
+                        <div className="details-quantity">
+                            <div className="details-quantity-title">Quantity:</div>
+                            <div className="details-quantity-box">
+                                <div className="details-remove" onClick={decrementAmount}>
+                                    -
+                                </div>
+                                <div className="details-number">{amount}</div>
+                                <div className="details-remove" onClick={incrementAmount}>
+                                    +
                                 </div>
                             </div>
-                            <Button
-                                content="ADD TO CART"
-                                color="#fff"
-                                backgroundColor="#ff7070"
-                                borderRadius="30px"
-                                height="50px"
-                                width="180px"
-                                onClick={addToCart}
-                            />
                         </div>
-                        <div style={{ height: "16px", color: "red" }}>{alert.toUpperCase()}</div>
+                        <Button
+                            content={
+                                <>
+                                    <Icons.Cart color="#fff" style={{ marginLeft: "-20px" }} />
+                                    <div style={{ marginLeft: "20px" }}>ADD TO CART</div>
+                                </>
+                            }
+                            color="#fff"
+                            backgroundColor="#000"
+                            borderRadius="6px"
+                            height="50px"
+                            width="180px"
+                            onClick={addToCart}
+                        />
                     </div>
+                    <div style={{ height: "16px", color: "red" }}>{alert.toUpperCase()}</div>
                 </div>
-                <div className="details-additional-main">
-                    <div className="details-additional-title">DESCRIPTION</div>
-                    <div className="details-description-text">{product.description}</div>
-                </div>
+
                 <div className="details-carousel">
                     <WithCarousel />
                 </div>

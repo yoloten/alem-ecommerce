@@ -33,7 +33,7 @@ export default function WithCarousel(props: any) {
                     />
                 </div>
             ) : (
-                <div className="withcarousel-pros-header">Products in today</div>
+                <div className="withcarousel-pros-header">You may also be interested</div>
             )}
             <Carousel
                 className="carousel"

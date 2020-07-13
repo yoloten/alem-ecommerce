@@ -290,6 +290,7 @@ export class ProductController {
                     SELECT * FROM product
                     ${joins.join(" ")}
                     ${wheres.length > 0 ? "WHERE" : ""} ${wheres.filter((a) => a !== "").join(" AND ")}
+                    ORDER BY product.updated_at DESC
                     LIMIT ${limit} OFFSET ${offset};
                 `)
 
@@ -302,6 +303,7 @@ export class ProductController {
                 `)
 
                 products[i].photos = photos
+                console.log(products.slice(0, 1))
             }
 
             res.json(products)

@@ -1,63 +1,122 @@
-.details-main
-    border-top: 1px solid $base-grey
-.details-maininfo
-    display: flex
-    justify-content: space-between
-    margin-right: 170px
-    margin-left: 170px
-    margin-top: 40px
-.details-photos
-    margin-top: 80px
-    display: flex
+.strike
+    text-decoration: line-through
 
-.details-info
-    margin-left: 30px
+.details
+    padding-right: 200px
+    padding-left: 200px
+    background: #fafafa
+
+    &-routes
+        padding-top: 30px
+
+    &-maininfo
+        display: flex
+        justify-content: space-between
+        margin-top: 30px
+
+    &-photos
+        display: flex
+
+        &-first
+            background-position: center center
+            background-repeat: no-repeat
+            background-size: cover
+            width: 586px
+            height: 586px
+            margin-left: 50px
+            border-radius: 6px
+
+        &-small
+            background-position: center center
+            background-repeat: no-repeat
+            background-size: cover
+            width: 100px
+            height: 100px
+            margin-bottom: 10px
+            margin-right: 10px
+            cursor: pointer
+            border-radius: 6px
+            display: flex
+            justify-content: center
+            align-items: center
+
+        &-selected
+            width: 86px
+            height: 86px
+            border: 3px solid #fff
+            border-radius: 6px
+            opacity: 0.6
+
+    &-info
+        margin-left: 50px
+
+    &-product
+        width: 680px
+
+        &-name
+            font-size: 28px
+
+        &-sale
+            margin-left: 154px
+            margin-top: 30px
+            margin-bottom: 30px
+            display: flex
+            justify-content: space-between
+            font-size: 13px
+
+        &-pricesbox
+            font-size: 20px
+            display: flex
+            margin-bottom: 24px
+
+            &-price
+                color: #FF5722
+                margin-right: 14px
+
+            &-old-price
+                color: grey
+
+    &-secondary
+        width: max-content
+        &-item
+            display: flex
+            font-size: 14px
+            margin-bottom: 14px
+            justify-content: space-between
+            align-items: center
+
+        &-title
+            margin-right: 30px
+            min-width: 100px
+
+    &-quantity
+        display: flex
+        align-items: center
+        font-size: 14px
+        margin-top: 24px
+        margin-bottom: 24px
+
+        &-box
+            margin-left: 20px
+            display: flex
+            justify-content: space-around
+            width: 120px
+            height: 50px
+            border: 1px solid #00000010
+            border-radius: 6px
+            align-items: center
+            font-size: 20px
+
 .details-delivery
     display: flex
     width: 450px
     justify-content: space-between
 
-.details-shipping-info
-    margin-left: 20px
-
-.details-product
-    width: 680px
-
-.details-sale-id
-    margin-top: 40px
-    display: flex
-    justify-content: space-between
-    font-size: 13px
 .details-sale
-    background: red
+    background: #FF5722
     color: #fff
     padding: 6px 12px 6px 12px
     border-radius: 30px
-
-.details-id
-    color: #c4c4c4
-    font-size: 13px
-
-.details-product-name
-    margin-top: 20px
-    font-size: 29px
-
-.details-price-brand
-    display: flex
-    justify-content: space-between
-
-.details-prices
-    display: flex
-    width: 275px
-    justify-content: space-between
-
-.details-price
-    color: red
-    font-size: 29px
-
-.details-old-price
-    font-size: 29px
-    color: grey
 
 .details-colors
     margin-top: 40px
@@ -79,17 +138,6 @@
     align-items: flex-end
     justify-content: space-between
     width: 320px
-
-.details-quantity-box
-    display: flex
-    justify-content: space-around
-    width: 120px
-    height: 50px
-    border: 1px solid #d9d9d9
-    border-radius: 30px
-    align-items: center
-    font-size: 20px
-    margin-top: 20px
 
 .details-additional-main
     margin-right: 170px
@@ -144,24 +192,6 @@
 .details-remove
     cursor: pointer
     user-select: none
-
-.details-first-photo
-    background-position: center center
-    background-repeat: no-repeat
-    background-size: cover
-    width: 500px
-    height: 500px
-    margin-left: 50px
-
-.details-photo-small
-    background-position: center center
-    background-repeat: no-repeat
-    background-size: cover
-    width: 100px
-    height: 100px
-    margin-bottom: 10px
-    margin-right: 10px
-    cursor: pointer
 
 @media (max-width: 1700px)
     .details-product
